@@ -1,20 +1,27 @@
-const app = require("express")()
-const PORT = 8000;
-//const cors = require("cors")()
-const startTime = new Date();
+import logo from './logo.svg';
+import {useState, useEffect} from 'react'
 
-app.get("/", (req,res) => {
-  res.status(200).send({resut: `server running on port : ${PORT} since: ${startTime}`} );
-  res.end('Hello World');
-})
+function App() {
+  const [backendData,setBackendData] = useState([{}])
+  useEffect(()=>
+  {
+    fetch("/api").then(
+      response => response.json()
+    ).then(
+      data => 
+      {
+        setBackendData(data);
+      }
+    )
+  },[])
 
-app.listen(PORT, ()=>{console.log(`Server running on port:${PORT}`)});
-// function App() {
-//   return (
-//     <div className="App">
-//      <>Hello World!</>
-//     </div>
-//   );
-// }
+  return (
+    <div >
+     {typeof backendData.users === 'undefined' ? (<p>Loading...</p>) : (backendData.users.map((user,i) =>
+     (<p key = {i}>{user}</p>)) 
+     )}
+    </div>
+  );
+}
 
-// export default App;
+export default App;
