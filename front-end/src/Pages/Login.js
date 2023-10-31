@@ -16,7 +16,7 @@ function Login()
         // try 
         // {
         //     const response = await fetch("/api")
-        //     console.log(response);
+        //     console.log(response.data);
         // }
         // catch (err)
         // {
@@ -24,6 +24,12 @@ function Login()
         //     setErrorMessage({name: "json", message: "The response from the server could not be parsed."})
         //     setIsSubmitted(false);
         //     return;
+        // }
+        // if(response.ok){
+        //     setUserData(email,password);
+        // }
+        // else{
+        //     console.log("Error encountered logging you in");
         // }
 
     }
