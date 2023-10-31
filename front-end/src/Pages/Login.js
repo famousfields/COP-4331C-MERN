@@ -12,35 +12,20 @@ function Login()
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
 
-    const handleSubmit = async(e) => {
-        // e.preventDefault();
-        // const body = JSON.stringify({email,password});
-        // console.log(body);
-
-        // const response = await fetch("/api")
-        // let json;
+    const handleSubmit = async() => {
         // try 
         // {
-        //     json = await response.json();
+        //     const response = await fetch("/api")
+        //     console.log(response);
         // }
-        // catch (e)
+        // catch (err)
         // {
-        //     console.error(e);
+        //     console.log("something went wrong");
         //     setErrorMessage({name: "json", message: "The response from the server could not be parsed."})
         //     setIsSubmitted(false);
         //     return;
         // }
-        // if(response.ok){
-        //     setValidUserData(true);
-        //     setErrorMessage(null);
-        //     data => {
-        //         setUserData(data);
-        //     }
-        // }
-        // else
-        // {
-        //     //check which field in form is incorrect and adjust accordingly
-        // }
+
     }
 
     const redirectSignUp = () => {
