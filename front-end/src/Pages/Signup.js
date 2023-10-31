@@ -1,0 +1,68 @@
+import React, {useState} from 'react'
+
+function Signup() {
+    const [email,setEmail] = useState("");
+    const [password1,setPassword1] = useState("");
+    const [password2,setPassword2] = useState("");
+    const [validEmail,setValidEmail] = useState(false);
+    const [validPassword, setValidPassword] = useState(false);
+
+
+    const handleSubmit = async(e) => {
+        // const result = await fetch("/users")
+        //     let json;
+        //     try{
+        //         json = await result.json();
+        //     }
+        //     catch{
+        //         console.error(e);
+        //     }
+        //     if(result.ok)
+        //     {
+                
+        //     }
+    }
+
+     const signupForm = (
+        <div className="form-container">
+            <form onSubmit={handleSubmit}>
+                <label> enter email
+                    <input
+                    type = 'text'
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    />
+                </label>
+                <label> enter password
+                    <input
+                    type = 'text'
+                    required
+                    value={password1}
+                    onChange={e => setPassword1(e.target.value)}
+                    //onBlur={e => setErrorMmessage}
+                    />
+                </label>
+                <label> re-enter password
+                    <input
+                    type = 'text'
+                    required
+                    value={password2}
+                    onChange={e => setEmail(e.target.value)}
+                    />
+                </label>
+                <input
+                type = 'submit'
+                value= "signup"
+                />
+            </form>
+        </div>
+     )
+        
+    
+  return (
+    signupForm
+  )
+}
+
+export default Signup
