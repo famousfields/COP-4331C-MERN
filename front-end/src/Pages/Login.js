@@ -12,26 +12,24 @@ function Login()
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
 
-    const handleSubmit = async() => {
-        // try 
-        // {
-        //     const response = await fetch("/api")
-        //     console.log(response.data);
-        // }
-        // catch (err)
-        // {
-        //     console.log("something went wrong");
-        //     setErrorMessage({name: "json", message: "The response from the server could not be parsed."})
-        //     setIsSubmitted(false);
-        //     return;
-        // }
-        // if(response.ok){
-        //     setUserData(email,password);
-        // }
-        // else{
-        //     console.log("Error encountered logging you in");
-        // }
 
+    const handleSubmit = async() =>{
+        try{
+            const response = await fetch("/users")
+            console.log(response.data);
+        }
+        catch (err){
+            console.log("something went wrong");
+            setErrorMessage({name: "json", message: "The response from the server could not be parsed."})
+            setIsSubmitted(false);
+            return;
+        }
+        if(response.ok){
+            setUserData(email,password);
+        }
+        else{
+            console.log("Error encountered logging you in");
+        }
     }
 
     const redirectSignUp = () => {
@@ -45,6 +43,7 @@ function Login()
                     <input
                         type='text'
                         required
+                        placeholder='Email'
                         value={email}
                         name='email'
                         onChange={(e) => setEmail(e.target.value)}
@@ -54,6 +53,7 @@ function Login()
                     <input
                         type='text'
                         required
+                        placeholder='password'
                         value={password}
                         name='pass'
                         onChange={(e) => setPassword(e.target.value)}

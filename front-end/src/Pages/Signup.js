@@ -4,23 +4,30 @@ function Signup() {
     const [email,setEmail] = useState("");
     const [password1,setPassword1] = useState("");
     const [password2,setPassword2] = useState("");
+    const[finalPass,setFinalPass] = useState("");
     const [validEmail,setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
-
+    const [userCredentials, setUserCredentials] = useState([
+        email = "",
+        finalPass = ""
+    ])
 
     const handleSubmit = async(e) => {
-        // const result = await fetch("/users")
-        //     let json;
-        //     try{
-        //         json = await result.json();
-        //     }
-        //     catch{
-        //         console.error(e);
-        //     }
-        //     if(result.ok)
-        //     {
-                
-        //     }
+        const result = await fetch("/users")
+            let json;
+            try{
+                json = await result.json();
+            }
+            catch{
+                console.error(e);
+            }
+            if(result.ok)
+            {
+                if(validEmail&&validPassword){
+                    setUserCredentials(email,finalPass);
+                }
+                result.send(userCredentials);
+            }
     }
 
      const signupForm = (
@@ -48,7 +55,7 @@ function Signup() {
                     type = 'text'
                     required
                     value={password2}
-                    onChange={e => setEmail(e.target.value)}
+                    onChange={e => setpassword2(e.target.value)}
                     />
                 </label>
                 <input
