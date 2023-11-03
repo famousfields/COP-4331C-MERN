@@ -8,6 +8,20 @@ app.use(cors());
 app.use(express.json());
 
 //connect db here
+  //infrastructure for HTTPS, requires a key pair be created and then a cert.
+const https = require('node:https');
+const fs = require('node:fs');
+
+/*const options = {
+    key: fs.readFileSync('path_to_key.pem'),
+    cert: fs.readFileSync('path_to_cert.pem'),
+};*/
+//otherwise
+const options = {
+    pfx: fs.readFileSync('./mern.pfx'),
+    passphrase: 'mernProj',
+};
+
 
 app.get("/", (req,res) => {
     res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
@@ -31,4 +45,7 @@ app.post("/user/delete/:id", async(req,res) => {
     res.json(result);
 })
 
-app.listen(PORT, ()=> {console.log(`Server running on port ${PORT}`)})
+//http.createServer(app).listen(80) //for non http requests
+https.createServer(options, app).listen(443);   //or use port. 
+
+//app.listen(PORT, ()=> {console.log(`Server running on port ${PORT}`)})
