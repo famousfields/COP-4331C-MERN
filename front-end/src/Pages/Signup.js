@@ -7,27 +7,27 @@ function Signup() {
     const[finalPass,setFinalPass] = useState("");
     const [validEmail,setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
-    const [userCredentials, setUserCredentials] = useState([
-        email = "",
-        finalPass = ""
-    ])
+    // const [userCredentials, setUserCredentials] = useState([
+    //     email = "",
+    //     finalPass = ""
+    // ])
 
     const handleSubmit = async(e) => {
-        const result = await fetch("/users")
-            let json;
-            try{
-                json = await result.json();
-            }
-            catch{
-                console.error(e);
-            }
-            if(result.ok)
-            {
-                if(validEmail&&validPassword){
-                    setUserCredentials(email,finalPass);
-                }
-                result.send(userCredentials);
-            }
+        // const result = await fetch("/users")
+        //     let json;
+        //     try{
+        //         json = await result.json();
+        //     }
+        //     catch{
+        //         console.error(e);
+        //     }
+        //     if(result.ok)
+        //     {
+        //         if(validEmail&&validPassword){
+        //             setUserCredentials(email,finalPass);
+        //         }
+        //         result.send(userCredentials);
+        //     }
     }
 
      const signupForm = (
@@ -37,14 +37,16 @@ function Signup() {
                     <input
                     type = 'text'
                     required
+                    placeholder='email'
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     />
                 </label>
                 <label> enter password
                     <input
-                    type = 'text'
+                    type = 'password'
                     required
+                    placeholder='password'
                     value={password1}
                     onChange={e => setPassword1(e.target.value)}
                     //onBlur={e => setErrorMmessage}
@@ -52,10 +54,11 @@ function Signup() {
                 </label>
                 <label> re-enter password
                     <input
-                    type = 'text'
+                    type = 'password'
                     required
+                    placeholder='re-enter password'
                     value={password2}
-                    onChange={e => setpassword2(e.target.value)}
+                    onChange={e => setPassword2(e.target.value)}
                     />
                 </label>
                 <input

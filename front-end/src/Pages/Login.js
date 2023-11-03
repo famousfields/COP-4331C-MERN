@@ -5,31 +5,30 @@ function Login()
 {
     const [email, setEmail] = useState([]);
     const [password, setPassword] = useState([]);
-    const [badEmail,setBadEmail] = useState(false);
-    const [validUserData,setValidUserData] = useState(false);
-    const [badPass,setBadPass] = useState(false);
-    const [userData,setUserData] = useState([{}]);
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
 
 
     const handleSubmit = async() =>{
-        try{
-            const response = await fetch("/users")
-            console.log(response.data);
-        }
-        catch (err){
-            console.log("something went wrong");
-            setErrorMessage({name: "json", message: "The response from the server could not be parsed."})
-            setIsSubmitted(false);
-            return;
-        }
-        if(response.ok){
-            setUserData(email,password);
-        }
-        else{
-            console.log("Error encountered logging you in");
-        }
+        let item = {email,password}
+        let resut = await fetch("/users")
+        // try{
+        //     const response = await fetch("/users")
+        //     console.log(response.data);
+        // }
+        // catch (err){
+        //     console.log("something went wrong");
+        //     setErrorMessage({name: "json", message: "The response from the server could not be parsed."})
+        //     setIsSubmitted(false);
+        //     return;
+        // }
+        // if(response.ok){
+        //     r;
+        // }
+        // else{
+        //     console.log("Error encountered logging you in");
+        // }
+        //history.push("/userexpenses");
     }
 
     const redirectSignUp = () => {

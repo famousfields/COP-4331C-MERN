@@ -12,6 +12,7 @@ app.use(express.json());
 app.get("/", (req,res) => {
     res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
 })
+
 app.get("/users",async(req,res)=>{
     const allUsers = await User.find();
 
