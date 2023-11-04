@@ -4,6 +4,7 @@ import About from './Pages/About';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import "./App.css";
+import UserExpenses from './Pages/UserExpenses';
 
 function App() {
   // const [backendData,setBackendData] = useState([{}])
@@ -33,6 +34,7 @@ function App() {
             <Route path = "/signup" element = {<Signup/>}/>
             <Route path = "/login" element = {<Login/>}/>
             <Route path = "/about" element = {<About/>}/>
+            <Route path='/expenses' element={<UserExpenses/>}/>
           </Routes>
         </BrowserRouter>
         

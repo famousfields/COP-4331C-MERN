@@ -4,9 +4,9 @@ function Signup() {
     const [email,setEmail] = useState("");
     const [password1,setPassword1] = useState("");
     const [password2,setPassword2] = useState("");
-    const[finalPass,setFinalPass] = useState("");
     const [validEmail,setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
+    
     // const [userCredentials, setUserCredentials] = useState([
     //     email = "",
     //     finalPass = ""
