@@ -70,3 +70,13 @@ h4 {
 	justify-content: center;
 	font-weight: 700;
 }
+
+.navbar{
+  background-color: gray;
+  display: flex;
+  color:white;
+  justify-content: space-between;
+}
+.navbar a{
+  color:inherit;
+}

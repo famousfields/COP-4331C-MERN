@@ -5,6 +5,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import "./App.css";
 import UserExpenses from './Pages/UserExpenses';
+import Navbar from './Components/Navbar';
 
 function App() {
   // const [backendData,setBackendData] = useState([{}])
@@ -28,6 +29,7 @@ function App() {
     // </div>
     <>
       <div className='App'>
+        <Navbar/>
         <BrowserRouter>
           <Routes>
             <Route exact path = "/" element = {<Home/>}/>
