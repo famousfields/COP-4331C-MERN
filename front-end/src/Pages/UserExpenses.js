@@ -3,11 +3,31 @@ import Expenses from '../Components/Expenses'
 
 function UserExpenses() {
 const [expenses,setExpenses] = useState({});
+const [newExpense,setNewExpense] = useState([]);
+const [popupActive,setPopupActive] = useState(false);
+
+//function to fetch api and add expense
+// const addExpense = async() => {
+//   const data = await fetch(API_BASE + "expense/new",{
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify({
+//       text: newExpense
+//     })
+//   }).then(res =>res.json());
+//   setExpenses([...expenses,data]);
+//   setPopupActive(false);
+//   setNewExpense("");
+// }
+const fallback = ("Can not load ");
 
   return (
     <div className="expense-layout">
       <h1>Welcome</h1>
       <h4>Your Expenses</h4>
+      {/* Can map expenses from  database once fetched */}
       <div className='expenses'>
         <div className='expense'>
           <div className='text'>Gas</div>
@@ -26,9 +46,29 @@ const [expenses,setExpenses] = useState({});
         </div>
       </div>
       <div className='expense-total'>Expense Total: $700</div>
-      <button>add expense</button>
+      <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
+      {/*popupActive ? (
+        <div className='popup'>
+          <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
+          <div className="content">
+            <h3>Add expense</h3>
+            <input 
+            type='text'
+            className='add-expense-name'
+            onChange={e => setNewExpense(e.target.value)}
+            value = {newExpense.name} />
+             <input 
+            type='number'
+            className='add-expense-price'
+            onChange={e => setNewExpense(e.target.value)}
+            value = {newExpense.price} />
+             <button className='button' onClick={addExpense}>Create Expense</button> 
+             <button className='button' >Create Expense</button>  
+          </div>
+        </div>
+      ): fallback*/ }
     </div>
-  )
+  );
 }
 
 export default UserExpenses

@@ -19,6 +19,12 @@ body {
 	background-color: var(--dark-alt);
 	color: var(--light);
 }
+.home-page{
+	margin-top: 10cm;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+}
 
 .expese-layout {
 	padding: 32px;
@@ -127,4 +133,22 @@ h4 {
 	transition: 0.5s;
 	cursor: pointer;
 	margin-bottom: 16px;
+}
+.addPopup {
+	position: fixed;
+	bottom: 32px;
+	right: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	width: 64px;
+	height: 64px;
+	border-radius: 999px;
+	font-size: 28px;
+	font-weight: 900;
+	color: var(--light);
+	background-color: var(--primary);
+	background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));
+	cursor: pointer;
 }
