@@ -11,6 +11,29 @@ app.use(express.json());
   //infrastructure for HTTPS, requires a key pair be created and then a cert.
 const https = require('node:https');
 const fs = require('node:fs');
+// infrastructure for sending emails with sendgrid
+/*  // Tested, and it worked. Albeit, it went to spam (or Junk)
+    // to not go to spam, would require a custom domain email. which would cost extra $$$.
+const sgMail = require('@sendgrid/mail');
+//Key is orginally added to the environment and accessed that way (could be more secure)
+key = fs.readFileSync('./sendGridAPIKey.txt', {'encoding':'utf-8'});
+sgMail.setApiKey(key); //Get public key from 
+
+const msg = {
+    to: 'da429145@ucf.edu',
+    from: 'mern.cop4331@gmail.com',
+    subject: 'Hello From SendGrid',
+    text: 'sent from server.js using SendGrid',
+    html: '<strong>sent from server.js using SendGrid</strong>',
+};
+sgMail.send(msg)
+    .then( () => {
+        console.log('Email sent')
+    })
+    .catch( (error) => {
+        console.error(error)
+    })
+*/
 
 /*const options = {
     key: fs.readFileSync('path_to_key.pem'),
