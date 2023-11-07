@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express();
 const PORT  = 5000;
+const PORT_S = 433;
 const cors = require('cors')
 //use this variable to store mongoDB/mongoose
 //const db = 
@@ -10,6 +11,7 @@ app.use(express.json());
 //connect db here
   //infrastructure for HTTPS, requires a key pair be created and then a cert.
 const https = require('node:https');
+const http = require('node:http');
 const fs = require('node:fs');
 
 /*const options = {
@@ -24,7 +26,8 @@ const options = {
 
 
 app.get("/", (req,res) => {
-    res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
+   // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
+    res.end("\nHello from the server homepage");
 })
 app.get("/users",async(req,res)=>{
     const allUsers = await User.find();
@@ -45,7 +48,11 @@ app.post("/user/delete/:id", async(req,res) => {
     res.json(result);
 })
 
-//http.createServer(app).listen(80) //for non http requests
-https.createServer(options, app).listen(443);   //or use port. 
+http.createServer(app).listen(PORT, () => {
+    console.log(`HTTP Server running on port ${PORT}`);
+}); //for non http requests
+https.createServer(options, app).listen(PORT_S, () => {
+    console.log(`HTTPS Server running on port ${PORT_S}`);
+});   //or use port. 
 
 //app.listen(PORT, ()=> {console.log(`Server running on port ${PORT}`)})
