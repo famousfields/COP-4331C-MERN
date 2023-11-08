@@ -24,6 +24,54 @@ const options = {
     passphrase: 'mernProj',
 };
 
+// infrastructure for sending emails with sendgrid
+/*
+// Tested, and it worked. Albeit, it went to spam (or Junk) initially
+const sgMail = require('@sendgrid/mail');
+//Key is orginally added to the environment and accessed that way (could be more secure)
+key = fs.readFileSync('./sendGridAPIKey.txt', {'encoding':'utf-8'});
+sgMail.setApiKey(key); //Get public key from the text file
+
+// Template ID: d-07d36665001b4f28bc9e07d335bf8f51 for E-mail verification.
+// Will create another Template for password reset.
+const message = {
+    template_id: 'd-07d36665001b4f28bc9e07d335bf8f51',
+    dynamic_template_data: {
+        first_name: "David",
+        verify_url: "google.com"    // google.com used for testing.
+    },
+    personalizations: [
+    {
+        to: [
+            {
+            email: 'da429145@ucf.edu',
+            name: 'David Patenaude'
+        },
+        ],
+
+    }
+    ],
+    from: {
+        email: 'mern.cop4331@gmail.com',
+        name: 'Mern Group 5'
+    },
+};
+// A basic message
+const msg = {
+    to: 'da429145@ucf.edu',
+    from: 'mern.cop4331@gmail.com',
+    subject: 'Hello From SendGrid',
+    text: 'sent from server.js using SendGrid',
+    html: '<strong>sent from server.js using SendGrid</strong>',
+};
+sgMail.send(message)
+    .then( () => {
+        console.log('Email sent')
+    })
+    .catch( (error) => {
+        console.error(error)
+    })
+//*/
 
 app.get("/", (req,res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
