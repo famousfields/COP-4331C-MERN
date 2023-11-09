@@ -1,30 +1,56 @@
-const express = require('express')
-const app = express();
+var express = require('express');
+var MongoClient = require("mongodb").MongoClient;
+var cors = require('cors');
+const mongoose = require('mongoose');
+var multer = require("multer");
+const connectDB = require("./dbConn");
+const { default: UserExpenses } = require('../front-end/src/Pages/UserExpenses');
+
+var app = express();
 const PORT  = 5000;
-const cors = require('cors')
+
 //use this variable to store mongoDB/mongoose
-//const db = 
 app.use(cors());
 app.use(express.json());
 
 //connect db here
+connectDB();
 
-app.get("/", (req,res) => {
-    res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
+mongoose.connection.once('open', ()=> {
+    console.log("Mongo DB connection is succcessful");
+    app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
-app.get("/users",async(req,res)=>{
-    const allUsers = await User.find();
 
-    res.json(allUsers);
+// app.get("/", (req,res) => {
+//     res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
+// })
+
+const user = new User({
+    email:'test2@gmail.com',
+    password:'test123'
+})
+app.get("/users",(request,response)=>{
+    database.collection("users").find({}).toArray((error,result)=>{
+        response.send(result);
+    })
 })
 
-app.post("/user/new", (req,res)=>{
-    const newUser = new User(req.body.text);
-
-    newUser.save();
-    res.json(newUser);
+app.get("/api/expenses", async(request,response) => {
+    const result = await UserExpense.find();
+    response.send({"userExpenses": result});
 })
+
+app.post("/login", async (request,response)=>{
+        const {email,password} = request.body;
+        try{
+            const check = await collection
+        }catch{
+
+        }
+    }
+    
+)
 
 app.post("/user/delete/:id", async(req,res) => {
     const result = await User.findByIdAndDelete(req.params.id);
@@ -32,4 +58,3 @@ app.post("/user/delete/:id", async(req,res) => {
     res.json(result);
 })
 
-app.listen(PORT, ()=> {console.log(`Server running on port ${PORT}`)})
