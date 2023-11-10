@@ -91,14 +91,6 @@ mongoose.connection.once('open', ()=> {
 })
 
 
-// app.get("/", (req,res) => {
-//     res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
-// })
-
-// const user = new User({
-//     email:'test2@gmail.com',
-//     password:'test123'
-// })
 app.get("/users",(request,response)=>{
     database.collection("users").find({}).toArray((error,result)=>{
         response.send(result);
@@ -109,7 +101,6 @@ app.get("/api/expenses", async(request,response) => {
     const result = await UserExpense.find();
     response.send({"userExpenses": result});
 })
-
 app.post("/login", async (request,response)=>{
         const {email,password} = request.body;
         try{

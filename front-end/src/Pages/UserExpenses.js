@@ -31,9 +31,9 @@ const fallback = ("Can not load ");
       {/* Can map expenses from  database once fetched */}
       
       <div className='expenses'>
-      {/* <div className='expense'>
+      {/*<div className='expense'>
           <Expenses expenses = {expenses}/>
-        </div> */}
+        </div> */} 
         <div className='expense'>
           <div className='text'>Gas</div>
           <div className='price'>Price: $150</div>
@@ -51,6 +51,7 @@ const fallback = ("Can not load ");
         </div>
       </div>
       <div className='expense-total'>Expense Total: $700</div>
+      <div className='total-income'>Total Income: $1500</div>
       <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
       {/*popupActive ? (
         <div className='popup'>
