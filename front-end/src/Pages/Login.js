@@ -1,17 +1,39 @@
 import React, {useState,Effect} from 'react'
+import axios from "axios"
 import { useHistory } from "react-router-dom";
 
 function Login() 
 {
-    const [email, setEmail] = useState([]);
-    const [password, setPassword] = useState([]);
+    var loginEmail;
+    var loginPassword;
+    const [users,setUsers] = useState({});
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
 
 
-    const handleSubmit = async() =>{
-        let item = {email,password}
-        let resut = await fetch("/users")
+     const handleSubmit = async(e) =>{
+    //     e.preventDefault();
+    //     var user = {email:loginEmail.value,password:loginPassword.value};
+    //     var js = JSON.stringify(obj);
+    //     try{
+    //         const response = await fetch("http://localhost:5000/login",{
+    //         method:'POST',
+    //         body: js,
+    //         headers:{'Content-Type' : 'application/json'}
+    //     });
+
+    //     var result = JSON.parse(await response.text());
+    //     if(result.id <= 0){
+    //         setErrorMessage('User/Password combination incorrect');
+    //     }
+    //     else{
+    //     }
+    // }
+    //     catch(e){
+    //         alert(e.toString());
+    //         return;
+    //     }
+      
         // try{
         //     const response = await fetch("/users")
         //     console.log(response.data);
@@ -40,12 +62,11 @@ function Login()
             <form onSubmit={handleSubmit}>
                 <label> Email
                     <input
-                        type='text'
+                        type='email'
                         required
                         placeholder='Email'
-                        value={email}
                         name='email'
-                        onChange={(e) => setEmail(e.target.value)}
+                        ref={(e) => loginEmail = e}
                     />
                 </label>
                 <label> password
@@ -53,9 +74,8 @@ function Login()
                         type='text'
                         required
                         placeholder='password'
-                        value={password}
                         name='pass'
-                        onChange={(e) => setPassword(e.target.value)}
+                        ref={(e) => loginPassword = e}
                     />
                 </label>
                 <input type='submit' value= "login" />

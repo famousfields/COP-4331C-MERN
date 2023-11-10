@@ -1,9 +1,10 @@
-import React,{useState} from 'react'
+import {useState} from 'react'
 import Expenses from '../Components/Expenses'
 
 function UserExpenses() {
+  
 const [expenses,setExpenses] = useState({});
-const [newExpense,setNewExpense] = useState([]);
+const [newExpense,setNewExpense] = useState({});
 const [popupActive,setPopupActive] = useState(false);
 
 //function to fetch api and add expense
@@ -28,7 +29,11 @@ const fallback = ("Can not load ");
       <h1>Welcome</h1>
       <h4>Your Expenses</h4>
       {/* Can map expenses from  database once fetched */}
+      
       <div className='expenses'>
+      {/* <div className='expense'>
+          <Expenses expenses = {expenses}/>
+        </div> */}
         <div className='expense'>
           <div className='text'>Gas</div>
           <div className='price'>Price: $150</div>
