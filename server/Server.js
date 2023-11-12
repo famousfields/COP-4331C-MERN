@@ -4,13 +4,16 @@ var cors = require('cors');
 const mongoose = require('mongoose');
 var multer = require("multer");
 const connectDB = require("./dbConn");
+const User = require("./models/userModel");
+const Expense = require('./models/expenseModel');
+
 // const { default: UserExpenses } = require('../front-end/src/Pages/UserExpenses');
 
 var app = express();
 const PORT  = 5000;
 const PORT_S = 433;
 
-//use this variable to store mongoDB/mongoose
+// Neccessary packages for accepting json data
 app.use(cors());
 app.use(express.json());
 
@@ -81,7 +84,7 @@ sgMail.send(message)
 
 app.get("/", (req,res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
-    res.end("\nHello from the server homepage");
+    res.send("\nHello from the server homepage");
 })
 connectDB();
 
@@ -90,17 +93,34 @@ mongoose.connection.once('open', ()=> {
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
-
-app.get("/users",(request,response)=>{
-    database.collection("users").find({}).toArray((error,result)=>{
-        response.send(result);
-    })
+app.post("/expenses", async(req, res) => {
+    try {
+        const expense = await Expense.create(req.body);
+        res.status(200).json(expense);
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({message: error.message});
+    }
 })
 
+// Route to get all users
+app.get("/users", async (request,response) => {
+    try {
+        const users = await User.find();
+        response.json(users);
+    } catch (error) {
+        console.error(error);
+        console.log("Internal Server Error");
+    }
+    
+})
+
+/*
 app.get("/api/expenses", async(request,response) => {
     const result = await UserExpense.find();
     response.send({"userExpenses": result});
 })
+*/
 app.post("/login", async (request,response)=>{
         const {email,password} = request.body;
         try{
