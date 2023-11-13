@@ -83,13 +83,13 @@ app.get("/", (req,res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
     res.end("\nHello from the server homepage");
 })
+
 connectDB();
 
 mongoose.connection.once('open', ()=> {
     console.log("Mongo DB connection is succcessful");
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
-
 
 app.get("/users",(request,response)=>{
     database.collection("users").find({}).toArray((error,result)=>{
@@ -101,6 +101,7 @@ app.get("/api/expenses", async(request,response) => {
     const result = await UserExpense.find();
     response.send({"userExpenses": result});
 })
+
 app.post("/login", async (request,response)=>{
         const {email,password} = request.body;
         try{
@@ -108,9 +109,8 @@ app.post("/login", async (request,response)=>{
         }catch{
 
         }
-    }
+    })
     
-)
 app.post("/user/delete/:id", async(req,res) => {
     const result = await User.findByIdAndDelete(req.params.id);
 
