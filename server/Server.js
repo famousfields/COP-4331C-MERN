@@ -86,6 +86,7 @@ app.get("/", (req, res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
     res.send("\nHello from the server homepage");
 })
+
 connectDB();
 
 mongoose.connection.once('open', ()=> {
@@ -139,9 +140,8 @@ app.post("/login", async (request,response)=>{
         }catch{
 
         }
-    }
+    })
     
-)
 app.post("/user/delete/:id", async(req,res) => {
     const result = await User.findByIdAndDelete(req.params.id);
 
