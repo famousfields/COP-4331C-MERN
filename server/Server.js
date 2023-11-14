@@ -107,7 +107,7 @@ app.post("/expenses", async(req, res) => {
 app.post("/users", async (req, res) => {
     try {
         const users = await User.create(req.body);
-        response.status(200).json(users);
+        res.status(200).json(users);
     } catch (error) {
         console.error(error.message);
         res.status(500).json({message: error.message});
