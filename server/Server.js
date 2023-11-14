@@ -82,7 +82,7 @@ sgMail.send(message)
     })
 //*/
 
-app.get("/", (req,res) => {
+app.get("/", (req, res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
     res.send("\nHello from the server homepage");
 })
@@ -104,8 +104,19 @@ app.post("/expenses", async(req, res) => {
     }
 })
 
+app.post("/users", async (req, res) => {
+    try {
+        const users = await User.create(req.body);
+        response.status(200).json(users);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({message: error.message});
+    }
+    
+})
+
 // Route to get all users
-app.get("/users", async (request,response) => {
+app.get("/users", async (request, response) => {
     try {
         const users = await User.find();
         response.json(users);
