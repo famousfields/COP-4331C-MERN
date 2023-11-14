@@ -22,6 +22,12 @@ const [popupActive,setPopupActive] = useState(false);
 //   setPopupActive(false);
 //   setNewExpense("");
 // }
+// function to fetch user expenses
+const fetchExpenses= async() =>{
+  const data = await fetch("https://localhost:5000/expenses")
+  .then(res=>res.json())
+  .then((d)=>setExpenses(d))
+}
 const fallback = ("Can not load ");
 
   return (
