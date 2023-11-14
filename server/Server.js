@@ -17,11 +17,24 @@ const PORT_S = 433;
 app.use(cors());
 app.use(express.json());
 
+// Global middleware function (logs the time, along with request method and route)
+app.use( (req, res, next) => {
+    //date = new Date().
+    //strTime = 
+    //console.log('Time:', Date.now(), '; Request Type:', req.method);
+    console.log('Request Type:', req.method, ', Route:', req.path);
+    next()
+})
 //connect db here
   //infrastructure for HTTPS, requires a key pair be created and then a cert.
 const https = require('node:https');
 const http = require('node:http');
 const fs = require('node:fs');
+//const { signup, confirmEmail, resendLink } = require('./emailHandler');
+
+const signup = require('./emailHandler/signup');
+const resendLink = require('./emailHandler/signup');
+const confirmEmail = require('./emailHandler/confirmEmail');
 
 /*const options = {
     key: fs.readFileSync('path_to_key.pem'),
@@ -33,23 +46,7 @@ const options = {
     passphrase: 'mernProj',
 };
 
-// infrastructure for sending emails with sendgrid
-// A basic message
-/*const msg = {
-    to: 'da429145@ucf.edu',
-    from: 'mern.cop4331@gmail.com',
-    subject: 'Hello From SendGrid',
-    text: 'sent from server.js using SendGrid',
-    html: '<strong>sent from server.js using SendGrid</strong>',
-};
-sgMail.send(message)
-    .then( () => {
-        console.log('Email sent')
-    })
-    .catch( (error) => {
-        console.error(error)
-    })
-//*/
+// infrastructure for sending emails with sendgrid moved to ./emailHandler/
 
 app.get("/", (req,res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
@@ -83,6 +80,34 @@ app.get("/users", async (request,response) => {
     }
     
 })
+
+// Handle a post for a new user
+app.post('/signup', (req, res, next) => {
+    output = signup(req, res, next);
+    res.end(output);
+    next()
+},
+    (req, res) => {
+        console.log('Successfully completed Signup route')
+    });
+
+// Handle verification of the email given along with the token.
+app.get('/verify/:email/:token', (req, res, next) => {
+    output = confirmEmail(req, res, next);
+    res.end(output);
+    next();
+}, 
+    (req, res, next) => {
+        console.log('Successfully completed Confirm Email route');
+    });
+
+app.post('/resend/', (req, res, next) => {
+    output = resendLink(req, res, next);
+    res.json(output);
+    next()
+}, (req, res, next) => {
+    console.log('Successfully finished resend route');
+});
 
 /*
 app.get("/api/expenses", async(request,response) => {

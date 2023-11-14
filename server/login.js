@@ -1,7 +1,7 @@
 const Bcrypt = require('bcyrpt')
 const User = require("./models/userModel")
 
-exports.login = (req, res, next) => {
+const login = (req, res, next) => {
     User.findOne({ email:req.body.email } , (err, user) => {
         // report error
         if(err) {
@@ -26,3 +26,5 @@ exports.login = (req, res, next) => {
         }
     })
 }
+
+module.exports = login;
