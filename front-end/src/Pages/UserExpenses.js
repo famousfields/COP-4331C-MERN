@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import Expenses from '../Components/Expenses'
 
 function UserExpenses() {
@@ -6,6 +6,12 @@ function UserExpenses() {
 const [expenses,setExpenses] = useState({});
 const [newExpense,setNewExpense] = useState({});
 const [popupActive,setPopupActive] = useState(false);
+const [expenseTotal,setExpenseTotal] = useState(0);
+const [monthlyBudget,setMonthlyBudget] = useState();
+const [displayBudget,setDisplayBudget] = useState();
+const [budget,setBudget] = useState();
+
+
 
 //function to fetch api and add expense
 // const addExpense = async() => {
@@ -28,6 +34,14 @@ const fetchExpenses= async() =>{
   .then(res=>res.json())
   .then((d)=>setExpenses(d))
 }
+useEffect(() =>{
+},[expenses,expenseTotal])
+
+const expenseHandler= (e) =>{
+  localStorage.setItem(1,monthlyBudget);
+  setDisplayBudget(localStorage.getItem(1));
+}
+
 const fallback = ("Can not load ");
 
   return (
@@ -57,7 +71,15 @@ const fallback = ("Can not load ");
         </div>
       </div>
       <div className='expense-total'>Expense Total: $700</div>
-      <div className='total-income'>Total Income: $1500</div>
+
+      {/* Will not let me finish entering the total budget... records first integer entereded and renders it to the screen */}
+      {displayBudget ? 
+      <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
+      <div className='monthly-budget-input'> 
+        <h3>Enter monthly budget:</h3>
+        <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget}onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
+        <button onClick={expenseHandler}>Add budget</button>
+        </div>}
       <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
       {/*popupActive ? (
         <div className='popup'>
