@@ -1,0 +1,36 @@
+version: '3'
+services:
+  front-end:
+    image: front-end-techno-image
+    build:
+      contex: ./front-end
+    ports:
+      - "3000:3000"
+    networks:
+      - mern-app
+  server:
+  image: first-techno-image
+  build:
+    context: ./server
+  ports:
+  - "3000:3000"
+  networks:
+  - mern-app
+  depends on:
+  - mongo
+  
+  mongo:
+    image: mongo:4.4-bionic 
+    ports:
+    - "27017:27017"
+    networks:
+      - mern-app
+    volumes:
+    - mongo-data:/data/db
+      
+networks:
+  mern-app:
+    driver: bridge      
+volumes:
+  mongo-data:
+    driver: local
