@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Linear+B&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@700&display=swap');
+
 :root {
 	--primary: #D81E5B;
 	--secondary: #8A4EFC;
@@ -16,15 +19,21 @@
 }
 
 body {
-	background-color: var(--dark-alt);
-	color: var(--light);
+	font-family: 'Noto Sans Linear B', sans-serif;
+	background-color: white;
+	background-size: cover;
+	background-repeat: no-repeat;
+	color: black;
 }
+
+
 .home-page{
-	margin-top: 10cm;
-	display:flex;
+	text-align: center;
 	align-items: center;
 	justify-content: center;
 }
+
+
 
 .expese-layout {
 	padding: 32px;
@@ -36,6 +45,7 @@ h1 {
 	margin-bottom: 32px;
 }
 
+/*
 h4 {
 	font-size: 18px;
 	color: var(--light-alt);
@@ -43,6 +53,8 @@ h4 {
 	font-weight: 400;
 	margin-bottom: 16px;
 }
+
+*/
 .expense {
 	position: relative;
 	background-color: var(--dark);
@@ -82,16 +94,16 @@ h4 {
 }
 
 .navbar{
-  background-color: red;
+  background-color: darkgrey;
   display: flex;
-  color:white;
+  color: white;
   justify-content: space-between;
   align-items: stretch;
   gap: 2rem;
-  padding: 0 1rem;
+  padding: 20px 20px;
 }
 .site-title {
-  font-size: 2rem;
+  font-size: large;
 }
 
 .navbar ul {
@@ -104,6 +116,8 @@ h4 {
 
 .navbar a {
   color: inherit;
+  font-family: 'Noto Sans Linear B', sans-serif;
+  font-size: large;
   text-decoration: none;
   height: 100%;
   display: flex;
@@ -117,9 +131,6 @@ h4 {
 
 .navbar li:hover {
   background-color: #777;
-}
-.about-devs{
-	padding: 32px;
 }
 .dev-entry
 {
@@ -151,4 +162,76 @@ h4 {
 	background-color: var(--primary);
 	background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));
 	cursor: pointer;
+}
+
+/*Image of guy in the home screen*/
+.image-flexBox { 
+	display: flex;
+	align-items: center;
+	margin-right: 50px;
+  }
+
+
+.homeButtons {
+	font-family: 'Noto Sans Linear B', sans-serif;
+	font-size: 30px;
+	margin: 30px;
+	border-radius: 30px;
+	padding: 10px;
+	background-color: darkgray;
+}
+
+.homeButtons:hover{
+	background-color: black;
+	color: white;
+}
+
+.welcomeDiv {
+	
+	background-image: url('https://i.imgur.com/ofgmYoO.jpg');
+	background-size: cover;
+	background-position: center;
+	height: 500px;
+	align-items: center;
+}
+
+.welcomeDiv h1 {
+	font-family: 'Kanit', sans-serif;
+	font-size: 50px;
+}
+
+.welcomeTextBox{
+	width: 500px;
+	text-align: center;
+	background-color: rgba(255, 255, 255, 0.5);
+	padding: 30px;
+	margin-left: 50px;
+	border-radius: 50px;
+}
+
+.welcomeDiv h1 {
+	padding-top: 50px;
+}
+
+.featureStrip{
+	height: 100px;
+	background-color: darkgray;
+	align-items: center;
+	text-align: center;
+	justify-content: center;
+	display: flex;
+}
+
+/* About Page */
+.memberCard {
+	align-items: center;
+	margin: 50px;
+}
+
+.memberCard img {
+	max-width: 15%;
+}
+
+.aboutBox{
+
 }

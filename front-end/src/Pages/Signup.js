@@ -32,40 +32,49 @@ function Signup() {
 
      const signupForm = (
         <div className="form-container">
-            <form onSubmit={handleSubmit}>
-                <label> enter email
+            <div className= 'signupFormSurroundingBox'>
+                <form onSubmit={handleSubmit}>
+                    <label> Enter Email
+                        <input
+                        className='inputBox'
+                        type = 'text'
+                        required
+                        placeholder='email'
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        />
+                    </label>
+                    <br/>
+                    <label> Enter Password
+                        <input
+                        className='inputBox'
+                        type = 'password'
+                        required
+                        placeholder='password'
+                        value={password1}
+                        onChange={e => setPassword1(e.target.value)}
+                        //onBlur={e => setErrorMmessage}
+                        />
+                    </label>
+                    <br/>
+                    <label> Re-Enter Password
+                        <input
+                        className='inputBox'
+                        type = 'password'
+                        required
+                        placeholder='re-enter password'
+                        value={password2}
+                        onChange={e => setPassword2(e.target.value)}
+                        />
+                    </label>
+                    <br/>
                     <input
-                    type = 'text'
-                    required
-                    placeholder='email'
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    className='formButton'
+                    type = 'submit'
+                    value= "signup"
                     />
-                </label>
-                <label> enter password
-                    <input
-                    type = 'password'
-                    required
-                    placeholder='password'
-                    value={password1}
-                    onChange={e => setPassword1(e.target.value)}
-                    //onBlur={e => setErrorMmessage}
-                    />
-                </label>
-                <label> re-enter password
-                    <input
-                    type = 'password'
-                    required
-                    placeholder='re-enter password'
-                    value={password2}
-                    onChange={e => setPassword2(e.target.value)}
-                    />
-                </label>
-                <input
-                type = 'submit'
-                value= "signup"
-                />
-            </form>
+                </form>
+            </div>
         </div>
      )
         
