@@ -1,17 +1,33 @@
 import React, {useState,Effect} from 'react'
 import axios from "axios"
-import { useHistory } from "react-router-dom";
+import { useHistory,useNavigate } from "react-router-dom";
 
 function Login() 
 {
-    var loginEmail;
-    var loginPassword;
+    const [loginEmail,setLoginEmail] = useState('');
+    const [loginPassword,setLoginPassword] = useState('');
+
+    const history = useNavigate();
     const [users,setUsers] = useState({});
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
 
 
      const handleSubmit = async(e) =>{
+        e.preventDefault();
+        try{
+            fetch("https://localhost:5000/login",{
+                loginEmail,loginPassword
+            }).then(res=>{
+                if(res.ok){
+                   history(`/expenses/${res.id}`);
+                }   
+            })
+        }
+        catch(e){
+            console.log(e.errorMessage);
+        }
+       
     //     e.preventDefault();
     //     var user = {email:loginEmail.value,password:loginPassword.value};
     //     var js = JSON.stringify(obj);
@@ -66,7 +82,8 @@ function Login()
                         required
                         placeholder='Email'
                         name='email'
-                        ref={(e) => loginEmail = e}
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
                     />
                 </label>
                 <label> password
@@ -75,11 +92,12 @@ function Login()
                         required
                         placeholder='password'
                         name='pass'
-                        ref={(e) => loginPassword = e}
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
                     />
                 </label>
                 <input type='submit' value= "login" />
-                <button onClick={redirectSignUp}>   Sign up</button>
+                <button onClick = {redirectSignUp}>   Sign up</button>
             </form>
         </div>
     );
