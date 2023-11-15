@@ -32,9 +32,9 @@ const http = require('node:http');
 const fs = require('node:fs');
 //const { signup, confirmEmail, resendLink } = require('./emailHandler');
 
-const signup = require('./emailHandler/signup');
+//const signup = require('./emailHandler/signup');
 const resendLink = require('./emailHandler/signup');
-const confirmEmail = require('./emailHandler/confirmEmail');
+//const confirmEmail = require('./emailHandler/confirmEmail');
 
 /*const options = {
     key: fs.readFileSync('path_to_key.pem'),
@@ -81,20 +81,132 @@ app.get("/users", async (request,response) => {
     
 })
 
+const signup = function(req, res, next) {
+    User.findOne( {email: req.body.email })
+        .then( (err, user) => {
+            if(err) {
+                return {msg: err.message};
+            }
+            // or if the user already exists
+            else if (user) {
+                return {msg:'Email already associated with an account'};
+            }
+            //register otherwise
+            else {
+                // hash the password
+                req.body.password = Bcrypt.hashSync(req.body.password, 10);
+                console.log('DEBUG: Password hashed...');
+
+                user = new User({ name: req.body.name, email: req.body.email, password: req.body.password});
+                user.save()
+                .then( (err) => {
+                    if(err) {
+                        return {msg:err.message};
+                    }
+                    console.log('DEBUG: user saved successfully...');
+
+                    // create token for this user (to verify them)
+                    var token = new Token( {_userId: user._id, token: crypto.randomBytes(16).toString('hex')});
+                    token.save()
+                    .then((err) => {
+                        if(err){
+                            return {msg:err.message};
+                        }
+                        console.log('DEBUG: token saved successfully...');
+
+                        // send an email to verify user - don't see why email is needed in url. maybe name instead.
+                        v_url = 'http://' + req.headers.host + '/verify/' + user.email + '/' + token.token;
+                        const message = {
+                            template_id: 'd-07d36665001b4f28bc9e07d335bf8f51', //template for email verification
+                            dynamic_template_data: {
+                                first_name: req.body.name,
+                                verify_url: v_url    // google.com used for testing.
+                            },
+                            personalizations: [ {
+                                to: [
+                                    {
+                                    email: req.body.email,
+                                    name: req.body.name
+                                    },
+                                ],
+                            } ],
+                            from: {
+                                email: 'mern.cop4331@gmail.com',
+                                name: 'Mern Group 5'
+                            },
+                        };
+
+                        sgMail.send(message)
+                            .then( () => {
+                                console.log('Email sent to ' + message.personalizations.to.email);
+                            })
+                            .catch( (error) => {
+                                console.error(error)
+                            })
+                        return {msg:'Verification Email sent to ' + user.email};
+                    });
+
+                })
+            
+            }
+        });
+}
+
 // Handle a post for a new user
 app.post('/signup', (req, res, next) => {
     output = signup(req, res, next);
-    res.end(output);
+    res.json(output);
     next()
 },
     (req, res) => {
         console.log('Successfully completed Signup route')
     });
 
+const confirmEmail = (req, res, next) => {
+    Token.findOne( {token: req.params.token })
+        .then( (err, token) => {
+            // if token not found, it may have expired
+            if(!token) {
+                return {msg: 'Verification link may have expired. Click Resend Email'};
+            }
+            // otherwise see if the user associated is valid.
+            else {
+                User.findOne({_id: token._userId, name: req.params.name })
+                    .then( (err, user) => {
+                    // first check if not valid
+                    if(!user) {
+                        return {msg:'Unable to find user for this verification.'};
+                    }
+                    //check if already verified
+                    else if (user.isVerified) {
+                        return {msg:'User already verified, login instead'};
+                    }
+                    else {
+                        // Verify the user
+                        user.isVerified = true;
+                        //token no longer needed, delete it
+                        Token.deleteOne({token:req.params.token})
+
+                        user.save()
+                        .then((err) => {
+                            if(err) {
+                                return {msg: err.message};
+                            }
+                            else {
+                                return {msg:'Account successfully verified'};
+                            }
+                        })
+                    }
+                })
+            }
+
+        });
+}
+
 // Handle verification of the email given along with the token.
-app.get('/verify/:email/:token', (req, res, next) => {
+app.get('/verify/:name/:token', (req, res, next) => {
     output = confirmEmail(req, res, next);
-    res.end(output);
+    res.json(output);
     next();
 }, 
     (req, res, next) => {
