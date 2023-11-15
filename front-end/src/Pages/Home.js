@@ -6,12 +6,14 @@ function Home() {
     <div className='home-page'>
 
       <div className='welcomeDiv'>
-
-        <h1>The Expense Tracker</h1>
-
+        <br/>
+        <br/>
         <div className='welcomeTextBox'>
+            
+            <img src='https://i.imgur.com/jDRbafb.png'></img>
+
             <h2>
-            The Expense Tracker is the Simplest way to take control of your finances. 
+            The Expense Expert is the Simplest way to take control of your finances. 
             Effortlessly track your expenses, manage budgets, and gain insights into your spending habits. 
             </h2>
 

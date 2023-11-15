@@ -191,12 +191,12 @@ h4 {
 }
 
 .welcomeDiv {
-	
 	background-image: url('https://i.imgur.com/ofgmYoO.jpg');
 	background-size: cover;
 	background-position: center;
 	height: 500px;
 	align-items: center;
+
 }
 
 .welcomeDiv h1 {
@@ -213,6 +213,9 @@ h4 {
 	border-radius: 50px;
 }
 
+.welcomeTextBox img{
+	max-width: 80%;
+}
 .welcomeDiv h1 {
 	padding-top: 50px;
 }
@@ -234,8 +237,4 @@ h4 {
 
 .memberCard img {
 	max-width: 15%;
-}
-
-.aboutBox{
-
 }
