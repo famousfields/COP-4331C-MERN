@@ -95,7 +95,8 @@ app.post('/signup', async (req, res, next) => {
 
 // Handle verification of the user given along with the token.
 app.get('/verify/:name/:token', async (req, res, next) => {
-    output = await confirmEmail(req, res, next);
+    output = await confirmEmail(req, res, next);    //updates res in function
+    //console.log('Verify output:' + output);
     next();
 }, 
 (req, res, next) => {
@@ -104,9 +105,9 @@ app.get('/verify/:name/:token', async (req, res, next) => {
 });
 
 // resend not yet tested
-app.post('/resend/', (req, res, next) => {
-    output = resendLink(req, res, next);
-    res.json(output);
+app.post('/resend/', async (req, res, next) => {
+    output = await resendLink(req, res, next);
+    //res.json(output);
     next()
 }, (req, res, next) => {
     console.log('Successfully finished resend route');
@@ -114,8 +115,8 @@ app.post('/resend/', (req, res, next) => {
 
 app.post('/login/', async (req, res, next) => {
     output = await login(req, res, next);
-
-    res.json(output);
+    //console.log(output);  //don't log this, it is very long
+    //res.json(output); //handled in the function
     next();
 }, (req, res, next) => {
     console.log('Successfully completed login handler');
@@ -153,5 +154,6 @@ app.post("/user/delete/:email", async(req, res) => {
     const result = await User.findOneAndDelete({email:req.params.email});
 
     res.status(200).json(result);
+    console.log(`Deleted a user`);
 })
 

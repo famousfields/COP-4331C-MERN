@@ -21,9 +21,8 @@ const signup = async function(req, res, next) {
                 return res.status(500).send({msg:'Error writing log file', err: err.message});
         });
         // need to figure out proper way to handle this... it is doing it for all emails! Soln: check if email is not null
-        if(userQ.email != null) {
+        if(userQ != null && userQ.email != null && userQ.email === req.params.email) {
             return res.status(500).send({msg: 'Email already associated!'});
-            // must be a problem with syntax of User.findOne ... need to figure it out
         }
         else {
             // hash the password

@@ -1,5 +1,5 @@
 // file that houses the login function
-const Bcrypt = require('bcyrpt')
+const Bcrypt = require('bcrypt')
 const User = require("./models/userModel")
 
 const login = async (req, res, next) => {
@@ -9,23 +9,23 @@ const login = async (req, res, next) => {
             
         // check if user is null (did not find email.)
         if(!user) {
-            return res.status(401).send({msg:'User email "' + req.body.email + '" not found'});
+            return res.status(401).json({ msg:('User email "' + req.body.email + '" not found') });
         }
         // then compare password hashes
         else if( !Bcrypt.compareSync(req.body.password, user.password)) {
-            return res.status(401).send({msg: 'Wrong Password!'});
+            return res.status(401).json({ msg: 'Wrong Password!' });
         }
         // finally, check if verified
         else if(!user.isVerified) {
-            return res.status(401).send({msg:'Email not yet verified! Check your spam folder for link'});
+            return res.status(401).json({ msg:'Email not yet verified! Check your spam folder for link' });
         }
         // otherwise, all good!
         else {
-            return res.status(200).send('Successful log in!');
+            return res.status(200).json({ msg:'Successful log in!' });
             //Probably need some other stuff here to tell server that user is authenticated, like a session token/cookie
         }
     } catch(err) {
-        return res.status(500).send({msg:'login function error' ,'err': err.message});
+        return res.status(500).json({ err:'login function error' ,'err': err.message });
     }
 }
 
