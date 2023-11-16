@@ -11,9 +11,9 @@ key = fs.readFileSync('./sendGridAPIKey.txt', {'encoding':'utf-8'});
 sgMail.setApiKey(key); //Get public key from the text file
 
 // use a POST method
-resendLink = (req, res, next) => {
+const resendLink = async (req, res, next) => {
     User.findOne({email: req.body.email})
-        .then( (err, user) => {
+        .then( (user) => {
             // first see if user is in DB
             if (!user) {
                 return {msg: 'Unable to find user with that email'};
@@ -26,16 +26,16 @@ resendLink = (req, res, next) => {
                 //send a verification link - start by creating a new token
                 console.log('DEBUG: User found to resend link...');
 
-                var token = new Token( {_userId: user._id, token: crypto.randomBytes(16).toString('hex')});
-                    token.save()
-                    .then((err) => {
-                        if(err){
-                            return {msg:err.message};
-                        }
+                //create token for verification
+                var token = Token.create( {_userId: user._id, token: crypto.randomBytes(16).toString('hex') });
+                token.save()
+                    .then( (token) => {
+                        
                         console.log('DEBUG: new token saved...');
 
                         // send an email to verify user
                         v_url = 'https://' + req.headers.host + '/verify/' + user.email + '/' + token.token;
+                        
                         const message = {
                             template_id: 'd-07d36665001b4f28bc9e07d335bf8f51', //template for email verification
                             dynamic_template_data: {
@@ -43,11 +43,11 @@ resendLink = (req, res, next) => {
                                 verify_url: v_url    // google.com used for testing.
                             },
                             personalizations: [ {
-                                to: [
-                                    {
-                                    email: req.body.email,
-                                    name: req.body.name
+                                to: [ {
+                                        email: req.body.email,
+                                        name: req.body.name
                                     },
+                                    // Add extras here (if so desired)
                                 ],
                         
                             } ],
@@ -55,17 +55,23 @@ resendLink = (req, res, next) => {
                                 email: 'mern.cop4331@gmail.com',
                                 name: 'Mern Group 5'
                             },
+                            // perhaps mern email as BCC.
                         };
 
                         sgMail.send(message)
                             .then( () => {
-                                console.log('Email sent to ' + message.personalizations.to.email);
+                                console.log('Email sent to ' + user.email);
                             })
                             .catch( (error) => {
                                 console.error(error)
                             })
                         return {msg:'Verification Email sent to ' + user.email};
+                    }).catch( (err) => {
+                        return {'msg':err.message};
                     });
             }
+        }).catch( (err) => {
+            return {'err':err.message};
         });
 }
+module.exports = resendLink;

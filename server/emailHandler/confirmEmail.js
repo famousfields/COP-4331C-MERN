@@ -7,76 +7,54 @@ const User = require('../models/userModel');
 // where 'confirmEmail' is the function below. 
 const confirmEmail = async (req, res, next) => {
     try {
-    uToken = await Token.findOne( {token: req.params.token });
-    //.then() will take the promise returned by .findOne which is the token document.
-        /*.then( (err, token) => {
-            // if token not found, it may have expired
-            if(!token) {
-                return {msg: 'Verification link may have expired. Click Resend Email'};
-            }
-            // otherwise see if the user associated is valid.
-            else {
-                User.findOne({_id: token._userId, name: req.params.name })
-                    .then( (err, user) => {
-                    // first check if not valid
-                    if(!user) {
-                        return {msg:'Unable to find user for this verification.'};
-                    }
-                    //check if already verified
-                    else if (user.isVerified) {
-                        return {msg:'User already verified, login instead'};
-                    }
-                    else {
-                        // Verify the user
-                        user.isVerified = true;
-                        //token no longer needed, delete it
-                        Token.deleteOne({token:req.params.token})
-
-                        user.save()
-                        .then((err) => {
-                            if(err) {
-                                return {msg: err.message};
-                            }
-                            else {
-                                return {msg:'Account successfully verified'};
-                            }
-                        })
-                    }
-                })
-            }
-
-        });*/
-        if(!uToken) {
-            return { 'msg': 'Verification link may have expired'};
+        // await will wait for the query to run and returns a document. 
+        var token = await Token.findOne( {token: req.params.token });
+        //.then() will take the promise returned by .findOne which is the token document. (but you need await...)
+        if(!token) {
+            return res.status(500).json({ 'msg': 'Verification link may have expired (token not found)'});
         }
         else {
-            user = await User.findOne( {_id:token._userId, name: req.params.name});
-            
+            // user is a query , not the document... 
+            //var user = User.findOne( {_id:token._userId, name: req.params.name});
+            var user = await User.findOne( {_id:token._userId, name: req.params.name})  //await will give a document? = yes!
+            //.then( (user) => { // .then not need if awaiting.
+
             if(!user) {
-                return { 'msg': 'Unable to find user to verify'};
+                return res.status(404).json({ 'msg': 'Unable to find user to verify'});
             }
             else if(user.isVerified) {
-                return { 'msg': 'User already verified! Login in instead'};
+                return res.status(500).json({ 'msg': 'User already verified! Log in instead'});
             }
             else {
                 //Now try to verify the user
                 user.isVerified = true;
                 //we can delete the token, it is no longer needed.
-                Token.deleteOne( { 'token': req.params.token});
+                Token.deleteOne({token:req.params.token});
 
-                user.save().thne( (err) => {
-                    if(err) {
-                        return {'err':err.message};
-                    }
-                    else {
-                        return {'msg': 'Account successfully verified'};
-                    }
-                })
+                // this should be okay? (user.save().then(etc)), otherwise we can replace with User.updateOne() 
+                // User.findByIdAndUpdate(token._userId, {isVerified: true}).exec() //if no callback (no longer supported!), only a query is returned
+                //.save() is better as it does a full validation.
+                user.save().then( (usr) => {
+                        console.log('Successfully confirmed user: ' + usr.name);
+                        return res.status(200).json({'msg': 'Account successfully verified', name: usr.name, email: usr.email});
+                    })
+                    .catch((err) => {
+                        if(err) {
+                            return res.status(500).json({'msg': 'User.findByIdAndUpdate Error','err':err.message});
+                        }
+                        else {  //probably never reach... just saying.
+                            return res.status(500).json({'msg': 'Account successfully verified'});
+                        }
+                    });
             }
+            // }).catch( (err) => {
+            //     return res.status(500).json({'msg': 'Error on User.findOne.exec()', 'err':err.message});
+            // });
         }
+        
     }
     catch (err) {
-        return {'err':err};
+        return res.status(500).json({'msg': 'Find Token error (try-catch block)', 'err':err.message});
     }
 }
 

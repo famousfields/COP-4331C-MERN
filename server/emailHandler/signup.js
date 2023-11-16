@@ -11,87 +11,81 @@ key = fs.readFileSync('./sendGridAPIKey.txt', {'encoding':'utf-8'});
 sgMail.setApiKey(key); //Get public key from the text file
 
 // use POST. Requires JSON with email, name and password
-// const signup = function(req, res, next) {
-//     User.findOne( {email: req.body.email })
-//         .then( (err, user) => {
-//             if(err) {
-//                 return {msg: err.message};
-//             }
-//             // or if the user already exists
-//             else if (user) {
-//                 return {msg:'Email already associated with an account'};
-//             }
-//             //register otherwise
-//             else {
-//                 // hash the password
-//                 req.body.password = Bcrypt.hashSync(req.body.password, 10);
-//                 console.log('DEBUG: Password hashed...');
-
-//                 user = new User({ name: req.body.name, email: req.body.email, password: req.body.password});
-//                 user.save()
-//                 .then( (err) => {
-//                     if(err) {
-//                         return {msg:err.message};
-//                     }
-//                     console.log('DEBUG: user saved successfully...');
-
-//                     // create token for this user (to verify them)
-//                     var token = new Token( {_userId: user._id, token: crypto.randomBytes(16).toString('hex')});
-//                     token.save()
-//                     .then((err) => {
-//                         if(err){
-//                             return {msg:err.message};
-//                         }
-//                         console.log('DEBUG: token saved successfully...');
-
-//                         // send an email to verify user - don't see why email is needed in url. maybe name instead.
-//                         v_url = 'http://' + req.headers.host + '/verify/' + user.email + '/' + token.token;
-//                         const message = {
-//                             template_id: 'd-07d36665001b4f28bc9e07d335bf8f51', //template for email verification
-//                             dynamic_template_data: {
-//                                 first_name: req.body.name,
-//                                 verify_url: v_url    // google.com used for testing.
-//                             },
-//                             personalizations: [ {
-//                                 to: [
-//                                     {
-//                                     email: req.body.email,
-//                                     name: req.body.name
-//                                     },
-//                                 ],
-//                             } ],
-//                             from: {
-//                                 email: 'mern.cop4331@gmail.com',
-//                                 name: 'Mern Group 5'
-//                             },
-//                         };
-
-//                         sgMail.send(message)
-//                             .then( () => {
-//                                 console.log('Email sent to ' + message.personalizations.to.email);
-//                             })
-//                             .catch( (error) => {
-//                                 console.error(error)
-//                             })
-//                         return {msg:'Verification Email sent to ' + user.email};
-//                     });
-
-//                 })
-            
-//             }
-//         });
-// }
 
 const signup = async function(req, res, next) {
     try {
-        user = await User.findOne({email: req.params.email});
+        var userQ = await User.findOne( {email: req.params.email});
+        // write to a file as console.log disappears into the void...
+        fs.writeFile('./userQ.txt', ('Time: ' + Date.now().toString() + '\n' + userQ.toString() + '\n'), {encoding:'utf8', flag:'a'}, (err) => {
+            if(err) 
+                return res.status(500).send({msg:'Error writing log file', err: err.message});
+        });
+        // need to figure out proper way to handle this... it is doing it for all emails! Soln: check if email is not null
+        if(userQ.email != null) {
+            return res.status(500).send({msg: 'Email already associated!'});
+            // must be a problem with syntax of User.findOne ... need to figure it out
+        }
+        else {
+            // hash the password
+            req.body.password = Bcrypt.hashSync(req.body.password, 10);
+            // console.log('DEBUG: Password hashed...');
 
-        if(user) {
-            return {'msg': 'User already exists!'};
+            // So, User.create creates AND saves to the DB!
+            User.create({name:req.body.name, email:req.body.email, password: req.body.password})
+                .then( (user) => {
+                    //For a successful .create() 
+                    // console.log('DEBUG: User saved successfully');
+                    
+                    //create token for verification
+                    Token.create( {_userId: user._id, token: crypto.randomBytes(16).toString('hex') })
+                        .then( (token) => {
+                            // successfully saved - send an email
+                            // UPDATE to https when nearing completion.
+                            v_url = 'http://' + req.headers.host + '/verify/' + user.name + '/' + token.token;
+                            const message = {
+                                template_id: 'd-07d36665001b4f28bc9e07d335bf8f51', //template for email verification
+                                // data for the dynamic template
+                                dynamic_template_data: {
+                                    first_name: req.body.name,
+                                    verify_url: v_url    // google.com used for testing.
+                                },
+                                personalizations: [ {
+                                    to: [ {
+                                            email: req.body.email,
+                                            name: req.body.name
+                                    }, /*add additional emails here!*/],
+                                } ],
+                                from: {
+                                    email: 'mern.cop4331@gmail.com',
+                                    name: 'Mern Group 5'
+                                },
+                                //maybe add mern.cop4331@gmail.com as a BCC
+                            };
+
+                            sgMail.send(message)
+                                .then( () => {
+                                    console.log('Email sent to ' + user.email);
+                                }).catch( (error) => {
+                                    console.error(error);
+                                    return res.status(500).send({msg: 'Error sending mail', err: error.message})
+                                });
+                            return res.status(200).send({msg:'Verification email sent to ' + user.email});
+                            //{'msg':'Verification email sent to ' + user.email};
+                        })
+                        .catch( (err)=> {
+                            //if an error occured
+                            console.log('Error during token saving: ' + err);
+                            return res.status(500).send({msg: 'Error during saving token', 'err':err.message}); //{'err': err};
+                        });
+
+                }).catch( (err) => {
+                    console.log('Error during user creation: ' + err);
+                    return res.status(500).send({'msg':'error while creating user', 'err':err.message});
+                });
         }
 
     } catch(err) {
-        return { 'err': err};
+        return res.status(500).send({'msg': 'try-catch error in signup.js','err':err.message});;
     }
 }
 
