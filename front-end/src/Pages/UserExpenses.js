@@ -9,25 +9,22 @@ const [popupActive,setPopupActive] = useState(false);
 const [expenseTotal,setExpenseTotal] = useState(0);
 const [monthlyBudget,setMonthlyBudget] = useState();
 const [displayBudget,setDisplayBudget] = useState();
-const [budget,setBudget] = useState();
-
-
 
 //function to fetch api and add expense
-// const addExpense = async() => {
-//   const data = await fetch(API_BASE + "expense/new",{
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify({
-//       text: newExpense
-//     })
-//   }).then(res =>res.json());
-//   setExpenses([...expenses,data]);
-//   setPopupActive(false);
-//   setNewExpense("");
-// }
+const addExpense = async() => {
+  const data = await fetch("https://localhost:5000/expenses",{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      text: newExpense
+    })
+  }).then(res =>res.json());
+  setExpenses([...expenses,data]);
+  setPopupActive(false);
+  setNewExpense("");
+}
 // function to fetch user expenses
 const fetchExpenses= async() =>{
   const data = await fetch("https://localhost:5000/expenses")
@@ -42,7 +39,7 @@ const expenseHandler= (e) =>{
   setDisplayBudget(localStorage.getItem(1));
 }
 
-const fallback = ("Can not load ");
+const fallback = ("");
 
   return (
     <div className="expense-layout">
@@ -72,7 +69,6 @@ const fallback = ("Can not load ");
       </div>
       <div className='expense-total'>Expense Total: $700</div>
 
-      {/* Will not let me finish entering the total budget... records first integer entereded and renders it to the screen */}
       {displayBudget ? 
       <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
       <div className='monthly-budget-input'> 
@@ -81,7 +77,8 @@ const fallback = ("Can not load ");
         <button onClick={expenseHandler}>Add budget</button>
         </div>}
       <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
-      {/*popupActive ? (
+      
+      {popupActive ? (
         <div className='popup'>
           <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
           <div className="content">
@@ -97,10 +94,9 @@ const fallback = ("Can not load ");
             onChange={e => setNewExpense(e.target.value)}
             value = {newExpense.price} />
              <button className='button' onClick={addExpense}>Create Expense</button> 
-             <button className='button' >Create Expense</button>  
           </div>
         </div>
-      ): fallback*/ }
+      ): fallback}
     </div>
   );
 }

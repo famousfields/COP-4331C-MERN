@@ -118,7 +118,7 @@ app.post("/users", async (req, res) => {
 // Route to get all users
 app.get("/users", async (request, response) => {
     try {
-        const users = awgir.find();
+        const users = user.find();
         response.json(users);
     } catch (error) {
         console.error(error);

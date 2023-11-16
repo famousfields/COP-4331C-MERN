@@ -35,14 +35,15 @@ function Signup() {
             }
             if(result.ok)
             {
-                if(validEmail&&validPassword){
-                    setUserCredentials(email,finalPass);
-                    result.send(userCredentials);
-                }
-                else if(validEmail && !validPassword){
-                    console.log("passwords do not match");
-                    return window.location.assign("/login");
-                }
+                result.send(json)
+                // if(validEmail&&validPassword){
+                //     setUserCredentials(email,finalPass);
+                //     result.send(userCredentials);
+                // }
+                // else if(validEmail && !validPassword){
+                //     console.log("passwords do not match");
+                //     return window.location.assign("/login");
+                // }
             }
     }
 
@@ -74,7 +75,7 @@ function Signup() {
                     required
                     placeholder='re-enter password'
                     value={password2}
-                    onChange={(e => setPassword2(e.target.value)) && comparePass()}
+                    onChange={(e => setPassword2(e.target.value)) && comparePass}
                     />
                 </label>
                 <input

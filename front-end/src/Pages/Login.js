@@ -12,7 +12,7 @@ function Login()
 
 
      const handleSubmit = async(e) =>{
-            const js = JSON.stringify({email:email,ppassword1})
+            const js = JSON.stringify({email:loginEmail,password:loginPassword})
             const result = await fetch("/users",{
                 method:"POST",
                 headers: {
@@ -29,14 +29,15 @@ function Login()
                 }
                 if(result.ok)
                 {
-                    if(validEmail&&validPassword){
-                        setUserCredentials(email,finalPass);
-                        result.send(userCredentials);
-                    }
-                    else if(validEmail && !validPassword){
-                        console.log("passwords do not match");
-                        return window.location.assign("/login");
-                    }
+                    result.send(js);
+                    // if(validEmail&&validPassword){
+                    //     setUserCredentials(email,finalPass);
+                    //     result.send(userCredentials);
+                    // }
+                    // else if(validEmail && !validPassword){
+                    //     console.log("passwords do not match");
+                    //     return window.location.assign("/login");
+                    // }
                 }
         }
     //     e.preventDefault();
@@ -106,7 +107,7 @@ function Login()
                     />
                 </label>
                 <input type='submit' value= "login" />
-                <button onClick={redirectSignUp}>   Sign up</button>
+                <button onClick={redirectSignUp}> Sign up</button>
             </form>
         </div>
     );
