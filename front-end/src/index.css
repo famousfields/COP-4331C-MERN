@@ -82,7 +82,7 @@ h4 {
 }
 
 .navbar{
-  background-color: gray;
+  background-color: red;
   display: flex;
   color:white;
   justify-content: space-between;
@@ -150,5 +150,8 @@ h4 {
 	color: var(--light);
 	background-color: var(--primary);
 	background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));
+	cursor: pointer;
+}
+.closePopup{
 	cursor: pointer;
 }

@@ -1,10 +1,16 @@
 import React from 'react'
 
-const Expenses = (user) =>
+const Expenses = (expenses) =>
 {
   return (
     <div>
-      Component do display all expenses
+      {expenses ? expenses.map((expense)=>{
+        <>
+          <h2>{expense.name}</h2>
+          <h2>{expense.quantity}</h2>
+          <p>{expense.price}</p>
+        </>
+      }) : ""}
     </div>
   )
 }
