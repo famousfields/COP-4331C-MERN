@@ -127,13 +127,14 @@ app.post("/users", async (req, res) => {
 // Route to get all users
 app.get("/users", async (request, response) => {
     try {
+        let loginInfo = request.body;
         const users = await User.find();
-        response.json(users);
+        response.json(loginInfo);
+
     } catch (error) {
         console.error(error);
         console.log("Internal Server Error");
     }
-    
 })
 
 /*
