@@ -4,40 +4,51 @@ function About() {
   return (
     <div className='about-devs'>
 
-      <div>
+      <div className = 'aboutHeader'>
         <h1>Meet the Team</h1>
       </div>
 
       <div className='aboutBox'>
+
         <div className = 'memberCard'>
-          <img src = 'https://i.imgur.com/jOfEuol.png'></img>
-          <br></br>
-          <h3>William Fields</h3>
-          <p>Front-End</p>
+          <div className = 'cardContent'>
+            <img src = 'https://i.imgur.com/jOfEuol.png'></img>
+            <br></br>
+            <h3>William Fields</h3>
+            <p>Front-End</p>
+          </div>
         </div>
 
         <div className = 'memberCard'>
-          <img src = 'https://i.imgur.com/jOfEuol.png'></img>
-          <h3>Marco Andres Saavedra</h3>
-          <p>Database/API</p>
+          <div className='cardContent'>
+            <img src = 'https://i.imgur.com/jOfEuol.png'></img>
+            <h3>Marco Andres Saavedra</h3>
+            <p>Database/API</p>
+          </div>
         </div>
 
         <div className = 'memberCard'>
-          <img src = 'https://i.imgur.com/jOfEuol.png'></img>
-          <h3>Jason Griller</h3>
-          <p>API</p>
+          <div className='cardContent'>
+            <img src = 'https://i.imgur.com/jOfEuol.png'></img>
+            <h3>Jason Griller</h3>
+            <p>API</p>
+          </div>
         </div>
 
         <div className = 'memberCard'>
-          <img src = 'https://i.imgur.com/jOfEuol.png'></img>
-          <h3>Christian Rodriguez</h3>
-          <p>Front-End</p>
+          <div className='cardContent'>
+            <img src = 'https://i.imgur.com/jOfEuol.png'></img>
+            <h3>Christian Rodriguez</h3>
+            <p>Front-End</p>
+          </div>
         </div>
 
         <div className = 'memberCard'>
-          <img src = 'https://i.imgur.com/jOfEuol.png'></img>
-          <h3>David Patenaude</h3>
-          <p>Database</p>
+          <div className='cardContent'>
+            <img src = 'https://i.imgur.com/jOfEuol.png'></img>
+            <h3>David Patenaude</h3>
+            <p>Database</p>
+          </div>
         </div>
       </div>
 

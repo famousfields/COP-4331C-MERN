@@ -230,11 +230,34 @@ h4 {
 }
 
 /* About Page */
+
+/*
+.about-devs{
+	background-size: contain;
+	background-image: url('https://i.imgur.com/r9rWt1T.jpg');
+}
+*/
+.aboutHeader{
+	padding-top: 40px;
+	text-align: center;
+}
+.aboutBox{
+	align-items: center;
+	justify-content: center;
+	display: flex;
+	flex-wrap: wrap;
+}
 .memberCard {
 	align-items: center;
-	margin: 50px;
+	margin: 20px;
+}
+
+.cardContent{
+	text-align: center;
 }
 
 .memberCard img {
-	max-width: 15%;
+	align-items: center;
+	max-width: 40%;
+	text-align: center;
 }
