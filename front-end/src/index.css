@@ -82,7 +82,7 @@ h4 {
 }
 
 .navbar{
-  background-color: gray;
+  background-color: red;
   display: flex;
   color:white;
   justify-content: space-between;
