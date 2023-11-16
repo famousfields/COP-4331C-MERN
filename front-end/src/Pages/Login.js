@@ -12,6 +12,33 @@ function Login()
 
 
      const handleSubmit = async(e) =>{
+            const js = JSON.stringify({email:email,ppassword1})
+            const result = await fetch("/users",{
+                method:"POST",
+                headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body :js
+            });
+                let json;
+                try{
+                    json = await result.json();
+                }
+                catch{
+                    console.error(e);
+                }
+                if(result.ok)
+                {
+                    if(validEmail&&validPassword){
+                        setUserCredentials(email,finalPass);
+                        result.send(userCredentials);
+                    }
+                    else if(validEmail && !validPassword){
+                        console.log("passwords do not match");
+                        return window.location.assign("/login");
+                    }
+                }
+        }
     //     e.preventDefault();
     //     var user = {email:loginEmail.value,password:loginPassword.value};
     //     var js = JSON.stringify(obj);
@@ -51,7 +78,7 @@ function Login()
         //     console.log("Error encountered logging you in");
         // }
         //history.push("/userexpenses");
-    }
+    
 
     const redirectSignUp = () => {
         return window.location.assign("/signup");
