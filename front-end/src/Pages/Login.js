@@ -87,28 +87,35 @@ function Login()
 
     const loginForm = (
         <div className="form-container">
-            <form onSubmit={handleSubmit}>
-                <label> Email
-                    <input
-                        type='email'
-                        required
-                        placeholder='Email'
-                        name='email'
-                        ref={(e) => loginEmail = e}
-                    />
-                </label>
-                <label> password
-                    <input
-                        type='text'
-                        required
-                        placeholder='password'
-                        name='pass'
-                        ref={(e) => loginPassword = e}
-                    />
-                </label>
-                <input type='submit' value= "login" />
-                <button onClick={redirectSignUp}> Sign up</button>
-            </form>
+            <div className='loginFormSurroundingBox'>
+                <form onSubmit={handleSubmit}>
+                    <label> Email
+                        <input
+                            className='inputBox'
+                            type='email'
+                            required
+                            placeholder='Email'
+                            name='email'
+                            ref={(e) => loginEmail = e}
+                        />
+                    </label>
+                    <br/>
+                    <label> password
+                        <input
+                            className='inputBox'
+                            type='text'
+                            required
+                            placeholder='password'
+                            name='pass'
+                            ref={(e) => loginPassword = e}
+                        />
+                    </label>
+                    <br/>
+                    <input className = 'formButton' type='submit' value= "login" />
+                    <button className = 'formButton' onClick={redirectSignUp}>   Sign up</button>
+                </form>
+            </div>
+
         </div>
     );
   return (
