@@ -17,8 +17,7 @@ services:
       - "5000:5000"
     networks:
       - mern-app
-    depends_on:
-      - mongo
+    
 
 
 networks:
