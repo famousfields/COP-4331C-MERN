@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const mongodb = require('../dbConn');
 
 //basic user schema that allows for email verification
