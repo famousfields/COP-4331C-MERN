@@ -21,6 +21,7 @@ const login = async (req, res, next) => {
         }
         // otherwise, all good!
         else {
+            // send name and user_id after successful login for frontend to handle.
             return res.status(200).json(
                 { 
                     msg:'Successful log in!',
