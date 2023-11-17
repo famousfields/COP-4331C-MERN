@@ -168,6 +168,7 @@ h4 {
 	cursor: pointer;
 }
 
+
 /*Image of guy in the home screen*/
 .image-flexBox { 
 	display: flex;
@@ -261,3 +262,8 @@ h4 {
 	max-width: 40%;
 	text-align: center;
 }
+
+.closePopup{
+	cursor: pointer;
+}
+

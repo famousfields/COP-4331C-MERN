@@ -86,7 +86,6 @@ app.get("/", (req, res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
     res.send("\nHello from the server homepage");
 })
-
 connectDB();
 
 mongoose.connection.once('open', ()=> {
@@ -104,10 +103,20 @@ app.post("/expenses", async(req, res) => {
     }
 })
 
+app.get("/expenses", async (req, res) => {
+    try {
+        const expense = await Expense.find();
+        response.json(expense);
+    } catch (error) {
+        console.error(error);
+        console.log("Error getting expenses");
+    }
+})
+
 app.post("/users", async (req, res) => {
     try {
         const users = await User.create(req.body);
-        response.status(200).json(users);
+        res.status(200).json(users);
     } catch (error) {
         console.error(error.message);
         res.status(500).json({message: error.message});
@@ -118,7 +127,7 @@ app.post("/users", async (req, res) => {
 // Route to get all users
 app.get("/users", async (request, response) => {
     try {
-        const users = await User.find();
+        const users = user.find();
         response.json(users);
     } catch (error) {
         console.error(error);
@@ -140,8 +149,9 @@ app.post("/login", async (request,response)=>{
         }catch{
 
         }
-    })
+    }
     
+)
 app.post("/user/delete/:id", async(req,res) => {
     const result = await User.findByIdAndDelete(req.params.id);
 
