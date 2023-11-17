@@ -58,7 +58,10 @@ const signup = async function(req, res, next) {
                                     email: 'mern.cop4331@gmail.com',
                                     name: 'Mern Group 5'
                                 },
-                                //maybe add mern.cop4331@gmail.com as a BCC
+                                //maybe add mern.cop4331@gmail.com as a BCC (not yet tested)
+                                bcc: [{
+                                    email: 'mern.cop4331@gmail.com'
+                                }]
                             };
 
                             sgMail.send(message)

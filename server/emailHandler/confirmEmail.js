@@ -34,7 +34,7 @@ const confirmEmail = async (req, res, next) => {
                 // this should be okay? (user.save().then(etc)), otherwise we can replace with User.updateOne() 
                 // User.findByIdAndUpdate(token._userId, {isVerified: true}).exec() //if no callback (no longer supported!), only a query is returned
                 //.save() is better as it does a full validation.
-                user.save().then( (usr) => {
+                await user.save().then( (usr) => {
                         console.log('Successfully confirmed user: ' + usr.name);
                         return res.status(200).json({'msg': 'Account successfully verified', name: usr.name, email: usr.email});
                     })

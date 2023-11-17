@@ -93,7 +93,7 @@ app.post('/signup', async (req, res, next) => {
 });
 
 
-// Handle verification of the user given along with the token.
+// Handle verification of the user given along with the token. Oddity with JSON output.
 app.get('/verify/:name/:token', async (req, res, next) => {
     output = await confirmEmail(req, res, next);    //updates res in function
     //console.log('Verify output:' + output);
@@ -104,7 +104,7 @@ app.get('/verify/:name/:token', async (req, res, next) => {
     next()
 });
 
-// resend not yet tested
+// resend has been tested and works. 
 app.post('/resend/', async (req, res, next) => {
     output = await resendLink(req, res, next);
     //res.json(output);
@@ -123,7 +123,6 @@ app.post('/login/', async (req, res, next) => {
     next();
 })
 
-
 /*
 app.get("/api/expenses", async(request,response) => {
     const result = await UserExpense.find();
@@ -131,25 +130,14 @@ app.get("/api/expenses", async(request,response) => {
 })
 */
 
-/*app.post("/login", async (request,response)=>{
-        const {email,password} = request.body;
-        try{
-            const check = await collection
-        }catch{
-
-        }
-    }
-    
-);*/
-
-/*
+/* //delete by id
 app.post("/user/delete/:id", async(req,res) => {
     const result = await User.findByIdAndDelete(req.params.id);
 
     res.json(result);
 })*/
 
-// a bit easier to use in my opinion
+// delete by email: a bit easier to use in my opinion
 app.post("/user/delete/:email", async(req, res) => {
     const result = await User.findOneAndDelete({email:req.params.email});
 
