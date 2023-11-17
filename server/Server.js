@@ -47,11 +47,16 @@ const options = {
     passphrase: 'mernProj',
 };
 
-// infrastructure for sending emails with sendgrid moved to ./emailHandler/
 
-app.get("/", (req, res) => {
+// For production  / front-end and backend together
+const buildPath = 'E:\\01 VS Code\\COP-4331C-MERN\\front-end\\build'
+app.use(express.static(buildPath));
+
+// all routes from the react/front-end must be sent to the index.html, hence the wildcard.
+app.get("/*", (req, res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
-    res.send("\nHello from the server homepage");
+    //res.send("\nHello from the server homepage");
+    res.sendFile( buildPath + '\\index.html');
 })
 connectDB();
 
@@ -134,15 +139,20 @@ app.post('/resend/', async (req, res, next) => {
     console.log('Successfully finished resend route');
 });
 
-app.post('/login/', async (req, res, next) => {
-    output = await login(req, res, next);
-    //console.log(output);  //don't log this, it is very long
-    //res.json(output); //handled in the function
-    next();
-}, (req, res, next) => {
-    console.log('Successfully completed login handler');
-    next();
-})
+// Route allows us to have the route string in one location and then chain HTTP methods underneath it.
+app.route('/login')
+    .get( (req, res) => {
+        //res.sendFile(buildPath + '')
+    })
+    .post(async (req, res, next) => {
+        output = await login(req, res, next);
+        //console.log(output);  //don't log this, it is very long
+        //res.json(output); //handled in the function
+        next();
+    }, (req, res, next) => {
+        console.log('Successfully completed login handler');
+        next();
+    })
 
 /*
 app.get("/api/expenses", async(request,response) => {
