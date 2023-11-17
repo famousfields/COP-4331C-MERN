@@ -94,9 +94,13 @@ app.post("/users", async (req, res) => {
 // adds an expense id to the user expense array (tested and works)
 app.post("/users/add_expense", async (req, res) => {
     try{
-        User.updateOne({_id: req.body.user_id}, {$push: {"expenses": req.body.exp_id}})
-        .then(c => console.log(c));
-    
+        const user = User.findOneAndUpdate({_id: req.body.user_id}, {$push: {"expenses": req.body.exp_id}}, {new: tue}, 
+        (err, doc) => {
+            if (err) {
+                console.log("Something wrong when updating user");}
+            });
+        res.json(user);
+        
     } catch(error) {
         console.error(error.message);
         res.status(500).json({message: error.message});
