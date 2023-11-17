@@ -51,7 +51,9 @@ function Signup() {
         <div className="form-container">
             <div className= 'signupFormSurroundingBox'>
                 <form onSubmit={handleSubmit}>
-                    <label> Enter Email
+                    <label style = {{
+                        paddingRight : '85px'
+                    }}> Enter Email:</label>
                         <input
                         className='inputBox'
                         type = 'text'
@@ -60,9 +62,11 @@ function Signup() {
                         value={email}
                         onChange={e => setEmail(e.target.value)}
                         />
-                    </label>
+                    
                     <br/>
-                    <label> Enter Password
+                    <label style = {{
+                        paddingRight : '40px'
+                    }}> Enter Password:</label>
                         <input
                         className='inputBox'
                         type = 'password'
@@ -72,9 +76,9 @@ function Signup() {
                         onChange={e => setPassword1(e.target.value)}
                         //onBlur={e => setErrorMmessage}
                         />
-                    </label>
+                    
                     <br/>
-                    <label> Re-Enter Password
+                    <label> Re-Enter Password:
                         <input
                         className='inputBox'
                         type = 'password'

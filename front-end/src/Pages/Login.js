@@ -89,7 +89,9 @@ function Login()
         <div className="form-container">
             <div className='loginFormSurroundingBox'>
                 <form onSubmit={handleSubmit}>
-                    <label> Email
+                    <label style = {{
+                        paddingRight : '40px'
+                    }}> Email:</label>
                         <input
                             className='inputBox'
                             type='email'
@@ -98,9 +100,8 @@ function Login()
                             name='email'
                             ref={(e) => loginEmail = e}
                         />
-                    </label>
                     <br/>
-                    <label> password
+                    <label> Password:</label>
                         <input
                             className='inputBox'
                             type='text'
@@ -109,7 +110,7 @@ function Login()
                             name='pass'
                             ref={(e) => loginPassword = e}
                         />
-                    </label>
+                    
                     <br/>
                     <input className = 'formButton' type='submit' value= "login" />
                     <button className = 'formButton' onClick={redirectSignUp}>   Sign up</button>
