@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 var connecionString ="mongodb+srv://merngroup:merngroup123@merndb.fk1jibv.mongodb.net/test" 
 const connectDB = async()=>{
-    try{
+    try {
         await mongoose.connect(connecionString, {
-            useUnifiedTopology:true,
-            useNewURLParser:true
+            useUnifiedTopology: false,
+            useNewURLParser: false
         });
-    }catch(error){
+    } catch(error) {
         console.error(error);
     }
 }

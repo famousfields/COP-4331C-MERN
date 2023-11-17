@@ -12,6 +12,34 @@ function Login()
 
 
      const handleSubmit = async(e) =>{
+            const js = JSON.stringify({email:loginEmail,password:loginPassword})
+            const result = await fetch("/users",{
+                method:"POST",
+                headers: {
+                    "Content-Type": "application/json"
+                  },
+                  body :js
+            });
+                let json;
+                try{
+                    json = await result.json();
+                }
+                catch{
+                    console.error(e);
+                }
+                if(result.ok)
+                {
+                    result.send(js);
+                    // if(validEmail&&validPassword){
+                    //     setUserCredentials(email,finalPass);
+                    //     result.send(userCredentials);
+                    // }
+                    // else if(validEmail && !validPassword){
+                    //     console.log("passwords do not match");
+                    //     return window.location.assign("/login");
+                    // }
+                }
+        }
     //     e.preventDefault();
     //     var user = {email:loginEmail.value,password:loginPassword.value};
     //     var js = JSON.stringify(obj);
@@ -51,7 +79,7 @@ function Login()
         //     console.log("Error encountered logging you in");
         // }
         //history.push("/userexpenses");
-    }
+    
 
     const redirectSignUp = () => {
         return window.location.assign("/signup");
@@ -59,28 +87,35 @@ function Login()
 
     const loginForm = (
         <div className="form-container">
-            <form onSubmit={handleSubmit}>
-                <label> Email
-                    <input
-                        type='email'
-                        required
-                        placeholder='Email'
-                        name='email'
-                        ref={(e) => loginEmail = e}
-                    />
-                </label>
-                <label> password
-                    <input
-                        type='text'
-                        required
-                        placeholder='password'
-                        name='pass'
-                        ref={(e) => loginPassword = e}
-                    />
-                </label>
-                <input type='submit' value= "login" />
-                <button onClick={redirectSignUp}>   Sign up</button>
-            </form>
+            <div className='loginFormSurroundingBox'>
+                <form onSubmit={handleSubmit}>
+                    <label> Email
+                        <input
+                            className='inputBox'
+                            type='email'
+                            required
+                            placeholder='Email'
+                            name='email'
+                            ref={(e) => loginEmail = e}
+                        />
+                    </label>
+                    <br/>
+                    <label> password
+                        <input
+                            className='inputBox'
+                            type='text'
+                            required
+                            placeholder='password'
+                            name='pass'
+                            ref={(e) => loginPassword = e}
+                        />
+                    </label>
+                    <br/>
+                    <input className = 'formButton' type='submit' value= "login" />
+                    <button className = 'formButton' onClick={redirectSignUp}>   Sign up</button>
+                </form>
+            </div>
+
         </div>
     );
   return (

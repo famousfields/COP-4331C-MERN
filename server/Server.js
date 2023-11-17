@@ -49,7 +49,7 @@ const options = {
 
 // infrastructure for sending emails with sendgrid moved to ./emailHandler/
 
-app.get("/", (req,res) => {
+app.get("/", (req, res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
     res.send("\nHello from the server homepage");
 })
@@ -70,10 +70,31 @@ app.post("/expenses", async(req, res) => {
     }
 })
 
-// Route to get all users
-app.get("/users", async (request,response) => {
+app.get("/expenses", async (req, res) => {
     try {
-        const users = await User.find();
+        const expense = await Expense.find();
+        response.json(expense);
+    } catch (error) {
+        console.error(error);
+        console.log("Error getting expenses");
+    }
+})
+
+app.post("/users", async (req, res) => {
+    try {
+        const users = await User.create(req.body);
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({message: error.message});
+    }
+    
+})
+
+// Route to get all users
+app.get("/users", async (request, response) => {
+    try {
+        const users = user.find();
         response.json(users);
     } catch (error) {
         console.error(error);
