@@ -22,7 +22,7 @@ function Signup() {
     }
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post('http://localhost:5000/users', {email,password})
+        axios.post('http://localhost:5000/users', {name,email,password})
         .then(res=>console.log(res))
         .catch(err=>console.log(err))
         // const js = JSON.stringify({"email":email,"passpassword":password1})

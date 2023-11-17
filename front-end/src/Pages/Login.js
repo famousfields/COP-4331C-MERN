@@ -12,6 +12,10 @@ function Login()
 
 
      const handleSubmit = async(e) =>{
+        e.preventDefault()
+        axios.post('http://localhost:5000/users', {email,password})
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
             // const js = JSON.stringify({email:loginEmail,password:loginPassword})
             //  await fetch("/users",{
             //     method:"POST",
@@ -94,7 +98,7 @@ function Login()
                         required
                         placeholder='Email'
                         name='email'
-                        ref={(e) => loginEmail = e}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </label>
                 <label> password
