@@ -17,11 +17,25 @@ const PORT_S = 433;
 app.use(cors());
 app.use(express.json());
 
+// Global middleware function (logs the time, along with request method and route)
+app.use( (req, res, next) => {
+    //date = new Date().
+    //strTime = 
+    //console.log('Time:', Date.now(), '; Request Type:', req.method);
+    console.log('Request Type:', req.method, ', Route:', req.path);
+    next()
+})
 //connect db here
   //infrastructure for HTTPS, requires a key pair be created and then a cert.
 const https = require('node:https');
 const http = require('node:http');
 const fs = require('node:fs');
+//const { signup, confirmEmail, resendLink } = require('./emailHandler');
+
+const signup = require('./emailHandler/signup');
+const resendLink = require('./emailHandler/resendLink');
+const confirmEmail = require('./emailHandler/confirmEmail');
+const login = require('./login');
 
 /*const options = {
     key: fs.readFileSync('path_to_key.pem'),
@@ -33,54 +47,7 @@ const options = {
     passphrase: 'mernProj',
 };
 
-// infrastructure for sending emails with sendgrid
-/*
-// Tested, and it worked. Albeit, it went to spam (or Junk) initially
-const sgMail = require('@sendgrid/mail');
-//Key is orginally added to the environment and accessed that way (could be more secure)
-key = fs.readFileSync('./sendGridAPIKey.txt', {'encoding':'utf-8'});
-sgMail.setApiKey(key); //Get public key from the text file
-
-// Template ID: d-07d36665001b4f28bc9e07d335bf8f51 for E-mail verification.
-// Will create another Template for password reset.
-const message = {
-    template_id: 'd-07d36665001b4f28bc9e07d335bf8f51',
-    dynamic_template_data: {
-        first_name: "David",
-        verify_url: "google.com"    // google.com used for testing.
-    },
-    personalizations: [
-    {
-        to: [
-            {
-            email: 'da429145@ucf.edu',
-            name: 'David Patenaude'
-        },
-        ],
-
-    }
-    ],
-    from: {
-        email: 'mern.cop4331@gmail.com',
-        name: 'Mern Group 5'
-    },
-};
-// A basic message
-const msg = {
-    to: 'da429145@ucf.edu',
-    from: 'mern.cop4331@gmail.com',
-    subject: 'Hello From SendGrid',
-    text: 'sent from server.js using SendGrid',
-    html: '<strong>sent from server.js using SendGrid</strong>',
-};
-sgMail.send(message)
-    .then( () => {
-        console.log('Email sent')
-    })
-    .catch( (error) => {
-        console.error(error)
-    })
-//*/
+// infrastructure for sending emails with sendgrid moved to ./emailHandler/
 
 app.get("/", (req, res) => {
    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
@@ -131,24 +98,66 @@ app.post("/users", async (req, res) => {
     
 // })
 
+// Handle a post for a new user
+app.post('/signup', async (req, res, next) => {
+    output = await signup(req, res, next);  //await was the missing piece (it waits on the function to complete before moving on)
+    //res.json(output); // when awaiting function,we can modify res in the function !
+    next()
+},
+(req, res) => {
+    console.log('Successfully completed Signup route');
+});
+
+
+// Handle verification of the user given along with the token. Oddity with JSON output.
+app.get('/verify/:name/:token', async (req, res, next) => {
+    output = await confirmEmail(req, res, next);    //updates res in function
+    //console.log('Verify output:' + output);
+    next();
+}, 
+(req, res, next) => {
+    console.log('Successfully completed Confirm Email route');
+    next()
+});
+
+// resend has been tested and works. 
+app.post('/resend/', async (req, res, next) => {
+    output = await resendLink(req, res, next);
+    //res.json(output);
+    next()
+}, (req, res, next) => {
+    console.log('Successfully finished resend route');
+});
+
+app.post('/login/', async (req, res, next) => {
+    output = await login(req, res, next);
+    //console.log(output);  //don't log this, it is very long
+    //res.json(output); //handled in the function
+    next();
+}, (req, res, next) => {
+    console.log('Successfully completed login handler');
+    next();
+})
+
 /*
 app.get("/api/expenses", async(request,response) => {
     const result = await UserExpense.find();
     response.send({"userExpenses": result});
 })
 */
-app.post("/login", async (request,response)=>{
-        const {email,password} = request.body;
-        try{
-            const check = await collection
-        }catch{
 
-        }
-    }
-)
+/* //delete by id
 app.post("/user/delete/:id", async(req,res) => {
     const result = await User.findByIdAndDelete(req.params.id);
 
     res.json(result);
+})*/
+
+// delete by email: a bit easier to use in my opinion
+app.post("/user/delete/:email", async(req, res) => {
+    const result = await User.findOneAndDelete({email:req.params.email});
+
+    res.status(200).json(result);
+    console.log(`Deleted a user`);
 })
 
