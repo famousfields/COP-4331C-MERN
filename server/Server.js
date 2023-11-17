@@ -25,7 +25,7 @@ app.use( (req, res, next) => {
     console.log('Request Type:', req.method, ', Route:', req.path);
     next()
 })
-//connect db here
+
   //infrastructure for HTTPS, requires a key pair be created and then a cert.
 const https = require('node:https');
 const http = require('node:http');
@@ -47,50 +47,42 @@ const options = {
     passphrase: 'mernProj',
 };
 
-
-// For production  / front-end and backend together
-// const buildPath = 'E:\\01 VS Code\\COP-4331C-MERN\\front-end\\build'
-// app.use(express.static(buildPath));
-
-// // all routes from the react/front-end must be sent to the index.html, hence the wildcard.
-
-// app.get("/*", (req, res) => {
-//    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
-//     //res.send("\nHello from the server homepage");
-//     res.sendFile( buildPath + '\\index.html');
-// })
-
 app.get('/', (req, res) => {
-    res.send('\nHello from the server Homepage');
+    res.send('\nHello from the backend server Homepage!');
 })
 
-connectDB();
+connectDB(); //connects the db
 
+// log that the mongoose connection was successful and display server port connection
 mongoose.connection.once('open', ()=> {
     console.log("Mongo DB connection is succcessful");
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
-app.post("/expenses", async(req, res) => {
-    try {
-        const expense = await Expense.create(req.body);
-        res.status(200).json(expense);
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).json({message: error.message});
-    }
-})
+// route for '/expenses'
+app.route('/expenses')
+    // the post route
+    .post(async(req, res) => {
+        try {
+            const expense = await Expense.create(req.body);
+            res.status(200).json(expense);
+        } catch (error) {
+            console.log(error.message);
+            res.status(500).json({message: error.message});
+        }
+    })
+    // the get route
+    .get(async (req, res) => {
+        try {
+            const expense = await Expense.find();
+            response.json(expense);
+        } catch (error) {
+            console.error(error);
+            console.log("Error getting expenses");
+        }
+    })
 
-app.get("/expenses", async (req, res) => {
-    try {
-        const expense = await Expense.find();
-        response.json(expense);
-    } catch (error) {
-        console.error(error);
-        console.log("Error getting expenses");
-    }
-})
-
+// Creates and saves a new user to the DB
 app.post("/users", async (req, res) => {
      User.create(req.body)
      .then(users => res.json(users))
@@ -112,7 +104,7 @@ app.post("/users/add_expense", async (req, res) => {
 // Route to get all users
 app.get("/users", async (request, response) => {
     try {
-        const users = User.find();
+        const users = await User.find();    //must await when there is anything with the DB
         response.send(users);
     } catch (error) {
         console.error(error);
@@ -124,6 +116,7 @@ app.get("/users", async (request, response) => {
 // Handle a post for a new user
 app.post('/signup', async (req, res, next) => {
     output = await signup(req, res, next);  //await was the missing piece (it waits on the function to complete before moving on)
+    // returns name, email and user_id as json.
     //res.json(output); // when awaiting function,we can modify res in the function !
     next()
 },
@@ -135,6 +128,7 @@ app.post('/signup', async (req, res, next) => {
 // Handle verification of the user given along with the token. Oddity with JSON output.
 app.get('/verify/:name/:token', async (req, res, next) => {
     output = await confirmEmail(req, res, next);    //updates res in function
+    // returns name and email along with a message.
     //console.log('Verify output:' + output);
     next();
 }, 
@@ -145,7 +139,7 @@ app.get('/verify/:name/:token', async (req, res, next) => {
 
 // resend has been tested and works. 
 app.post('/resend/', async (req, res, next) => {
-    output = await resendLink(req, res, next);
+    output = await resendLink(req, res, next);  // returns status: 'success' on success.
     //res.json(output);
     next()
 }, (req, res, next) => {
@@ -156,9 +150,10 @@ app.post('/resend/', async (req, res, next) => {
 app.route('/login')
     .get( (req, res) => {
         //res.sendFile(buildPath + '')
+        res.end('server-side login page');
     })
     .post(async (req, res, next) => {
-        output = await login(req, res, next);
+        output = await login(req, res, next);   // returns user_id and name in json
         //console.log(output);  //don't log this, it is very long
         //res.json(output); //handled in the function
         next();

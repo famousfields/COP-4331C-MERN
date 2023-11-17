@@ -49,7 +49,6 @@ const resendLink = async (req, res, next) => {
                                     },
                                     // Add extras here (if so desired)
                                 ],
-                        
                             } ],
                             from: {
                                 email: 'mern.cop4331@gmail.com',
@@ -71,11 +70,11 @@ const resendLink = async (req, res, next) => {
                                 status: 'success'
                             });
                     }).catch( (err) => {
-                        return res.status(500).json( {'msg':err.message} );
+                        return res.status(500).json( {'msg':err.message, status: 'failed'} );
                     });
             }
         }).catch( (err) => {
-            return res.status(500).json( {'err':err.message} ) ;
+            return res.status(500).json( {'err':err.message, status:'failed'} ) ;
         });
 }
 module.exports = resendLink;

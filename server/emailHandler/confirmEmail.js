@@ -36,11 +36,16 @@ const confirmEmail = async (req, res, next) => {
                 //.save() is better as it does a full validation.
                 await user.save().then( (usr) => {
                         console.log('Successfully confirmed user: ' + usr.name);
-                        return res.status(200).json({'msg': 'Account successfully verified', name: usr.name, email: usr.email});
+                        return res.status(200).json(
+                            {
+                                msg: 'Account successfully verified',
+                                name: usr.name,
+                                email: usr.email
+                            });
                     })
                     .catch((err) => {
                         if(err) {
-                            return res.status(500).json({'msg': 'User.findByIdAndUpdate Error','err':err.message});
+                            return res.status(500).json({'msg': 'User.findByIdAndUpdate Error', 'err':err.message});
                         }
                         else {  //probably never reach... just saying.
                             return res.status(500).json({'msg': 'Account successfully verified'});
@@ -51,7 +56,6 @@ const confirmEmail = async (req, res, next) => {
             //     return res.status(500).json({'msg': 'Error on User.findOne.exec()', 'err':err.message});
             // });
         }
-        
     }
     catch (err) {
         return res.status(500).json({'msg': 'Find Token error (try-catch block)', 'err':err.message});
