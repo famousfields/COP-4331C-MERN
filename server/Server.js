@@ -115,6 +115,17 @@ app.post("/users", async (req, res) => {
     
 })
 
+// adds an expense id to the user
+app.post("/users/add_expense", async (req, res) => {
+    try{
+        User.updateOne({_id: req.body.user_id}, {$push: {"expenses": req.body.exp_id}}).then(c => console.log(c));
+    
+    } catch(error) {
+        console.error(error.message);
+        res.status(500).json({message: error.message});
+    }
+})
+
 // Route to get all users
 app.get("/users", async (request, response) => {
     try {

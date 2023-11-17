@@ -2,7 +2,8 @@ POST http://localhost:5000/users
 Content-Type: application/json
 
 {
-	"email": "Test2@ucf.edu",
+	"name": "test",
+	"email": "Test3@ucf.edu",
 	"password": "hello124"
 }
 
@@ -21,3 +22,13 @@ Content-Type: application/json
 ###
 
 GET http://localhost:5000/users
+
+###
+
+POST http://localhost:5000/users/add_expense
+Content-Type: application/json
+
+{
+	"user_id": "6553d40d829184f074e19de9",
+	"exp_id": "testid"
+}
