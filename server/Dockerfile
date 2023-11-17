@@ -1,6 +1,8 @@
 FROM node:20-slim
 
-WORKDIR /app
+# Set the working directory inside the container
+WORKDIR /usr/src/app/server
+
 
 COPY package*.json ./
 
