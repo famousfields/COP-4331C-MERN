@@ -97,6 +97,18 @@ app.post("/users", async (req, res) => {
      .catch(err => res.json(err));
 })
 
+// adds an expense id to the user expense array (tested and works)
+app.post("/users/add_expense", async (req, res) => {
+    try{
+        const user = await User.findOneAndUpdate({_id: req.body.user_id}, {$push: {"expenses": req.body.exp_id}}, {new: true});
+        res.json(user);
+        
+    } catch(error) {
+        console.error(error.message);
+        res.status(500).json({message: error.message});
+    }
+})
+
 // Route to get all users
 app.get("/users", async (request, response) => {
     try {
