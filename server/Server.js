@@ -4,7 +4,7 @@ var cors = require('cors');
 const mongoose = require('mongoose');
 var multer = require("multer");
 const connectDB = require("./dbConn");
-const UserModel = require("./models/userModel");
+const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 
 // const { default: UserExpenses } = require('../front-end/src/Pages/UserExpenses');
@@ -49,15 +49,21 @@ const options = {
 
 
 // For production  / front-end and backend together
-const buildPath = 'E:\\01 VS Code\\COP-4331C-MERN\\front-end\\build'
-app.use(express.static(buildPath));
+// const buildPath = 'E:\\01 VS Code\\COP-4331C-MERN\\front-end\\build'
+// app.use(express.static(buildPath));
 
-// all routes from the react/front-end must be sent to the index.html, hence the wildcard.
-app.get("/*", (req, res) => {
-   // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
-    //res.send("\nHello from the server homepage");
-    res.sendFile( buildPath + '\\index.html');
+// // all routes from the react/front-end must be sent to the index.html, hence the wildcard.
+
+// app.get("/*", (req, res) => {
+//    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
+//     //res.send("\nHello from the server homepage");
+//     res.sendFile( buildPath + '\\index.html');
+// })
+
+app.get('/', (req, res) => {
+    res.send('\nHello from the server Homepage');
 })
+
 connectDB();
 
 mongoose.connection.once('open', ()=> {
@@ -86,22 +92,22 @@ app.get("/expenses", async (req, res) => {
 })
 
 app.post("/users", async (req, res) => {
-     UserModel.create(req.body)
+     User.create(req.body)
      .then(users => res.json(users))
      .catch(err => res.json(err));
 })
 
 // Route to get all users
-// app.get("/users", async (request, response) => {
-//     try {
-//         const users = user.find();
-//         response.json(users);
-//     } catch (error) {
-//         console.error(error);
-//         console.log("Internal Server Error");
-//     }
+app.get("/users", async (request, response) => {
+    try {
+        const users = User.find();
+        response.send(users);
+    } catch (error) {
+        console.error(error);
+        console.log("Internal Server Error");
+    }
     
-// })
+})
 
 // Handle a post for a new user
 app.post('/signup', async (req, res, next) => {

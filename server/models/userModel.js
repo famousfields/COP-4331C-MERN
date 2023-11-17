@@ -1,4 +1,5 @@
 const mongodb = require('../dbConn');
+const mongoose = require('mongoose');
 
 //basic user schema that allows for email verification
 const userSchema = new mongoose.Schema({

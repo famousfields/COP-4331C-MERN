@@ -9,9 +9,16 @@ function Login()
     const [users,setUsers] = useState({});
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
+    const [email,setEmail] = useState("");
+    
+    const [password,setPassword] = useState("");
 
 
      const handleSubmit = async(e) =>{
+        e.preventDefault()
+        axios.post('http://localhost:5000/login', {email,password})
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
             // const js = JSON.stringify({email:loginEmail,password:loginPassword})
             //  await fetch("/users",{
             //     method:"POST",
@@ -94,7 +101,9 @@ function Login()
                         required
                         placeholder='Email'
                         name='email'
-                        ref={(e) => loginEmail = e}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+
                     />
                 </label>
                 <label> password
@@ -103,7 +112,8 @@ function Login()
                         required
                         placeholder='password'
                         name='pass'
-                        ref={(e) => loginPassword = e}
+                        value={password}                        
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </label>
                 <input type='submit' value= "login" />
@@ -126,7 +136,7 @@ function Login()
                     <label> Password:</label>
                         <input
                             className='inputBox'
-                            type='text'
+                            type='password'
                             required
                             placeholder='password'
                             name='pass'

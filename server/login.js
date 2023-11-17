@@ -21,7 +21,13 @@ const login = async (req, res, next) => {
         }
         // otherwise, all good!
         else {
-            return res.status(200).json({ msg:'Successful log in!' });
+            return res.status(200).json(
+                { 
+                    msg:'Successful log in!',
+                    name: user.name,
+                    user_id: user._id
+                }              
+                );
             //Probably need some other stuff here to tell server that user is authenticated, like a session token/cookie
         }
     } catch(err) {
