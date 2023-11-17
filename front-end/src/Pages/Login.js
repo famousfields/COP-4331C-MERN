@@ -12,33 +12,33 @@ function Login()
 
 
      const handleSubmit = async(e) =>{
-            const js = JSON.stringify({email:loginEmail,password:loginPassword})
-            const result = await fetch("/users",{
-                method:"POST",
-                headers: {
-                    "Content-Type": "application/json"
-                  },
-                  body :js
-            });
-                let json;
-                try{
-                    json = await result.json();
-                }
-                catch{
-                    console.error(e);
-                }
-                if(result.ok)
-                {
-                    result.send(js);
-                    // if(validEmail&&validPassword){
-                    //     setUserCredentials(email,finalPass);
-                    //     result.send(userCredentials);
-                    // }
-                    // else if(validEmail && !validPassword){
-                    //     console.log("passwords do not match");
-                    //     return window.location.assign("/login");
-                    // }
-                }
+            // const js = JSON.stringify({email:loginEmail,password:loginPassword})
+            //  await fetch("/users",{
+            //     method:"POST",
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //       },
+            //       body :js
+            // }).then()
+            //     let json;
+            //     try{
+            //         json = await result.json();
+            //     }
+            //     catch{
+            //         console.error(e);
+            //     }
+            //     if(result.ok)
+            //     {
+            //         result.send(js);
+            //         // if(validEmail&&validPassword){
+            //         //     setUserCredentials(email,finalPass);
+            //         //     result.send(userCredentials);
+            //         // }
+            //         // else if(validEmail && !validPassword){
+            //         //     console.log("passwords do not match");
+            //         //     return window.location.assign("/login");
+            //         // }
+            //     }
         }
     //     e.preventDefault();
     //     var user = {email:loginEmail.value,password:loginPassword.value};
@@ -99,7 +99,7 @@ function Login()
                 </label>
                 <label> password
                     <input
-                        type='text'
+                        type='password'
                         required
                         placeholder='password'
                         name='pass'

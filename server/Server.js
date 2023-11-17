@@ -4,7 +4,7 @@ var cors = require('cors');
 const mongoose = require('mongoose');
 var multer = require("multer");
 const connectDB = require("./dbConn");
-const User = require("./models/userModel");
+const UserModel = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 
 // const { default: UserExpenses } = require('../front-end/src/Pages/UserExpenses');
@@ -114,27 +114,22 @@ app.get("/expenses", async (req, res) => {
 })
 
 app.post("/users", async (req, res) => {
-    try {
-        const users = await User.create(req.body);
-        res.status(200).json(users);
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({message: error.message});
-    }
-    
+     UserModel.create(req.body)
+     .then(users => res.json(users))
+     .catch(err => res.json(err));
 })
 
 // Route to get all users
-app.get("/users", async (request, response) => {
-    try {
-        const users = user.find();
-        response.json(users);
-    } catch (error) {
-        console.error(error);
-        console.log("Internal Server Error");
-    }
+// app.get("/users", async (request, response) => {
+//     try {
+//         const users = user.find();
+//         response.json(users);
+//     } catch (error) {
+//         console.error(error);
+//         console.log("Internal Server Error");
+//     }
     
-})
+// })
 
 /*
 app.get("/api/expenses", async(request,response) => {
@@ -150,7 +145,6 @@ app.post("/login", async (request,response)=>{
 
         }
     }
-    
 )
 app.post("/user/delete/:id", async(req,res) => {
     const result = await User.findByIdAndDelete(req.params.id);

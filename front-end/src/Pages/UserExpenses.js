@@ -93,6 +93,11 @@ const fallback = ("");
             className='add-expense-price'
             onChange={e => setNewExpense(e.target.value)}
             value = {newExpense.price} />
+            <input 
+            type='number'
+            className='add-expense-price'
+            onChange={e => setNewExpense(e.target.value)}
+            value = {newExpense.quantity} />
              <button className='button' onClick={addExpense}>Create Expense</button> 
           </div>
         </div>
