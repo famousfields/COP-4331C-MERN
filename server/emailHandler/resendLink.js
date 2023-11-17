@@ -65,7 +65,11 @@ const resendLink = async (req, res, next) => {
                             .catch( (error) => {
                                 console.error(error)
                             })
-                        return res.status(200).json( {msg:'Verification Email sent to ' + user.email} );
+                        return res.status(200).json( 
+                            {
+                                msg:'Verification Email sent to ' + user.email,
+                                status: 'success'
+                            });
                     }).catch( (err) => {
                         return res.status(500).json( {'msg':err.message} );
                     });

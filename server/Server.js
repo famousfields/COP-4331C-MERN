@@ -4,7 +4,7 @@ var cors = require('cors');
 const mongoose = require('mongoose');
 var multer = require("multer");
 const connectDB = require("./dbConn");
-const UserModel = require("./models/userModel");
+const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 
 // const { default: UserExpenses } = require('../front-end/src/Pages/UserExpenses');
@@ -47,12 +47,23 @@ const options = {
     passphrase: 'mernProj',
 };
 
-// infrastructure for sending emails with sendgrid moved to ./emailHandler/
 
-app.get("/", (req, res) => {
-   // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
-    res.send("\nHello from the server homepage");
+// For production  / front-end and backend together
+// const buildPath = 'E:\\01 VS Code\\COP-4331C-MERN\\front-end\\build'
+// app.use(express.static(buildPath));
+
+// // all routes from the react/front-end must be sent to the index.html, hence the wildcard.
+
+// app.get("/*", (req, res) => {
+//    // res.json({"users": ["UserOne", "UserTwo", "UserThree"]})
+//     //res.send("\nHello from the server homepage");
+//     res.sendFile( buildPath + '\\index.html');
+// })
+
+app.get('/', (req, res) => {
+    res.send('\nHello from the server Homepage');
 })
+
 connectDB();
 
 mongoose.connection.once('open', ()=> {
@@ -81,22 +92,34 @@ app.get("/expenses", async (req, res) => {
 })
 
 app.post("/users", async (req, res) => {
-     UserModel.create(req.body)
+     User.create(req.body)
      .then(users => res.json(users))
      .catch(err => res.json(err));
 })
 
+// adds an expense id to the user expense array (tested and works)
+app.post("/users/add_expense", async (req, res) => {
+    try{
+        const user = await User.findOneAndUpdate({_id: req.body.user_id}, {$push: {"expenses": req.body.exp_id}}, {new: true});
+        res.json(user);
+        
+    } catch(error) {
+        console.error(error.message);
+        res.status(500).json({message: error.message});
+    }
+})
+
 // Route to get all users
-// app.get("/users", async (request, response) => {
-//     try {
-//         const users = user.find();
-//         response.json(users);
-//     } catch (error) {
-//         console.error(error);
-//         console.log("Internal Server Error");
-//     }
+app.get("/users", async (request, response) => {
+    try {
+        const users = User.find();
+        response.send(users);
+    } catch (error) {
+        console.error(error);
+        console.log("Internal Server Error");
+    }
     
-// })
+})
 
 // Handle a post for a new user
 app.post('/signup', async (req, res, next) => {
@@ -129,15 +152,20 @@ app.post('/resend/', async (req, res, next) => {
     console.log('Successfully finished resend route');
 });
 
-app.post('/login/', async (req, res, next) => {
-    output = await login(req, res, next);
-    //console.log(output);  //don't log this, it is very long
-    //res.json(output); //handled in the function
-    next();
-}, (req, res, next) => {
-    console.log('Successfully completed login handler');
-    next();
-})
+// Route allows us to have the route string in one location and then chain HTTP methods underneath it.
+app.route('/login')
+    .get( (req, res) => {
+        //res.sendFile(buildPath + '')
+    })
+    .post(async (req, res, next) => {
+        output = await login(req, res, next);
+        //console.log(output);  //don't log this, it is very long
+        //res.json(output); //handled in the function
+        next();
+    }, (req, res, next) => {
+        console.log('Successfully completed login handler');
+        next();
+    })
 
 /*
 app.get("/api/expenses", async(request,response) => {

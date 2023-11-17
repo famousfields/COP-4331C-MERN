@@ -71,7 +71,13 @@ const signup = async function(req, res, next) {
                                     console.error(error);
                                     return res.status(500).send({msg: 'Error sending mail', err: error.message})
                                 });
-                            return res.status(200).send({msg:'Verification email sent to ' + user.email});
+                            return res.status(200).send(
+                                {
+                                    msg:'Verification email sent to ' + user.email,
+                                    email: req.params.email,
+                                    name: req.params.email,
+                                    user_id: user._id
+                                });
                             //{'msg':'Verification email sent to ' + user.email};
                         })
                         .catch( (err)=> {

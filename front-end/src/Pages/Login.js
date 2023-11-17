@@ -1,89 +1,44 @@
 import React, {useState,Effect} from 'react'
 import axios from "axios"
-import { useHistory } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useNavigate } from 'react-router-dom';
 
 function Login() 
 {
     var loginEmail;
     var loginPassword;
+    const history = useNavigate();
     const [users,setUsers] = useState({});
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
+    const [email,setEmail] = useState(history.location.state?.email||"");
+    const [cookies, setCookie] = useCookies(["userID"]);
+    var loginResponse = null;
+    
+    const [password,setPassword] = useState("");
 
 
      const handleSubmit = async(e) =>{
         e.preventDefault()
-        axios.post('http://localhost:5000/users', {email,password})
+        loginResponse =  await axios.post('http://localhost:5000/login', {email,password})
         .then(res=>console.log(res))
         .catch(err=>console.log(err))
-            // const js = JSON.stringify({email:loginEmail,password:loginPassword})
-            //  await fetch("/users",{
-            //     method:"POST",
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //       },
-            //       body :js
-            // }).then()
-            //     let json;
-            //     try{
-            //         json = await result.json();
-            //     }
-            //     catch{
-            //         console.error(e);
-            //     }
-            //     if(result.ok)
-            //     {
-            //         result.send(js);
-            //         // if(validEmail&&validPassword){
-            //         //     setUserCredentials(email,finalPass);
-            //         //     result.send(userCredentials);
-            //         // }
-            //         // else if(validEmail && !validPassword){
-            //         //     console.log("passwords do not match");
-            //         //     return window.location.assign("/login");
-            //         // }
-            //     }
+        let json
+        try{
+             json = loginResponse.json();
+        }catch(error){
+            console.log(error);
+            return;
         }
-    //     e.preventDefault();
-    //     var user = {email:loginEmail.value,password:loginPassword.value};
-    //     var js = JSON.stringify(obj);
-    //     try{
-    //         const response = await fetch("http://localhost:5000/login",{
-    //         method:'POST',
-    //         body: js,
-    //         headers:{'Content-Type' : 'application/json'}
-    //     });
-
-    //     var result = JSON.parse(await response.text());
-    //     if(result.id <= 0){
-    //         setErrorMessage('User/Password combination incorrect');
-    //     }
-    //     else{
-    //     }
-    // }
-    //     catch(e){
-    //         alert(e.toString());
-    //         return;
-    //     }
-      
-        // try{
-        //     const response = await fetch("/users")
-        //     console.log(response.data);
-        // }
-        // catch (err){
-        //     console.log("something went wrong");
-        //     setErrorMessage({name: "json", message: "The response from the server could not be parsed."})
-        //     setIsSubmitted(false);
-        //     return;
-        // }
-        // if(response.ok){
-        //     r;
-        // }
-        // else{
-        //     console.log("Error encountered logging you in");
-        // }
-        //history.push("/userexpenses");
-    
+        if(loginResponse.ok){
+            setCookie("userID",json.user_id)
+            console.log("user logged in",json)
+            history.push("/expenses");
+        }
+        else{
+            console.error(json);
+        }
+     }
 
     const redirectSignUp = () => {
         return window.location.assign("/signup");
@@ -91,28 +46,6 @@ function Login()
 
     const loginForm = (
         <div className="form-container">
-            <form onSubmit={handleSubmit}>
-                <label> Email
-                    <input
-                        type='email'
-                        required
-                        placeholder='Email'
-                        name='email'
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </label>
-                <label> password
-                    <input
-                        type='password'
-                        required
-                        placeholder='password'
-                        name='pass'
-                        ref={(e) => loginPassword = e}
-                    />
-                </label>
-                <input type='submit' value= "login" />
-                <button onClick={redirectSignUp}> Sign up</button>
-            </form>
             <div className='loginFormSurroundingBox'>
                 <form onSubmit={handleSubmit}>
                     <label style = {{
@@ -124,17 +57,19 @@ function Login()
                             required
                             placeholder='Email'
                             name='email'
-                            ref={(e) => loginEmail = e}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     <br/>
                     <label> Password:</label>
                         <input
                             className='inputBox'
-                            type='text'
+                            type='password'
                             required
                             placeholder='password'
                             name='pass'
-                            ref={(e) => loginPassword = e}
+                            value={password}                        
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     
                     <br/>
@@ -146,7 +81,7 @@ function Login()
         </div>
     );
   return (
-   loginForm
+   loginResponse ? loginForm: <div>{loginResponse.msg}</div>
   )
 }
 

@@ -1,4 +1,5 @@
 const mongodb = require('../dbConn');
+const mongoose = require('mongoose');
 
 //basic user schema that allows for email verification
 const userSchema = new mongoose.Schema({
@@ -6,6 +7,7 @@ const userSchema = new mongoose.Schema({
     email: {type: String, unique: true},
     isVerified: {type: Boolean, default: false }, 
     password: String, 
+	expenses: [String]
 });
 
 const User = mongoose.model("User", userSchema)
