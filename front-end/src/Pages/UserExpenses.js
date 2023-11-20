@@ -43,7 +43,7 @@ const fallback = ("");
 
   return (
     <div className="expense-layout">
-      <h1>Welcome</h1>
+      <h1>Welcome [Name]</h1>{/*Pulling name from database once connected*/}
       <h4>Your Expenses</h4>
       {/* Can map expenses from  database once fetched */}
       
@@ -93,6 +93,11 @@ const fallback = ("");
             className='add-expense-price'
             onChange={e => setNewExpense(e.target.value)}
             value = {newExpense.price} />
+            <input 
+            type='number'
+            className='add-expense-price'
+            onChange={e => setNewExpense(e.target.value)}
+            value = {newExpense.quantity} />
              <button className='button' onClick={addExpense}>Create Expense</button> 
           </div>
         </div>

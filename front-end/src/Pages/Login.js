@@ -9,36 +9,43 @@ function Login()
     const [users,setUsers] = useState({});
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
+    const [email,setEmail] = useState("");
+    
+    const [password,setPassword] = useState("");
 
 
      const handleSubmit = async(e) =>{
-            const js = JSON.stringify({email:loginEmail,password:loginPassword})
-            const result = await fetch("/users",{
-                method:"POST",
-                headers: {
-                    "Content-Type": "application/json"
-                  },
-                  body :js
-            });
-                let json;
-                try{
-                    json = await result.json();
-                }
-                catch{
-                    console.error(e);
-                }
-                if(result.ok)
-                {
-                    result.send(js);
-                    // if(validEmail&&validPassword){
-                    //     setUserCredentials(email,finalPass);
-                    //     result.send(userCredentials);
-                    // }
-                    // else if(validEmail && !validPassword){
-                    //     console.log("passwords do not match");
-                    //     return window.location.assign("/login");
-                    // }
-                }
+        e.preventDefault()
+        axios.post('http://localhost:5000/login', {email,password})
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
+            // const js = JSON.stringify({email:loginEmail,password:loginPassword})
+            //  await fetch("/users",{
+            //     method:"POST",
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //       },
+            //       body :js
+            // }).then()
+            //     let json;
+            //     try{
+            //         json = await result.json();
+            //     }
+            //     catch{
+            //         console.error(e);
+            //     }
+            //     if(result.ok)
+            //     {
+            //         result.send(js);
+            //         // if(validEmail&&validPassword){
+            //         //     setUserCredentials(email,finalPass);
+            //         //     result.send(userCredentials);
+            //         // }
+            //         // else if(validEmail && !validPassword){
+            //         //     console.log("passwords do not match");
+            //         //     return window.location.assign("/login");
+            //         // }
+            //     }
         }
     //     e.preventDefault();
     //     var user = {email:loginEmail.value,password:loginPassword.value};
@@ -87,9 +94,36 @@ function Login()
 
     const loginForm = (
         <div className="form-container">
+            <form onSubmit={handleSubmit}>
+                <label> Email
+                    <input
+                        type='email'
+                        required
+                        placeholder='Email'
+                        name='email'
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+
+                    />
+                </label>
+                <label> password
+                    <input
+                        type='password'
+                        required
+                        placeholder='password'
+                        name='pass'
+                        value={password}                        
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </label>
+                <input type='submit' value= "login" />
+                <button onClick={redirectSignUp}> Sign up</button>
+            </form>
             <div className='loginFormSurroundingBox'>
                 <form onSubmit={handleSubmit}>
-                    <label> Email
+                    <label style = {{
+                        paddingRight : '40px'
+                    }}> Email:</label>
                         <input
                             className='inputBox'
                             type='email'
@@ -98,18 +132,17 @@ function Login()
                             name='email'
                             ref={(e) => loginEmail = e}
                         />
-                    </label>
                     <br/>
-                    <label> password
+                    <label> Password:</label>
                         <input
                             className='inputBox'
-                            type='text'
+                            type='password'
                             required
                             placeholder='password'
                             name='pass'
                             ref={(e) => loginPassword = e}
                         />
-                    </label>
+                    
                     <br/>
                     <input className = 'formButton' type='submit' value= "login" />
                     <button className = 'formButton' onClick={redirectSignUp}>   Sign up</button>

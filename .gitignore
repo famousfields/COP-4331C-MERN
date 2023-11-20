@@ -1,0 +1,4 @@
+#Ignore the API key and node modules.
+
+/node_modules
+sendGridAPIKey.txt

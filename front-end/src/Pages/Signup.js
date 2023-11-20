@@ -1,10 +1,13 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Signup() {
     const [email,setEmail] = useState("");
+    const [name, setName] = useState("");
     const [password1,setPassword1] = useState("");
     const [password2,setPassword2] = useState("");
+    const [password,setPassword] = useState("");
     const [validEmail,setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
     const history = useNavigate();
@@ -15,85 +18,82 @@ function Signup() {
     // ])
     function comparePass(){
         if(password1 === password2)
-        setValidPassword(password1);
+        setValidPassword(true);
     }
-    const handleSubmit = async(e) => {
-        const js = JSON.stringify({"email":email,"passpassword":password1})
-        const result = await fetch("/users",{
-            method:"POST",
-            headers: {
-                "Content-Type": "application/json"
-              },
-              body :js
-        });
-            let json;
-            try{
-                json = await result.json();
-            }
-            catch{
-                console.error(e);
-            }
-            if(result.ok)
-            {
-                result.send(json)
-                // if(validEmail&&validPassword){
-                //     setUserCredentials(email,finalPass);
-                //     result.send(userCredentials);
-                // }
-                // else if(validEmail && !validPassword){
-                //     console.log("passwords do not match");
-                //     return window.location.assign("/login");
-                // }
-            }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        axios.post('http://localhost:5000/signup', {name, email,password})
+        .then(res=>console.log(res))
+        .catch(err=>console.log(err))
+        // const js = JSON.stringify({"email":email,"passpassword":password1})
+        // const result = await fetch("/users",{
+        //     method:"POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //       },
+        //       body :js
+        // });
+        //     let json;
+        //     try{
+        //         json = await result.json();
+        //     }
+        //     catch(e){
+        //         console.error(e);
+        //     }
+        //     if(result.ok)
+        //     {
+        //         result.send(json)
+        //     }
     }
 
      const signupForm = (
         <div className="form-container">
-            <div className= 'signupFormSurroundingBox'>
-                <form onSubmit={handleSubmit}>
-                    <label> Enter Email
-                        <input
-                        className='inputBox'
-                        type = 'text'
-                        required
-                        placeholder='email'
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        />
-                    </label>
-                    <br/>
-                    <label> Enter Password
-                        <input
-                        className='inputBox'
-                        type = 'password'
-                        required
-                        placeholder='password'
-                        value={password1}
-                        onChange={e => setPassword1(e.target.value)}
-                        //onBlur={e => setErrorMmessage}
-                        />
-                    </label>
-                    <br/>
-                    <label> Re-Enter Password
-                        <input
-                        className='inputBox'
-                        type = 'password'
-                        required
-                        placeholder='re-enter password'
-                        value={password2}
-                        onChange={e => setPassword2(e.target.value)}
-                        />
-                    </label>
-                    <br/>
+            <form onSubmit={handleSubmit}>
+            <label> enter name
                     <input
-                    className='formButton'
-                    type = 'submit'
-                    value= "signup"
+                    type = 'text'
+                    required
+                    name='name'
+                    placeholder='name'
+                    value={name}
+                    onChange={e => setName(e.target.value)}
                     />
-
-                </form>
-            </div>
-
+            </label>
+                <label> enter email
+                    <input
+                    type = 'text'
+                    required
+                    name='email'
+                    placeholder='email'
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    />
+                </label>
+                <label> enter password
+                    <input
+                    type = 'password'
+                    required
+                    name='password'
+                    placeholder='password'
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    //onBlur={e => setErrorMmessage}
+                    />
+                </label>
+                {/* <label> re-enter password
+                    <input
+                    type = 'password'
+                    required
+                    placeholder='re-enter password'
+                    value={password2}
+                    onChange={(e => setPassword2(e.target.value))}
+                    />
+                </label> */}
+                <input
+                type = 'submit'
+                value= "signup"
+                />
+            </form>
         </div>
      )
     
