@@ -1,11 +1,19 @@
 var express = require('express');
-var MongoClient = require("mongodb").MongoClient;
+//var MongoClient = require("mongodb").MongoClient;
+const mongodb = require('mongodb');
 var cors = require('cors');
 const mongoose = require('mongoose');
 var multer = require("multer");
 const connectDB = require("./dbConn");
 const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
+const bcrypt = require('bcrypt');
+
+// Other imports
+// ...
+
+// Your code continues...
+
 
 // const { default: UserExpenses } = require('../front-end/src/Pages/UserExpenses');
 
