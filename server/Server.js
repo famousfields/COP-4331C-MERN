@@ -94,7 +94,7 @@ app.post("/users", async (req, res) => {
 // Route to get all users
 app.get("/users", async (request, response) => {
     try {
-        const users = user.find();
+        const users = await User.find();  // finds all users and waits for the response
         response.json(users);
     } catch (error) {
         console.error(error);
@@ -165,4 +165,3 @@ app.post("/user/delete/:email", async(req, res) => {
     res.status(200).json(result);
     console.log(`Deleted a user`);
 })
-
