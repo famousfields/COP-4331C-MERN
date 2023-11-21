@@ -10,7 +10,6 @@ function Signup() {
     const [password,setPassword] = useState("");
     const [validEmail,setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
-    const history = useNavigate();
     
     // const [userCredentials, setUserCredentials] = useState([
     //     email = "",

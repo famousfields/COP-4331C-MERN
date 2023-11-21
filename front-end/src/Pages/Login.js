@@ -1,13 +1,11 @@
 import React, {useState,Effect} from 'react'
 import axios from "axios"
-//import { useCookies } from "react-cookie";
-import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 
 function Login({onLogin}) 
 {
     var loginEmail;
     var loginPassword;
-    const history = useNavigate();
     const [users,setUsers] = useState({});
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);

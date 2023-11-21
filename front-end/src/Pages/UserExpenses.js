@@ -38,8 +38,9 @@ let eArr = [150,500,50];
   }
   // refreshed the expense total everytime the screen refreshes or expenses change
   useEffect(() =>{
+    fetchExpenses();
     setExpenseTotal(calcExpenseTotal(eArr));
-  },[])
+  },[expenses])
 
 //function to fetch api and add expense
 const addExpense = async() => {
@@ -51,7 +52,7 @@ const addExpense = async() => {
     body: JSON.stringify({
       text: newExpense
     })
-  }).then(res =>res.json());
+  }).then(res =>console.log(res));
   setExpenses([...expenses,data]);
   setPopupActive(false);
   setNewExpense("");
@@ -59,11 +60,12 @@ const addExpense = async() => {
 
 // function to fetch user expenses
 const fetchExpenses= async() =>{
-  const data = await fetch(`https://localhost:5000/expenses`, {
+  await fetch(`https://localhost:5000/user`, {
     body: JSON.stringify({user_Id: cookies.userID})
   })
   .then(res=>console.log(res))
-  .then((d)=>setExpenses(d))
+  .catch(err=> console.error(err))
+  .finally(res=>setExpenses(res))
 }
 
 // component to properly display monthly budget entered by user
