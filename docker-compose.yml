@@ -1,7 +1,7 @@
 version: '3'
 services:
   front-end:
-    image: front-end:V6
+    image: front-end:V7
     build:
       context: ./front-end
     ports:
@@ -12,7 +12,7 @@ services:
       - mern-app
 
   server:
-    image: server-end:V6
+    image: server-end:V8
     build:
       context: ./server
     ports:

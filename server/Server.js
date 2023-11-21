@@ -7,7 +7,7 @@ var multer = require("multer");
 const connectDB = require("./dbConn");
 const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 
 // Other imports
 // ...
@@ -64,6 +64,7 @@ connectDB(); //connects the db
 // log that the mongoose connection was successful and display server port connection
 mongoose.connection.once('open', ()=> {
     console.log("Mongo DB connection is succcessful");
+    //https.createServer(options, app).listen(PORT_S);    //does the trick, doesn't print to console though...
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
@@ -98,7 +99,7 @@ app.post("/users", async (req, res) => {
 })
 
 // adds an expense id to the user expense array (tested and works)
-app.post("/users/add_expense", async (req, res) => {
+app.post("/users/add/:expense", async (req, res) => {
     try{
         const user = await User.findOneAndUpdate({_id: req.body.user_id}, {$push: {"expenses": req.body.exp_id}}, {new: true});
         res.json(user);
@@ -114,6 +115,18 @@ app.get("/users", async (request, response) => {
     try {
         const users = await User.find();    //must await when there is anything with the DB
         response.send(users);
+    } catch (error) {
+        console.error(error);
+        console.log("Internal Server Error");
+    }
+    
+})
+
+// gets a specific user
+app.get("/user", async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.body._id});    
+        res.send(user);
     } catch (error) {
         console.error(error);
         console.log("Internal Server Error");
