@@ -64,6 +64,7 @@ connectDB(); //connects the db
 // log that the mongoose connection was successful and display server port connection
 mongoose.connection.once('open', ()=> {
     console.log("Mongo DB connection is succcessful");
+    //https.createServer(options, app).listen(PORT_S);    //does the trick, doesn't print to console though...
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
