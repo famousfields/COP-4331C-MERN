@@ -7,7 +7,7 @@ var multer = require("multer");
 const connectDB = require("./dbConn");
 const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 
 // Other imports
 // ...

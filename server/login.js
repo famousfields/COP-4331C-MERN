@@ -1,5 +1,6 @@
 // file that houses the login function
 const Bcrypt = require('bcrypt')
+const { createHash, } = require('node:crypto');
 const User = require("./models/userModel")
 
 const login = async (req, res, next) => {
@@ -12,6 +13,7 @@ const login = async (req, res, next) => {
             return res.status(401).json({ msg:('User email "' + req.body.email + '" not found') });
         }
         // then compare password hashes
+        //!compareHash(req.body.password, user.password)
         else if( !Bcrypt.compareSync(req.body.password, user.password)) {
             return res.status(401).json({ msg: 'Wrong Password!' });
         }
@@ -32,8 +34,18 @@ const login = async (req, res, next) => {
             //Probably need some other stuff here to tell server that user is authenticated, like a session token/cookie
         }
     } catch(err) {
-        return res.status(500).json({ err:'login function error' ,'err': err.message });
+        return res.status(500).json({ msg:'login function error' ,'err': err.message });
     }
+}
+// Function to compare userPass as a hash to the password from the request
+function compareHash(reqPass, userPass) {
+    // first hash the reqPass
+    const hash = createHash('sha256');
+    //console.log(`Req Pass: ${reqPass}`);
+    hash.update(reqPass);
+    hashedReq = hash.digest('hex');
+    console.log(`hashedReq: ${hashedReq}\nuserPass: ${userPass}`);
+    return (hashedReq == userPass);    // return the comparison
 }
 
 module.exports = login;

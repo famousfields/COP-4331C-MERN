@@ -1,5 +1,5 @@
 const Bcrypt = require('bcrypt');
-const crypto = require('node:crypto');
+//const crypto = require('node:crypto');
 
 const sgMail = require('@sendgrid/mail');
 const Token = require('../models/tokenModel');
@@ -28,6 +28,11 @@ const signup = async function(req, res, next) {
             // hash the password
             req.body.password = Bcrypt.hashSync(req.body.password, 10);
             // console.log('DEBUG: Password hashed...');
+            // hashing using built-in node:crypto
+            
+            // const hash = crypto.createHash('sha256');   //creates hash object
+            // hash.update(req.body.password);     // updates text to hash
+            // req.body.password = hash.digest('hex'); // gives the computed hash.
 
             // So, User.create creates AND saves to the DB!
             User.create({name:req.body.name, email:req.body.email, password: req.body.password})
