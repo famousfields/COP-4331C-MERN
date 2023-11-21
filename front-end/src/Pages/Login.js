@@ -13,7 +13,8 @@ function Login({onLogin})
     const [isSubmitted,setIsSubmitted] = useState(false);
     const [email,setEmail] = useState("");
     const [loginResponse, setLoginResponse] = useState();
-   // const [cookies, setCookie] = useCookies(["userID"]);
+
+   const [cookies] = useCookies(["userID"]);
     
     const [password,setPassword] = useState("");
 
@@ -26,6 +27,7 @@ function Login({onLogin})
             {
                 console.log(data);
                 console.log(res);
+                onLogin(res.data.user_id);
                 setLoginResponse(res);
                 console.log(loginResponse);
             }

@@ -1,9 +1,6 @@
 import {useEffect, useState} from 'react'
 import Expenses from "../Components/Expenses"
-
-
-
-
+import { useCookies } from "react-cookie";
 
 function UserExpenses() {
 
@@ -12,6 +9,8 @@ function UserExpenses() {
   const [expenseTotal,setExpenseTotal] = useState(0);
   const [monthlyBudget,setMonthlyBudget] = useState();
   const [displayBudget,setDisplayBudget] = useState();
+  const [cookies] = useCookies(["userID"]);
+
   
   const [expenses,setExpenses] = useState(
     [
@@ -44,7 +43,7 @@ let eArr = [150,500,50];
 
 //function to fetch api and add expense
 const addExpense = async() => {
-  const data = await fetch("https://localhost:5000/expenses",{
+  const data = await fetch("https://localhost:5000/users/add_expense",{
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -60,8 +59,10 @@ const addExpense = async() => {
 
 // function to fetch user expenses
 const fetchExpenses= async() =>{
-  const data = await fetch("https://localhost:5000/expenses")
-  .then(res=>res.json())
+  const data = await fetch(`https://localhost:5000/expenses`, {
+    body: JSON.stringify({user_Id: cookies.userID})
+  })
+  .then(res=>console.log(res))
   .then((d)=>setExpenses(d))
 }
 
