@@ -21,7 +21,12 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:5000/users
+GET http://localhost:5000/user
+Content-type: application/json
+
+{
+	"_id": "6553d40d829184f074e19de9"
+}
 
 ###
 

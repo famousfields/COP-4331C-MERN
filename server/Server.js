@@ -115,6 +115,18 @@ app.post("/users", async (req, res) => {
     
 })
 
+// gets a specific user
+app.get("/user", async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.body._id});    
+        res.send(user);
+    } catch (error) {
+        console.error(error);
+        console.log("Internal Server Error");
+    }
+    
+})
+
 // adds an expense id to the user expense array (tested and works)
 app.post("/users/add_expense", async (req, res) => {
     try{
