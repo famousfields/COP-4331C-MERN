@@ -18,20 +18,27 @@ function Login({onLogin})
     const [password,setPassword] = useState("");
 
 
-     const handleSubmit = async(e) =>{
+     const handleSubmit = (e) =>{
         e.preventDefault()
-        await axios.post('http://localhost:5000/login', {email,password})
-        .then(res=>console.log(res))
-        .then((d)=>setLoginResponse(d))
+         var data = axios.post('http://localhost:5000/login', {email,password})
+        .then(res=>{
+            if(res.statusText === "OK")
+            {
+                console.log(data);
+                console.log(res);
+                setLoginResponse(res);
+                console.log(loginResponse);
+            }
+        })
         .catch(err=>console.log(err))
-        if(loginResponse){
-           // setCookie("userID",json.user_id);
-            console.log("user logged in",loginResponse)
-            history.push("/expenses");
-        }
-        else{
-            console.error(loginResponse);
-        }
+
+        // if(loginResponse){
+        //    // setCookie("userID",json.user_id);
+        //     history.push("/expenses");
+        // }
+        // else{
+        //     console.error(loginResponse);
+        // }
      }
 
     const redirectSignUp = () => {
