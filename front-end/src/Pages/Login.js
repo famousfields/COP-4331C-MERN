@@ -3,7 +3,7 @@ import axios from "axios"
 import { useCookies } from "react-cookie";
 import { useNavigate } from 'react-router-dom';
 
-function Login() 
+function Login({onLogin}) 
 {
     var loginEmail;
     var loginPassword;
@@ -11,32 +11,26 @@ function Login()
     const [users,setUsers] = useState({});
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
-    const [email,setEmail] = useState(history.location.state?.email||"");
-    const [cookies, setCookie] = useCookies(["userID"]);
-    var loginResponse = null;
+    const [email,setEmail] = useState("");
+    const [loginResponse, setLoginResponse] = useState();
+   // const [cookies, setCookie] = useCookies(["userID"]);
     
     const [password,setPassword] = useState("");
 
 
      const handleSubmit = async(e) =>{
         e.preventDefault()
-        loginResponse =  await axios.post('http://localhost:5000/login', {email,password})
+        await axios.post('http://localhost:5000/login', {email,password})
         .then(res=>console.log(res))
+        .then((d)=>setLoginResponse(d))
         .catch(err=>console.log(err))
-        let json
-        try{
-             json = loginResponse.json();
-        }catch(error){
-            console.log(error);
-            return;
-        }
-        if(loginResponse.ok){
-            setCookie("userID",json.user_id)
-            console.log("user logged in",json)
+        if(loginResponse){
+           // setCookie("userID",json.user_id);
+            console.log("user logged in",loginResponse)
             history.push("/expenses");
         }
         else{
-            console.error(json);
+            console.error(loginResponse);
         }
      }
 
@@ -73,7 +67,7 @@ function Login()
                         />
                     
                     <br/>
-                    <input className = 'formButton' type='submit' value= "login" />
+                    <input className = 'formButton' type='submit' value= "login"/>
                     <button className = 'formButton' onClick={redirectSignUp}>   Sign up</button>
                 </form>
             </div>
@@ -81,7 +75,7 @@ function Login()
         </div>
     );
   return (
-   loginResponse ? loginForm: <div>{loginResponse.msg}</div>
+   loginResponse ?  <div className='login-response'>Successfull Login!</div> : loginForm
   )
 }
 
