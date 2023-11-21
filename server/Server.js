@@ -122,6 +122,18 @@ app.get("/users", async (request, response) => {
     
 })
 
+// gets a specific user
+app.get("/user", async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.body._id});    
+        res.send(user);
+    } catch (error) {
+        console.error(error);
+        console.log("Internal Server Error");
+    }
+    
+})
+
 // Handle a post for a new user
 app.post('/signup', async (req, res, next) => {
     output = await signup(req, res, next);  //await was the missing piece (it waits on the function to complete before moving on)
