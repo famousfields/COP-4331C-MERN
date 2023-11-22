@@ -12,20 +12,19 @@ function Login({onLogin})
     const [email,setEmail] = useState("");
     const [loginResponse, setLoginResponse] = useState();
 
-   const [cookies] = useCookies(["userID"]);
+   const [cookies,setCookies] = useCookies(["userID"]);
     
     const [password,setPassword] = useState("");
 
 
      const handleSubmit = (e) =>{
         e.preventDefault()
-         var data = axios.post('http://localhost:5000/login', {email,password})
+        axios.post('http://localhost:5000/login', {email,password})
         .then(res=>{
             if(res.statusText === "OK")
             {
-                console.log(data);
-                console.log(res);
-                onLogin(res.data.user_id);
+                console.log(res.data.user_id);
+                setCookies("userID",res.data.user_id);
                 setLoginResponse(res);
                 console.log(loginResponse);
             }
