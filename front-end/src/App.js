@@ -27,7 +27,7 @@ function App() {
       <Navbar/>
       <div className='App'>
           <Switch>
-              <Route exact path = "/home" >
+              <Route exact path = "/" >
                 {cookies.userID ? <Redirect to="/expenses"/> : <Home/> } 
               </Route>
               <Route path = "/signup">
