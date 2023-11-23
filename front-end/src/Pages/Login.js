@@ -28,6 +28,9 @@ function Login({onLogin})
                 setLoginResponse(res);
                 console.log(loginResponse);
             }
+            else{
+                console.log("Something went wrong when logging in");
+            }
         })
         .catch(err=>console.log(err))
 

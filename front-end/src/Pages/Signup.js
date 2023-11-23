@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
@@ -6,47 +6,36 @@ import { useCookies } from 'react-cookie';
 function Signup() {
     const [email,setEmail] = useState("");
     const [name, setName] = useState("");
-    const [password1,setPassword1] = useState("");
-    const [password2,setPassword2] = useState("");
-    const [password,setPassword] = useState("");
-    const [validEmail,setValidEmail] = useState(false);
-    const [validPassword, setValidPassword] = useState(false);
+    const [passwordTry1,setPasswordTry1] = useState("");
+    const [passwordTry2,setPasswordTry2] = useState("");
+    const [password,setPassword] = useState();
     const [cookies, setCookies] = useCookies(["userID"]);
+    const [errorMessage,setErrorMessage] = useState();
+    const [isSubmitted,setIsSubmitted] = useState(false);
     
-    // const [userCredentials, setUserCredentials] = useState([
-    //     email = "",
-    //     finalPass = ""
-    // ])
-    function comparePass(){
-        if(password1 === password2)
-        setValidPassword(true);
-    }
-    const handleSubmit = (e) => {
+    const handleInvalid = (e) =>{
         e.preventDefault()
-        axios.post('http://localhost:5000/signup', {name, email,password})
-        .then(res=>console.log(res))
-        .catch(err=>console.log(err))
-        // const js = JSON.stringify({"email":email,"passpassword":password1})
-        // const result = await fetch("/users",{
-        //     method:"POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //       },
-        //       body :js
-        // });
-        //     let json;
-        //     try{
-        //         json = await result.json();
-        //     }
-        //     catch(e){
-        //         console.error(e);
-        //     }
-        //     if(result.ok)
-        //     {
-        //         result.send(json)
-        //     }
+        const passwordMessage = !password && (!passwordTry1 ? "enter a password" : ! passwordTry2 ? "reenter your password" : "ensure your passwords match");
+        setErrorMessage({name: "input", message: `Please ${!email && !passwordTry1 ? "enter a username and password" : [!email && "enter a username", passwordMessage].filter(i=>i).join(" and ")}.`});
     }
 
+    useEffect(()=>{
+        setPassword(passwordTry1 === passwordTry2 ? passwordTry1 : "");
+    },[passwordTry1,passwordTry2])
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if(name &&email && password)
+        {
+            axios.post('http://localhost:5000/signup', {name, email,password})
+            .then(res=>console.log(res))
+            .catch(err=>console.log(err))
+            setIsSubmitted(true);
+        }
+        else{
+            handleInvalid(e);
+        }
+    }
      const signupForm = (
         <div className="form-container">
             <form onSubmit={handleSubmit}>
@@ -76,24 +65,28 @@ function Signup() {
                     required
                     name='password'
                     placeholder='password'
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
+                    value={passwordTry1}
+                    onChange={e => setPasswordTry1(e.target.value)}
                     //onBlur={e => setErrorMmessage}
                     />
                 </label>
-                {/* <label> re-enter password
+                <label> re-enter password
                     <input
                     type = 'password'
                     required
-                    placeholder='re-enter password'
-                    value={password2}
-                    onChange={(e => setPassword2(e.target.value))}
+                    name='password'
+                    placeholder='password'
+                    value={passwordTry2}
+                    onChange={e => setPasswordTry2(e.target.value)}
+                    //onBlur={e => setErrorMmessage}
                     />
-                </label> */}
+                </label>
                 <input
                 type = 'submit'
                 value= "signup"
                 />
+                {isSubmitted&& <div>...Pending</div>}
+                {errorMessage?.message && <div className="error">{errorMessage.message}</div>}
             </form>
         </div>
      )
