@@ -13,7 +13,7 @@ POST http://localhost:5000/expenses
 Content-Type: application/json
 
 {
-	"type": "Test",
+	"type": "Test30",
 	"quanity": 10,
 	"price": 10,
 	"user_id": "6553d40d829184f074e19de9"

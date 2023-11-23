@@ -97,14 +97,7 @@ mongoose.connection.once('open', ()=> {
 // get expenses based on user id
 app.get("/expense", async (req, res) => {
     try{
-        const expenses = await Expense.find({user_id : req.body._id}, function (err, docs) { 
-            if (err){ 
-                console.log(err); 
-            } 
-            else{ 
-                console.log("First function call : ", docs); 
-            } 
-        });
+        const expenses = await Expense.find({user_id : req.body._id});
         res.json(expenses);
     } catch(error) {
         console.error(error.message);
