@@ -77,6 +77,8 @@ function Login({onLogin})
                     
                     <br/>
                     <input className = 'formButton' type='submit' value= "login"/>
+                    <br/>
+                    <p>or</p>
                     <button className = 'formButton' onClick={redirectSignUp}>   Sign up</button>
                 </form>
             </div>
