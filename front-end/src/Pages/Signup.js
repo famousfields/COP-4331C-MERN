@@ -38,56 +38,75 @@ function Signup() {
     }
      const signupForm = (
         <div className="form-container">
-            <form onSubmit={handleSubmit}>
-            <label> enter name
-                    <input
-                    type = 'text'
-                    required
-                    name='name'
-                    placeholder='name'
-                    value={name}
-                    onChange={e => setName(e.target.value)}
+
+            <div className='signupFormSurroundingBox'>
+                <form onSubmit={handleSubmit}>
+                    <label style = {{
+                        paddingRight : '85px'
+                    }}> Enter Name  </label>
+                            <input
+                            className='inputBox'
+                            type = 'text'
+                            required
+                            name='name'
+                            placeholder='name'
+                            value={name}
+                            onChange={e => setName(e.target.value)}
                     />
-            </label>
-                <label> enter email
+                   
+                    <br/>
+                    <label style = {{
+                        paddingRight : '90px'
+                    }}> Enter Email </label>
+                        <input
+                        className='inputBox'
+                        type = 'text'
+                        required
+                        name='email'
+                        placeholder='email'
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        />
+                    
+                    <br/>
+                    <label style = {{
+                        paddingRight : '50px'
+                    }}>Enter Password</label>
+                        <input
+                        className='inputBox'
+                        type = 'password'
+                        required
+                        name='password'
+                        placeholder='password'
+                        value={passwordTry1}
+                        onChange={e => setPasswordTry1(e.target.value)}
+                        //onBlur={e => setErrorMmessage}
+                        />
+                    
+                    <br/>
+                    <label style = {{
+                        paddingRight : '0px'
+                    }}>Re-Enter Password </label>
+                        <input
+                        className='inputBox'
+                        type = 'password'
+                        required
+                        name='password'
+                        placeholder='password'
+                        value={passwordTry2}
+                        onChange={e => setPasswordTry2(e.target.value)}
+                        //onBlur={e => setErrorMmessage}
+                        />
+                    
                     <input
-                    type = 'text'
-                    required
-                    name='email'
-                    placeholder='email'
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    className='formButton'
+                    type = 'submit'
+                    value= "signup"
                     />
-                </label>
-                <label> enter password
-                    <input
-                    type = 'password'
-                    required
-                    name='password'
-                    placeholder='password'
-                    value={passwordTry1}
-                    onChange={e => setPasswordTry1(e.target.value)}
-                    //onBlur={e => setErrorMmessage}
-                    />
-                </label>
-                <label> re-enter password
-                    <input
-                    type = 'password'
-                    required
-                    name='password'
-                    placeholder='password'
-                    value={passwordTry2}
-                    onChange={e => setPasswordTry2(e.target.value)}
-                    //onBlur={e => setErrorMmessage}
-                    />
-                </label>
-                <input
-                type = 'submit'
-                value= "signup"
-                />
-                {isSubmitted&& <div>...Pending</div>}
-                {errorMessage?.message && <div className="error">{errorMessage.message}</div>}
-            </form>
+                    {isSubmitted&& <div>...Pending</div>}
+                    {errorMessage?.message && <div className="error">{errorMessage.message}</div>}
+                </form>
+            </div>
         </div>
      )
     
