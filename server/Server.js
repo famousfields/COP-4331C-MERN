@@ -94,6 +94,24 @@ mongoose.connection.once('open', ()=> {
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
+// get expenses based on user id
+app.get("/expense", async (req, res) => {
+    try{
+        const expenses = await Expense.find({user_id : req.body._id}, function (err, docs) { 
+            if (err){ 
+                console.log(err); 
+            } 
+            else{ 
+                console.log("First function call : ", docs); 
+            } 
+        });
+        res.json(expenses);
+    } catch(error) {
+        console.error(error.message);
+        res.status(500).json({message: error.message});
+    }
+})
+
 app.post("/expenses", async(req, res) => {
     try {
         const expense = await Expense.create(req.body);

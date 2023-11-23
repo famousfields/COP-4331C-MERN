@@ -15,7 +15,8 @@ Content-Type: application/json
 {
 	"type": "Test",
 	"quanity": 10,
-	"price": 10
+	"price": 10,
+	"user_id": "6553d40d829184f074e19de9"
 
 }
 
@@ -36,4 +37,13 @@ Content-Type: application/json
 {
 	"user_id": "6553d40d829184f074e19de9",
 	"exp_id": "testid"
+}
+
+###
+
+GET http://localhost:5000/expense
+Content-Type: application/json
+
+{
+	"_id": "6553d40d829184f074e19de9"
 }
