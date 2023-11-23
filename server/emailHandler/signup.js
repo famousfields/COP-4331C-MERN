@@ -1,5 +1,5 @@
 const Bcrypt = require('bcrypt');
-//const crypto = require('node:crypto');
+const crypto = require('node:crypto');
 
 const sgMail = require('@sendgrid/mail');
 const Token = require('../models/tokenModel');
@@ -85,14 +85,19 @@ const signup = async function(req, res, next) {
                                 });
                             //{'msg':'Verification email sent to ' + user.email};
                         })
-                        .catch( (err)=> {
+                        .catch( async (err)=> {
                             //if an error occured
                             console.log('Error during token saving: ' + err);
+                            await User.deleteOne({_id:user._id});
+                            console.log('Deleting the user');
+                            
                             return res.status(500).send({msg: 'Error during saving token', 'err':err.message}); //{'err': err};
                         });
 
-                }).catch( (err) => {
+                }).catch(async (err) => {
                     console.log('Error during user creation: ' + err);
+                    await User.deleteOne({_id:user._id});
+                    console.log('Deleted User');
                     return res.status(500).send({'msg':'error while creating user', 'err':err.message});
                 });
         }
