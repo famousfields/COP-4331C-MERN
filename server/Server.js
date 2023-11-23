@@ -1,6 +1,8 @@
+
 //var express = require('express');
 const express = require('express');
 //var MongoClient = require("mongodb").MongoClient;
+
 const mongodb = require('mongodb');
 var cors = require('cors');
 const mongoose = require('mongoose');
@@ -101,7 +103,7 @@ app.post("/users", async (req, res) => {
 })
 
 // adds an expense id to the user expense array (tested and works)
-app.post("/users/add_expense", async (req, res) => {
+app.post("/users/add/:expense", async (req, res) => {
     try{
         const user = await User.findOneAndUpdate({_id: req.body.user_id}, {$push: {"expenses": req.body.exp_id}}, {new: true});
         res.json(user);
@@ -117,6 +119,18 @@ app.get("/users", async (request, response) => {
     try {
         const users = await User.find();    //must await when there is anything with the DB
         response.send(users);
+    } catch (error) {
+        console.error(error);
+        console.log("Internal Server Error");
+    }
+    
+})
+
+// gets a specific user
+app.get("/user", async (req, res) => {
+    try {
+        const user = await User.findOne({_id: req.body._id});    
+        res.send(user);
     } catch (error) {
         console.error(error);
         console.log("Internal Server Error");

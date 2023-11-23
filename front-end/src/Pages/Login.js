@@ -1,37 +1,43 @@
 import React, {useState,Effect} from 'react'
 import axios from "axios"
-//import { useCookies } from "react-cookie";
-import { useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 
 function Login({onLogin}) 
 {
     var loginEmail;
     var loginPassword;
-    const history = useNavigate();
     const [users,setUsers] = useState({});
     const [errorMessage,setErrorMessage] = useState("");
     const [isSubmitted,setIsSubmitted] = useState(false);
     const [email,setEmail] = useState("");
     const [loginResponse, setLoginResponse] = useState();
-   // const [cookies, setCookie] = useCookies(["userID"]);
+
+   const [cookies,setCookies] = useCookies(["userID"]);
     
     const [password,setPassword] = useState("");
 
 
-     const handleSubmit = async(e) =>{
+     const handleSubmit = (e) =>{
         e.preventDefault()
-        await axios.post('http://localhost:5000/login', {email,password})
-        .then(res=>console.log(res))
-        .then((d)=>setLoginResponse(d))
+        axios.post('http://localhost:5000/login', {email,password})
+        .then(res=>{
+            if(res.statusText === "OK")
+            {
+                console.log(res.data.user_id);
+                setCookies("userID",res.data.user_id);
+                setLoginResponse(res);
+                console.log(loginResponse);
+            }
+        })
         .catch(err=>console.log(err))
-        if(loginResponse){
-           // setCookie("userID",json.user_id);
-            console.log("user logged in",loginResponse)
-            history.push("/expenses");
-        }
-        else{
-            console.error(loginResponse);
-        }
+
+        // if(loginResponse){
+        //    // setCookie("userID",json.user_id);
+        //     history.push("/expenses");
+        // }
+        // else{
+        //     console.error(loginResponse);
+        // }
      }
 
     const redirectSignUp = () => {

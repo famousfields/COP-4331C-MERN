@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useCookies } from 'react-cookie';
 
 function Signup() {
     const [email,setEmail] = useState("");
@@ -10,7 +11,7 @@ function Signup() {
     const [password,setPassword] = useState("");
     const [validEmail,setValidEmail] = useState(false);
     const [validPassword, setValidPassword] = useState(false);
-    const history = useNavigate();
+    const [cookies, setCookies] = useCookies(["userID"]);
     
     // const [userCredentials, setUserCredentials] = useState([
     //     email = "",
@@ -98,7 +99,7 @@ function Signup() {
      )
     
   return (
-    signupForm
+    cookies.userID ?  <div className='error'>looks like youre already signed in</div> : signupForm
   )
 }
 

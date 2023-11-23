@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Signup from './Pages/Signup';
 import About from './Pages/About';
 import Home from './Pages/Home';
@@ -6,35 +6,46 @@ import Login from './Pages/Login';
 import "./App.css";
 import UserExpenses from './Pages/UserExpenses';
 import Navbar from './Components/Navbar';
-//import { CookiesProvider, useCookies } from "react-cookie";
+import { CookiesProvider,useCookies } from "react-cookie";
 
 function App() {
- // const [cookies, setCookie] = useCookies(["user"]);
+ const [cookies] = useCookies(["userID"]);
 
-  function handleLogin(user) 
-  {
-    //setCookie("user", user, { path: "/" });
-  }
+ const RequireUser = ({children, loggedOut=false})=>{
+  if (loggedOut === !cookies.userID) {
+    return children;
+  } else return <Redirect to="/" />
+}
+
+  
   return (
     // <div >
     //  {typeof backendData.users === 'undefined' ? (<p>Loading...</p>) : (backendData.users.map((user,i) =>
     //  (<p key = {i}>{user}</p>)) 
     //  )}
     // </div>
+    <>
+      <Navbar/>
       <div className='App'>
-        <Navbar/>
-        {/* {cookies ? */}
-          <BrowserRouter>
-            <Routes>
-              <Route exact path = "/" element = {<Home/>}/>
-              <Route path = "/signup" element = {<Signup/>}/>
-              <Route path = "/login" element = {<Login />}/>
-              <Route path = "/about" element = {<About/>}/>
-              <Route path='/expenses' element={<UserExpenses/>}/>
-            </Routes>
-          </BrowserRouter>
-        {/* : <UserExpenses user = {cookies.user}/>}  */}
+          <Switch>
+              <Route exact path = "/" >
+                {cookies.userID ? <Redirect to="/expenses"/> : <Redirect to="/login"/> } 
+              </Route>
+              <Route path = "/signup">
+                <RequireUser loggedOut><Signup /></RequireUser>
+              </Route>
+              <Route path = "/login" >
+                <RequireUser loggedOut><Login /></RequireUser>
+              </Route>
+              <Route path = "/about">
+                <RequireUser ><About /></RequireUser>
+              </Route>
+              <Route path='/expenses' >
+                <RequireUser ><UserExpenses /></RequireUser>
+              </Route>
+          </Switch>  
       </div>
+    </>
   );
 }
 
