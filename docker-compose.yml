@@ -1,7 +1,7 @@
 version: '3'
 services:
   front-end:
-    image: front-end:V7
+    image: front-end:V9
     build:
       context: ./front-end
     ports:
@@ -10,17 +10,18 @@ services:
       - ./front-end:/usr/src/app/front-end
     networks:
       - mern-app
-
   server:
-    image: server-end:V8
-    build:
-      context: ./server
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./server:/usr/src/app/server
-    networks:
-      - mern-app
+   image: server-end:V14
+   build:
+     context: ./server
+   ports:
+     - "5000:5000"
+   volumes:
+     - ./server:/usr/src/app/server
+     - /usr/src/app/server/node_modules
+   networks:
+     - mern-app
+
     
 
 

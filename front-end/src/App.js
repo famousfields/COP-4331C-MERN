@@ -17,7 +17,6 @@ function App() {
   } else return <Redirect to="/" />
 }
 
-  
   return (
     // <div >
     //  {typeof backendData.users === 'undefined' ? (<p>Loading...</p>) : (backendData.users.map((user,i) =>
@@ -29,7 +28,7 @@ function App() {
       <div className='App'>
           <Switch>
               <Route exact path = "/" >
-                {cookies.userID ? <Redirect to="/expenses"/> : <Redirect to="/login"/> } 
+                {cookies.userID ? <Redirect to="/expenses"/> : <Home/> } 
               </Route>
               <Route path = "/signup">
                 <RequireUser loggedOut><Signup /></RequireUser>
