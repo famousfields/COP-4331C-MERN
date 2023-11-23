@@ -95,6 +95,26 @@ app.route('/expenses')
         }
     })
 
+
+// gets all expenses that belong to a user
+app.get("/expense", async (req, res) => {
+    try{
+        const expenses = await Expense.find({user_id : req.body._i}, function (err, docs) { 
+            if (err){ 
+                console.log(err); 
+            } 
+            else{ 
+                console.log("First function call : ", docs); 
+            } 
+        });
+        res.json(expenses);
+    } catch(error) {
+        console.error(error.message);
+        res.status(500).json({message: error.message});
+    }
+})
+
+
 // Creates and saves a new user to the DB
 app.post("/users", async (req, res) => {
      User.create(req.body)
