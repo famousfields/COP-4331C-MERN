@@ -96,7 +96,7 @@ const fallback = ("");
       <div className='expense-total'>Expense Total: ${expenseTotal}</div>
 
       {validBudget ? 
-      <div className='monthly-budget'>Monthly budget: ${ displayBudget}</div> : 
+      <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
       <div className='monthly-budget-input'> 
         <h3>Enter monthly budget:</h3>
         <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>

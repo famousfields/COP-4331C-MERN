@@ -28,6 +28,9 @@ function Login({onLogin})
                 setLoginResponse(res);
                 console.log(loginResponse);
             }
+            else{
+                console.log("Something went wrong when logging in");
+            }
         })
         .catch(err=>console.log(err))
 
@@ -74,6 +77,8 @@ function Login({onLogin})
                     
                     <br/>
                     <input className = 'formButton' type='submit' value= "login"/>
+                    <br/>
+                    <p>or</p>
                     <button className = 'formButton' onClick={redirectSignUp}>   Sign up</button>
                 </form>
             </div>
