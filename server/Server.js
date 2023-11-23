@@ -99,7 +99,7 @@ app.route('/expenses')
 // gets all expenses that belong to a user
 app.get("/expense", async (req, res) => {
     try{
-        const expenses = await Expense.find({user_id : req.body._i}, function (err, docs) { 
+        const expenses = await Expense.find({user_id : req.body._id}, function (err, docs) { 
             if (err){ 
                 console.log(err); 
             } 

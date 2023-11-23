@@ -16,7 +16,8 @@ const expenseSchema = mongoose.Schema(
             required: true
         },
         user_id: {
-            type: String
+            type: String,
+            required: true
         },
     },
     {
