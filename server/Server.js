@@ -103,7 +103,7 @@ app.route('/expenses')
 
 
 // get expenses based on user id
-app.post("/expense", async (req, res) => {
+app.get("/expense", async (req, res) => {
     try{
         const expenses = await Expense.find({user_id : req.body._id});
         res.json(expenses);
