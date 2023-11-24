@@ -121,6 +121,7 @@ app.post("/users", async (req, res) => {
      .catch(err => res.json(err));
 })
 
+/*
 // adds an expense id to the user expense array (tested and works)
 app.post("/users/add/:expense", async (req, res) => {
     try{
@@ -132,6 +133,8 @@ app.post("/users/add/:expense", async (req, res) => {
         res.status(500).json({message: error.message});
     }
 })
+*/
+
 
 // Route to get all users
 app.get("/users", async (request, response) => {
