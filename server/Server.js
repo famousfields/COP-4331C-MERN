@@ -11,6 +11,8 @@ const connectDB = require("./dbConn");
 const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 const bcrypt = require("bcrypt");
+const Token = require("./models/tokenModel");
+//const bcrypt = require('bcrypt');
 
 // Other imports
 // ...
@@ -28,6 +30,7 @@ const PORT_S = 433;
 // Neccessary packages for accepting json data
 app.use(cors());
 app.use(express.json());
+app.set('view engine', 'pug');
 
 // Global middleware function (logs the time, along with request method and route)
 app.use( (req, res, next) => {
@@ -68,13 +71,16 @@ connectDB(); //connects the db
 // log that the mongoose connection was successful and display server port connection
 mongoose.connection.once('open', ()=> {
     console.log("Mongo DB connection is succcessful");
+    //mongoose.Collection.createIndex( {"expireAt":1}, { expireAfterSeconds:15});
+    //mongoose.mongodb.C .createIndex( {"expireAt":1}, { expireAfterSeconds:15})
+    //Token.createIndexes({key: { expireAt: 1}, expireAfterSeconds: 15});
     //https.createServer(options, app).listen(PORT_S);    //does the trick, doesn't print to console though...
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
 // route for '/expenses'
 app.route('/expenses')
-    // the post route
+    // the post route = create a new expense (from req.body)
     .post(async(req, res) => {
         try {
             const expense = await Expense.create(req.body);
@@ -84,7 +90,7 @@ app.route('/expenses')
             res.status(500).json({message: error.message});
         }
     })
-    // the get route
+    // the get route = get all expenses
     .get(async (req, res) => {
         try {
             const expense = await Expense.find();
@@ -152,8 +158,9 @@ app.post('/signup', async (req, res, next) => {
 
 // Handle verification of the user given along with the token. Oddity with JSON output.
 app.get('/verify/:name/:token', async (req, res, next) => {
-    output = await confirmEmail(req, res, next);    //updates res in function
+    output = await confirmEmail(req, res, next)    //updates res in function - now renders in function
     // returns name and email along with a message.
+    
     //console.log('Verify output:' + output);
     next();
 }, 
