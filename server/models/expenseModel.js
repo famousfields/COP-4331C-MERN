@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
-const expenseSchema = mongoose.Schema(
+const expenseSchema = new mongoose.Schema(
     {
         type: {
             type: String,
             required: [true, "Please enter a type of expense"]
         },
+        // number of times expense occurs each month.
         quantity: {
             type: Number,
             required: [true, "Please enter the quantity"],
@@ -23,7 +24,9 @@ const expenseSchema = mongoose.Schema(
     {
         timestamps: true
     }
-)
+);
+
+// TODO?: write middleware function to update price on quantity.
 
 const Expense = mongoose.model('Expense', expenseSchema);
 
