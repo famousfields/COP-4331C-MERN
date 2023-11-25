@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react'
 import Expenses from "../Components/Expenses"
 import { useCookies } from "react-cookie";
+import axios from 'axios';
 
 function UserExpenses() {
 
@@ -8,26 +9,12 @@ function UserExpenses() {
   const [popupActive,setPopupActive] = useState(false);
   const [expenseTotal,setExpenseTotal] = useState(0);
   const [monthlyBudget,setMonthlyBudget] = useState({});
-  const [displayBudget,setDisplayBudget] = useState({});
-  const [cookies,setCookies,removeCookies] = useCookies(["userID"]);
+  const [displayBudget, setDisplayBudget] = useState({});
+  const [cookies, setCookies,removeCookies] = useCookies(["userID"]);
   const [validBudget, setValidBudget] = useState(false);
   
-  const [expenses,setExpenses] = useState(
-    [
-      {
-        Id:1,
-        name: 'Food',
-        price: 10,
-        quantity: 1
-      },
-      {
-        Id:2,
-        name: 'Gas',
-        price: 20,
-        quantity: 1
-      },
-    ]);
-let eArr = [150,500,50];
+  const [expenses,setExpenses] = useState(null);
+  let eArr = [150,500,50];
 
   // function to calculate expense total
   function calcExpenseTotal(eArr){
@@ -36,21 +23,23 @@ let eArr = [150,500,50];
       sum += eArr[i];
     return sum;
   }
-  // refreshed the expense total everytime the screen refreshes or expenses change
-  // useEffect(() =>{
-  //   fetchExpenses();
-  //   setExpenseTotal(calcExpenseTotal(eArr));
-  // },[expenses])
+ 
+ // refreshed the expense total everytime the screen refreshes or expenses change
+  useEffect(() =>{
+    fetchExpenses();
+   // setExpenseTotal(calcExpenseTotal(eArr));
+  },[])
 
 //function to fetch api and add expense
 const addExpense = async() => {
-  const data = await fetch("https://localhost:5000/users/add_expense",{
+  const data = await fetch("http://localhost:5000/expenses",{
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      text: newExpense
+      text: newExpense,
+      user_id:cookies.userID
     })
   }).then(res =>console.log(res));
   setExpenses([...expenses,data]);
@@ -58,14 +47,20 @@ const addExpense = async() => {
   setNewExpense("");
 }
 
+const deleteExpense = (expense) =>{
+  setExpenses(expenses.filter(e => e !== expense))
+}
+
 // function to fetch user expenses
-const fetchExpenses= async() =>{
-  await fetch(`https://localhost:5000/user`, {
-    body: JSON.stringify({user_Id: cookies.userID})
-  })
-  .then(res=>console.log(res))
-  .catch(err=> console.error(err))
-  .finally(res=>setExpenses(res))
+const fetchExpenses = () => {
+  axios.get(`http://localhost:5000/expense`, {
+  params:{
+  _id: `655cb59801d9e9f051dd43c5`
+  }
+})
+.then(e => setExpenses(e))
+.then(console.log(expenses))
+.catch(err=>console.log(err))
 }
 
 // component to properly display monthly budget entered by user
@@ -89,12 +84,13 @@ const fallback = ("");
       
       {/*maps expenses from  database once fetched */}
       <div className='expenses'>
-          <Expenses expenses = {expenses}/>
+          <Expenses expenses = {expenses} onDelete = {deleteExpense}/>
       </div> 
 
       {/* sum of all expense.prices */}
       <div className='expense-total'>Expense Total: ${expenseTotal}</div>
-
+      
+      {/* If user had entered a valid budget display budget if not prompt them to enter one */}
       {validBudget ? 
       <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
       <div className='monthly-budget-input'> 
@@ -102,8 +98,9 @@ const fallback = ("");
         <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
         <button onClick={expenseHandler}>Add budget</button>
         </div>}
-      <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
       
+      {/* Add expense */}
+      <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
       {popupActive ? (
         <div className='popup'>
           <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
@@ -113,7 +110,7 @@ const fallback = ("");
             type='text'
             className='add-expense-name'
             onChange={e => setNewExpense(e.target.value)}
-            value = {newExpense.name} />
+            value = {newExpense.type} />
              <input 
             type='number'
             className='add-expense-price'
