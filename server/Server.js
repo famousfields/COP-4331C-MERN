@@ -171,6 +171,13 @@ app.post('/signup', async (req, res, next) => {
     console.log('Successfully completed Signup route');
 });
 
+// renders the verify.pug with some dummy values for testing the styling.
+app.get('/fakeVerify', async (req, res, next) => {
+    // Render the verify page, with dummy data.
+    res.render('verify', {title: 'Fake Verify', userMessage: 'Hello Fake User!', 
+        message: 'Test Page for Verify Template', err:'Optional error text would go here.'});
+    next();
+});
 
 // Handle verification of the user given along with the token. Oddity with JSON output.
 app.get('/verify/:name/:token', async (req, res, next) => {
