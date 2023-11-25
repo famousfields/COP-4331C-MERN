@@ -94,7 +94,7 @@ app.route('/expenses')
     .get(async (req, res) => {
         try {
             const expense = await Expense.find();
-            response.json(expense);
+            res.json(expense);
         } catch (error) {
             console.error(error);
             console.log("Error getting expenses");
