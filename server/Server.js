@@ -115,7 +115,21 @@ app.route('/expenses')
         // saved successfully
         console.log('Successfully Updated Expense: ' + expense.type);   //type is equivalent to its name.
         res.status(200).json({msg:'Successfully Updated Expense!'});
-    })
+    });
+    app.delete('/expenses/:id', async (req, res) => {
+        try {
+            const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
+
+            if (!deletedExpense) {
+                return res.status(500).json({message: error.message});
+            }
+
+            res.json({ message: 'Expense deleted successfully', deletedExpense })
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json({message: error.message});
+        }
+    });
 
 
 // get expenses based on user id
@@ -209,20 +223,6 @@ app.route('/login')
         console.log('Successfully completed login handler');
         next();
     })
-
-/*
-app.get("/api/expenses", async(request,response) => {
-    const result = await UserExpense.find();
-    response.send({"userExpenses": result});
-})
-*/
-
-/* //delete by id
-app.post("/user/delete/:id", async(req,res) => {
-    const result = await User.findByIdAndDelete(req.params.id);
-
-    res.json(result);
-})*/
 
 // delete by email: a bit easier to use in my opinion
 app.post("/user/delete/:email", async(req, res) => {
