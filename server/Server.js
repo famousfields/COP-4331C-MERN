@@ -100,6 +100,20 @@ app.route('/expenses')
             console.log("Error getting expenses");
         }
     })
+    app.delete('/expenses/:id', async (req, res) => {
+        try {
+            const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
+
+            if (!deletedExpense) {
+                return res.status(500).json({message: error.message});
+            }
+
+            res.json({ message: 'Expense deleted successfully', deletedExpense })
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).json({message: error.message});
+        }
+    });
 
 
 // get expenses based on user id
