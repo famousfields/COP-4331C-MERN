@@ -76,10 +76,13 @@ function Login({onLogin})
                         />
                     
                     <br/>
-                    <input className = 'formButton' type='submit' value= "login"/>
-                    <br/>
-                    <p>or</p>
-                    <button className = 'formButton' onClick={redirectSignUp}>   Sign up</button>
+
+                    <div className='loginButtonsDiv'>
+                        <input className = 'formButton' type='submit' value= "login"/>
+                        <p>or</p>
+                        <button className = 'formButton' onClick={redirectSignUp}>Signup</button>
+                    </div>
+                    
                 </form>
             </div>
 
