@@ -14,23 +14,14 @@ const bcrypt = require("bcrypt");
 const Token = require("./models/tokenModel");
 //const bcrypt = require('bcrypt');
 
-// Other imports
-// ...
-
-// Your code continues...
-
-
-// const { default: UserExpenses } = require('../front-end/src/Pages/UserExpenses');
-
-
 var app = express();
-const PORT  = 5000;
-const PORT_S = 433;
+const PORT  = 5000;     //main port for HTTP / testing
+const PORT_S = 433;     //httpS port.
 
 // Neccessary packages for accepting json data
 app.use(cors());
 app.use(express.json());
-app.set('view engine', 'pug');
+app.set('view engine', 'pug');  //view engine for verify page.
 
 // Global middleware function (logs the time, along with request method and route)
 app.use( (req, res, next) => {
@@ -45,8 +36,8 @@ app.use( (req, res, next) => {
 const https = require('node:https');
 const http = require('node:http');
 const fs = require('node:fs');
-//const { signup, confirmEmail, resendLink } = require('./emailHandler');
 
+// Email Verification
 const signup = require('./emailHandler/signup');
 const resendLink = require('./emailHandler/resendLink');
 const confirmEmail = require('./emailHandler/confirmEmail');
@@ -74,6 +65,7 @@ mongoose.connection.once('open', ()=> {
     //mongoose.Collection.createIndex( {"expireAt":1}, { expireAfterSeconds:15});
     //mongoose.mongodb.C .createIndex( {"expireAt":1}, { expireAfterSeconds:15})
     //Token.createIndexes({key: { expireAt: 1}, expireAfterSeconds: 15});
+
     //https.createServer(options, app).listen(PORT_S);    //does the trick, doesn't print to console though...
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
@@ -91,6 +83,7 @@ app.route('/expenses')
         }
     })
     // the get route = get all expenses
+    // MARKED for DELETION (not needed on frontend side)
     .get(async (req, res) => {
         try {
             const expense = await Expense.find();
@@ -100,6 +93,29 @@ app.route('/expenses')
             console.log("Error getting expenses");
         }
     })
+    //.delete() - in progress
+    .put(async (req, res, next) => {
+        //Update an expense
+        const expense = await Expense.findOne({_id:req.body._id});  //gets the expense
+        // update contents
+        if(!expense) {
+            console.log('Could not find Expense while Updating');
+            res.status(404).json({msg:'Could not find expense'});
+            next()
+        }
+        expense.type = req.body.type;
+        expense.quantity = req.body.quantity;
+        expense.price = req.body.price;
+
+        // catch any error during save.
+        await expense.save().catch ( (err) => {
+            console.error("Error saving expense after update:\n" + err.message);
+            res.status(500).json({msg:'Error while saving expense', err:err.message});
+        });
+        // saved successfully
+        console.log('Successfully Updated Expense: ' + expense.type);   //type is equivalent to its name.
+        res.status(200).json({msg:'Successfully Updated Expense!'});
+    });
     app.delete('/expenses/:id', async (req, res) => {
         try {
             const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
@@ -117,9 +133,9 @@ app.route('/expenses')
 
 
 // get expenses based on user id
-app.get("/expense", async (req, res) => {
+app.get("/user_expenses", async (req, res) => {
     try{
-        const expenses = await Expense.find({user_id : req.body._id});
+        const expenses = await Expense.find({ user_id: req.body._id});
         res.json(expenses);
     } catch(error) {
         console.error(error.message);
@@ -127,30 +143,8 @@ app.get("/expense", async (req, res) => {
     }
 })
 
-
-// Creates and saves a new user to the DB
-app.post("/users", async (req, res) => {
-     User.create(req.body)
-     .then(users => res.json(users))
-     .catch(err => res.json(err));
-})
-
-/*
-// adds an expense id to the user expense array (tested and works)
-app.post("/users/add/:expense", async (req, res) => {
-    try{
-        const user = await User.findOneAndUpdate({_id: req.body.user_id}, {$push: {"expenses": req.body.exp_id}}, {new: true});
-        res.json(user);
-        
-    } catch(error) {
-        console.error(error.message);
-        res.status(500).json({message: error.message});
-    }
-})
-*/
-
-
 // Route to get all users
+// MARKED for DELETION (not needed on frontend)
 app.get("/users", async (request, response) => {
     try {
         const users = await User.find();    //must await when there is anything with the DB
@@ -159,7 +153,6 @@ app.get("/users", async (request, response) => {
         console.error(error);
         console.log("Internal Server Error");
     }
-    
 })
 
 // gets a specific user
@@ -174,7 +167,7 @@ app.get("/user", async (req, res) => {
     
 })
 
-// Handle a post for a new user
+// Handle a post for a new user => could consolidate under POST /user ? 
 app.post('/signup', async (req, res, next) => {
     output = await signup(req, res, next);  //await was the missing piece (it waits on the function to complete before moving on)
     // returns name, email and user_id as json.
@@ -207,7 +200,7 @@ app.get('/verify/:name/:token', async (req, res, next) => {
 });
 
 // resend has been tested and works. 
-app.post('/resend/', async (req, res, next) => {
+app.post('/resend', async (req, res, next) => {
     output = await resendLink(req, res, next);  // returns status: 'success' on success.
     //res.json(output);
     next()
@@ -230,20 +223,6 @@ app.route('/login')
         console.log('Successfully completed login handler');
         next();
     })
-
-/*
-app.get("/api/expenses", async(request,response) => {
-    const result = await UserExpense.find();
-    response.send({"userExpenses": result});
-})
-*/
-
-/* //delete by id
-app.post("/user/delete/:id", async(req,res) => {
-    const result = await User.findByIdAndDelete(req.params.id);
-
-    res.json(result);
-})*/
 
 // delete by email: a bit easier to use in my opinion
 app.post("/user/delete/:email", async(req, res) => {
