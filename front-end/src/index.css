@@ -10,12 +10,13 @@
 	--dark-alt: #202B3E;
 }
 
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
 
-	font-family: "Fira Sans", sans-serif;
+	font-family: 'Noto Sans Linear B', sans-serif;
 }
 
 body {
@@ -35,10 +36,6 @@ body {
 
 
 /*Expenge Page CSS */
-.expese-layout {
-	padding: 32px;
-}
-
 h1 {
 	font-size: 40px;
 	font-weight: 700;
@@ -83,6 +80,55 @@ h1 {
 	justify-content: center;
 	font-weight: 700;
 }
+
+.expese-layout {
+	padding: 32px;
+	display: flex;
+}
+
+.main-content {
+	flex: 1;
+	/* Allow main content to take remaining space */
+	/* Add styles for your main content area */
+}
+
+/* Sidebar CSS */
+.sidebar {
+	width: 250px; /* Set width of the sidebar */
+	height: 100vh;
+	background-color: #333;
+	color: #fff;
+	display: flex;
+  	flex-direction: column; /* Items will stack vertically */
+  	align-items: center;
+  }
+
+  .logout {
+	margin-top: 40px;
+	border-radius: 20px;
+	padding: 15px;
+	font-size: x-large;
+  }
+
+  .logout:hover{
+	cursor: pointer;
+  }
+
+  .sideOption{
+	font-size: x-large;
+	width: 100%;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	background-color: transparent;
+	border: none;
+	color: white;
+  }
+
+  .sideOption:hover{
+	background-color: grey;
+	opacity: 50%;
+	cursor: pointer;
+  }
 
 /*Navbar CSS*/
 .navbar{
