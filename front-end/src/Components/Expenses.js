@@ -59,6 +59,7 @@ const Expenses = ({expenses}) =>
       <div>{listItems}</div>
           
       } */}
+
     </>
   );
 }
