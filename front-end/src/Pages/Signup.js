@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 
-function Signup() {
+function Signup() 
+{
     const [email,setEmail] = useState("");
     const [name, setName] = useState("");
     const [passwordTry1,setPasswordTry1] = useState("");

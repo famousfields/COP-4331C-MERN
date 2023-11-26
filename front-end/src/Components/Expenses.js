@@ -63,9 +63,9 @@ const Expenses = ({expenses,onDelete} ) =>
     
       {expenses?.length?expenses.map(expense=>(
         <div className='expense' key = {expense._id}>
-          <div className='text'>{expense.type}</div>
-          <div className='price'>{expense.price}</div>
-          <div className='quantity'>{expense.quantity}</div>  
+          <div className='text'>Expense Name: {expense.type}</div>
+          <div className='price'>Price: ${expense.price}</div>
+          <div className='price'>Quantity: {expense.quantity}</div>  
           <button className='delete-expense'onClick={()=>handleDelete(expense)}>x</button>
         </div>
       )) 
