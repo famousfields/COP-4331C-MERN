@@ -143,7 +143,6 @@ const fallback = ("");
       </div>
       */}
 
-      
       <div className='mainContent'>
         {/*maps expenses from  database once fetched */}
         <div className='expenses'>

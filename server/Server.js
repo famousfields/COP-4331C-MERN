@@ -131,17 +131,6 @@ app.route('/expenses')
         }
     });
 
-
-// get expenses based on user id
-// app.get("/user_expenses", async (req, res) => {
-//     try{
-//         const expenses = await Expense.find({ user_id: req.body._id});
-//         res.json(expenses);
-//     } catch(error) {
-//         console.error(error.message);
-//         res.status(500).json({message: error.message});
-//     }
-// })
 app.get("/user_expenses", async (req, res) => {
     try {
         const userId = req.query._id; // Retrieve user_id from query parameters
@@ -153,6 +142,7 @@ app.get("/user_expenses", async (req, res) => {
         const expenses = await Expense.find({ user_id: userId });
         res.send(expenses);
     } catch (error) {
+
         console.error(error.message);
         res.status(500).json({ message: error.message });
     }
