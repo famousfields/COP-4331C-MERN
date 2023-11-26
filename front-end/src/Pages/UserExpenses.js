@@ -124,7 +124,6 @@ const fallback = ("");
         <button className = "logout" onClick={handleLogout}>Logout</button>
       </div>
 
-      
       <div className='mainContent'>
         
         <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
@@ -174,9 +173,6 @@ const fallback = ("");
             </div>
             ): fallback}
       </div>
-
-
-      
     </div>
   );
 }
