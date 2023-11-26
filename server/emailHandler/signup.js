@@ -104,12 +104,13 @@ const signup = async function(req, res, next) {
                         });
 
                 }).catch(async (err) => {
-                    console.log('Error during user creation: ' + err);
+                    console.error('Error during user creation:\n' + err);
                     return res.status(500).send({'msg':'error while creating user', 'err':err.message});
                 });
         }
 
     } catch(err) {
+        console.error('Signup Error:\n' + err);
         return res.status(500).send({'msg': 'try-catch error in signup.js','err':err.message});;
     }
 }
