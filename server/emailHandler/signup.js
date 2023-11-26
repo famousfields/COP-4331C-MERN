@@ -16,10 +16,10 @@ const signup = async function(req, res, next) {
     try {
         var userQ = await User.findOne( {email: req.params.email});
         // write to a file as console.log disappears into the void...
-        fs.writeFile('./userQ.txt', ('Time: ' + Date.now().toString() + '\n' + userQ.toString() + '\n'), {encoding:'utf8', flag:'a'}, (err) => {
-            if(err) 
-                return res.status(500).send({msg:'Error writing log file', err: err.message});
-        });
+        // //fs.writeFile('./userQ.txt', ('Time: ' + Date.now().toString() + '\n' + userQ.toString() + '\n'), {encoding:'utf8', flag:'a'}, (err) => {
+        //     if(err) 
+        //         return res.status(500).send({msg:'Error writing log file', err: err.message});
+        // });
         // need to figure out proper way to handle this... it is doing it for all emails! Soln: check if email is not null
         if(userQ != null && userQ.email != null && userQ.email === req.params.email) {
             return res.status(500).send({msg: 'Email already associated!'});
@@ -101,7 +101,8 @@ const signup = async function(req, res, next) {
         }
 
     } catch(err) {
-        return res.status(500).send({'msg': 'try-catch error in signup.js','err':err.message});;
+        console.error(err);
+        return res.status(500).send({'msg': 'try-catch error in signup.js','err':err.message});
     }
 }
 

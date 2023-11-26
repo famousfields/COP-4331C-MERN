@@ -116,20 +116,21 @@ app.route('/expenses')
         console.log('Successfully Updated Expense: ' + expense.type);   //type is equivalent to its name.
         res.status(200).json({msg:'Successfully Updated Expense!'});
     });
-    app.delete('/expenses/:id', async (req, res) => {
-        try {
-            const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
 
-            if (!deletedExpense) {
-                return res.status(500).json({message: error.message});
-            }
+app.delete('/expenses/:id', async (req, res) => {
+    try {
+        const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
 
-            res.json({ message: 'Expense deleted successfully', deletedExpense })
-        } catch (error) {
-            console.error(error.message);
-            res.status(500).json({message: error.message});
+        if (!deletedExpense) {
+            return res.status(500).json({message: error.message});
         }
-    });
+
+        res.json({ message: 'Expense deleted successfully', deletedExpense })
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({message: error.message});
+    }
+});
 
 app.get("/user_expenses", async (req, res) => {
     try {

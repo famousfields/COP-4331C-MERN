@@ -25,11 +25,11 @@ function Signup() {
     },[passwordTry1,passwordTry2])
 
     const handleSubmit = async(e) => {
-        e.preventDefault()
+        e.preventDefault();
         try{
             if(name &&email && password)
             {
-                const response = await axios.post('http://localhost:5000/signup', {name, email,password})
+                const response = await axios.post('http://localhost:5000/signup', {name, email , password})
                 console.log(response)
                 let responseData;
                 if(response.statusText === 'OK')
