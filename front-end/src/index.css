@@ -42,6 +42,11 @@ h1 {
 	margin-bottom: 32px;
 }
 
+.expensesDiv{
+	padding-left: 5vh;
+	padding-right: 5vh;
+}
+
 .expense {
 	position: relative;
 	background-color: var(--dark);
@@ -117,9 +122,11 @@ h1 {
 
 .testDiv{
 	display: flex;
-	justify-content: flex-end;
-	padding-right: 10vh;
+	justify-content: space-between;
+	align-items: center;
+	padding-right: 5vh;
 	padding-bottom: 30px;
+	padding-left: 5vh;
 }
 
 .budgetButton{
@@ -157,14 +164,24 @@ h1 {
 }
 
 .addExpenseDiv{
-	padding-left: 30px;
-	padding-right: 30px;
+	padding-left: 5vh;
+	padding-right: 5vh;
 	display: flex;
 	justify-content: space-between;
 }
 
 .logoutDiv{
 	justify-content: flex-end;
+}
+
+.expenseWelcome {
+	padding-top: 20px;
+	text-align: center;
+}
+
+.popup{
+	padding-top: 15px;
+	padding-left: 5vh;
 }
 
   
