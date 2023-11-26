@@ -29,9 +29,12 @@ function Home() {
 
       </div>
 
+      {/*
       <div className='featureStrip'>
         <h1>Features</h1>
       </div>
+      */}
+      
       
     </div>
   )

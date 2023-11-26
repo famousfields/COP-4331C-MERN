@@ -12,6 +12,7 @@ function Signup() {
     const [cookies, setCookies] = useCookies(["userID"]);
     const [errorMessage,setErrorMessage] = useState();
     const [isSubmitted,setIsSubmitted] = useState(false);
+    const [signupStatus,setSignupStatus]= useState("");
     
     const handleInvalid = (e) =>{
         e.preventDefault()
@@ -23,18 +24,30 @@ function Signup() {
         setPassword(passwordTry1 === passwordTry2 ? passwordTry1 : "");
     },[passwordTry1,passwordTry2])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
-        if(name &&email && password)
-        {
-            axios.post('http://localhost:5000/signup', {name, email,password})
-            .then(res=>console.log(res))
-            .catch(err=>console.log(err))
-            setIsSubmitted(true);
+        try{
+            if(name &&email && password)
+            {
+                const response = await axios.post('http://localhost:5000/signup', {name, email,password})
+                console.log(response)
+                let responseData;
+                if(response.statusText === 'OK')
+                {
+                    responseData = response.data;
+                    setSignupStatus(responseData.data)
+                    console.log(signupStatus)
+                    setIsSubmitted(true);
+                }
+            } 
+            else{
+                handleInvalid(e);
+                return
+            }
+        }catch(error){
+            console.error(error)
         }
-        else{
-            handleInvalid(e);
-        }
+       
     }
      const signupForm = (
         <div className="form-container">

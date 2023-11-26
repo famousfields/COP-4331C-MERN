@@ -76,7 +76,7 @@ const signup = async function(req, res, next) {
                                     console.error(error);
                                     return res.status(500).send({msg: 'Error sending mail', err: error.message})
                                 });
-                            return res.status(200).send(
+                            return res.status(200).json(
                                 {
                                     msg:'Verification email sent to ' + user.email,
                                     email: req.params.email,
@@ -96,8 +96,6 @@ const signup = async function(req, res, next) {
 
                 }).catch(async (err) => {
                     console.log('Error during user creation: ' + err);
-                    await User.deleteOne({_id:user._id});
-                    console.log('Deleted User');
                     return res.status(500).send({'msg':'error while creating user', 'err':err.message});
                 });
         }

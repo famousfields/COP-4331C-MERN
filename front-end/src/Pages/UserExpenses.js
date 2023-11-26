@@ -14,7 +14,9 @@ function UserExpenses() {
   const [cookies, setCookies,removeCookies] = useCookies(["userID"]);
   const [validBudget, setValidBudget] = useState(false);
   
-  const [expenses,setExpenses] = useState(null);
+  const [userExpenses,setUserExpenses] = useState([]);
+  const [value,setValue] = useState(false)
+
   let eArr = [150,500,50];
 
   // function to calculate expense total
@@ -26,10 +28,18 @@ function UserExpenses() {
   }
  
  // refreshed the expense total everytime the screen refreshes or expenses change
-  useEffect(() =>{
-    fetchExpenses();
+ useEffect(() =>{
+  setTimeout(()=>
+  console.log("effect ran"),
+  fetchExpenses()
+  ,5000)
+  // fetchExpenses()
    // setExpenseTotal(calcExpenseTotal(eArr));
-  },[])
+},[])
+
+useEffect(()=>{
+
+},[value])
 
 //function to fetch api and add expense
 const addExpense = async() => {
@@ -43,25 +53,64 @@ const addExpense = async() => {
       user_id:cookies.userID
     })
   }).then(res =>console.log(res));
-  setExpenses([...expenses,data]);
+  setUserExpenses([...userExpenses,data]);
   setPopupActive(false);
   setNewExpense("");
 }
 
 const deleteExpense = (expense) =>{
-  setExpenses(expenses.filter(e => e !== expense))
+  setUserExpenses(userExpenses.filter(e => e !== expense))
 }
 
-// function to fetch user expenses
-const fetchExpenses = () => {
-  axios.get(`http://localhost:5000/expense`, {
-  params:{
-  _id: `655cb59801d9e9f051dd43c5`
+// function for green or red budget
+const ExpensePosNeg = ({ number }) => {
+  let color = 'black';
+  let message = '';
+
+  if (number > 0) {
+    color = 'green';
+    message = 'Great Job! You are on track with your budget!';
+  } else if (number < 0) {
+    color = 'red';
+    message = 'You are not on budget, lets look at your expenses and reduce them.';
   }
-})
-.then(e => setExpenses(e))
-.then(console.log(expenses))
-.catch(err=>console.log(err))
+
+  const numberStyle = {
+    color: color,
+  };
+
+  return (
+    <div>
+      <div style={numberStyle}>{number}</div>
+      <div>{message}</div>
+    </div>
+  );
+}
+
+
+// function to fetch user expenses
+const fetchExpenses = async() => {
+  try{
+   const response =  await axios.get('http://localhost:5000/user_expenses', {
+      params:{ 
+      _id: cookies.userID
+    }
+  });
+ 
+  if(response.statusText === 'OK'){
+    console.log(typeof([response.data]))
+    setUserExpenses(response.data);
+    setValue(!value)
+    return
+  }
+  else{
+    console.log("error when fetching expenses")
+  }
+}
+catch(error){
+  console.error("Error fetching expenses:", error);
+}
+
 }
 
 // component to properly display monthly budget entered by user
@@ -85,12 +134,31 @@ const fallback = ("");
       
       {/*maps expenses from  database once fetched */}
       <div className='expenses'>
-          <Expenses expenses = {expenses} onDelete = {deleteExpense}/>
+          {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
       </div> 
+    
+      
+      {/*
+      <div className="sidebar">
+        <button className='sideOption'>Dashboard</button>
+        <button className='sideOption'>Expenses</button>
+        <button className='sideOption'>Trends</button>
+        <button className='sideOption'>Budget</button>
+        
+        <button className = "logout" onClick={handleLogout}>Logout</button>
+      </div>
+      */}
+
+      <div className='mainContent'>
+        
+        
+        
+        
 
         {/* sum of all expense.prices */}
         <div className='expense-total'>Expense Total: ${expenseTotal}</div>
 
+        {/* If user had entered a valid budget display budget if not prompt them to enter one */}
         {validBudget ? 
         <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
         <div className='monthly-budget-input'> 
@@ -98,7 +166,13 @@ const fallback = ("");
           <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
           <button onClick={expenseHandler}>Add budget</button>
           </div>}
-        <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
+        
+           
+        
+        <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
+
+        {/* sum of all expense.prices */}
+        
         
         {popupActive ? ( 
             <div className='popup'>
@@ -125,10 +199,9 @@ const fallback = ("");
           </div>
           ): fallback}
       </div>
-
-
+    </div>
       
   );
 }
 
-export default UserExpenses
+export default UserExpenses;

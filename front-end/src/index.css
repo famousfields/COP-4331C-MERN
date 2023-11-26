@@ -92,6 +92,27 @@ h1 {
 	/* Add styles for your main content area */
 }
 
+.addExpenseInput {
+	font-size: 18px;
+	padding: 10px;
+	border-radius: 20px;
+	margin: 10px;
+}
+
+
+
+.createExpenseButton{
+	font-size: 18px;
+	width: 180px;
+	height: 40px;
+	border-radius: 20px;
+}
+
+.createExpenseButton:hover {
+	background-color: black;
+	color: white;
+	cursor: pointer;
+}
 /* Sidebar CSS */
 .sidebar {
 	width: 250px; /* Set width of the sidebar */
@@ -189,17 +210,21 @@ h1 {
 	margin-bottom: 16px;
 }
 .addPopup {
+
+	/*
 	position: fixed;
 	bottom: 32px;
 	right: 32px;
+	*/
+	
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
-	width: 64px;
+	width: 180px;
 	height: 64px;
 	border-radius: 999px;
-	font-size: 28px;
+	font-size: 20px;
 	font-weight: 900;
 	color: var(--light);
 	background-color: var(--primary);
@@ -234,9 +259,9 @@ h1 {
 	background-image: url('https://i.imgur.com/ofgmYoO.jpg');
 	background-size: cover;
 	background-position: center;
-	height: 500px;
+	height: 90vh;
 	align-items: center;
-
+	justify-content: center;
 }
 
 .welcomeDiv h1 {
@@ -273,9 +298,6 @@ h1 {
 .about-devs{
 	background-size: contain;
 	background-repeat: no-repeat;
-	/*
-	background-image: url('https://i.imgur.com/uaHWQXd.jpg');
-	*/
 }
 
 .aboutHeader{
