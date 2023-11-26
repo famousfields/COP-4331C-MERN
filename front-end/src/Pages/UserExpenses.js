@@ -136,6 +136,35 @@ const fallback = ("");
             <Expenses expenses = {expenses}/>
         </div> 
 
+        {/* Code for adding expense */}
+        
+        {popupActive ? ( 
+          <div className='popup'>
+            <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
+            <div className="content">
+              <h3>Add expense</h3>
+              <input 
+              type='text'
+              className='addExpenseInput'
+              onChange={e => setNewExpense(e.target.value)}
+              value = {newExpense.name} />
+              <input 
+              type='number'
+              className='addExpenseInput'
+              onChange={e => setNewExpense(e.target.value)}
+              value = {newExpense.price} />
+              <input 
+              type='number'
+              className='addExpenseInput'
+              onChange={e => setNewExpense(e.target.value)}
+              value = {newExpense.quantity} />
+              <button className='createExpenseButton' onClick={addExpense}>Create Expense</button> 
+              
+            </div>
+          </div>
+        ): fallback}
+        <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
+
         {/* sum of all expense.prices */}
         <div className='expense-total'>Expense Total: ${expenseTotal}</div>
 
@@ -146,7 +175,7 @@ const fallback = ("");
           <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
           <button onClick={expenseHandler}>Add budget</button>
           </div>}
-        <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
+        
         
         {/*
         <ExpensePosNeg number={5}/>
@@ -154,31 +183,7 @@ const fallback = ("");
          */}
         
         
-        {popupActive ? ( 
-            <div className='popup'>
-            <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
-            <div className="content">
-              <h3>Add expense</h3>
-              <input 
-              type='text'
-              className='add-expense-name'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.name} />
-              <input 
-              type='number'
-              className='add-expense-price'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.price} />
-              <input 
-              type='number'
-              className='add-expense-price'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.quantity} />
-              <button className='button' onClick={addExpense}>Create Expense</button> 
-              
-            </div>
-          </div>
-          ): fallback}
+        
       </div>
 
 
