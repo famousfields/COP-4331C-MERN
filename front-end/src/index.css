@@ -86,10 +86,11 @@ h1 {
 	font-weight: 700;
 }
 
-.expese-layout {
-	padding: 32px;
-	display: flex;
-	flex-direction: row;
+.expense-layout {
+	background-image: url('https://i.imgur.com/DjcukBk.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 90vh;
 }
 
 .main-content {
