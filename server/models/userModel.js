@@ -7,8 +7,16 @@ const userSchema = new mongoose.Schema({
     email: {type: String, unique: true},
     isVerified: {type: Boolean, default: false }, 
     password: String, 
-	expenses: [String]
+	expenses: [String],
+    monthlyBudget: { type:Number, default: 0 }
 });
+
+// Executed before a save (part of validation).
+// userSchema.pre( function (user) {
+//     if(user.monthlyBudget < 0) {
+//         //error!
+//     }
+// });
 
 const User = mongoose.model("User", userSchema)
 

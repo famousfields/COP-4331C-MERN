@@ -16,10 +16,10 @@ const signup = async function(req, res, next) {
     try {
         var userQ = await User.findOne( {email: req.params.email});
         // write to a file as console.log disappears into the void...
-        fs.writeFile('./userQ.txt', ('Time: ' + Date.now().toString() + '\n' + userQ.toString() + '\n'), {encoding:'utf8', flag:'a'}, (err) => {
-            if(err) 
-                return res.status(500).send({msg:'Error writing log file', err: err.message});
-        });
+        // fs.writeFile('./userQ.txt', ('Time: ' + Date.now().toString() + '\n' + userQ.toString() + '\n'), {encoding:'utf8', flag:'a'}, (err) => {
+        //     if(err) 
+        //         return res.status(500).send({msg:'Error writing log file', err: err.message});
+        // });
         // need to figure out proper way to handle this... it is doing it for all emails! Soln: check if email is not null
         if(userQ != null && userQ.email != null && userQ.email === req.params.email) {
             return res.status(500).send({msg: 'Email already associated!'});
@@ -42,9 +42,9 @@ const signup = async function(req, res, next) {
                     
                     //create token for verification
                     Token.create( {_userId: user._id, token: crypto.randomBytes(16).toString('hex') })
-                        .then( (token) => {
+                        .then( async (token) => {
                             // successfully saved - send an email
-                            // UPDATE to https when nearing completion.
+                            // UPDATE to https when nearing completion & use proper host name (expenseExpert:5000)
                             v_url = 'http://' + req.headers.host + '/verify/' + user.name + '/' + token.token;
                             const message = {
                                 template_id: 'd-07d36665001b4f28bc9e07d335bf8f51', //template for email verification
@@ -62,20 +62,29 @@ const signup = async function(req, res, next) {
                                 from: {
                                     email: 'mern.cop4331@gmail.com',
                                     name: 'Mern Group 5'
-                                },
+                                }
                                 //maybe add mern.cop4331@gmail.com as a BCC (not yet tested)
-                                bcc: [{
-                                    email: 'mern.cop4331@gmail.com'
-                                }]
+                                // bcc: [{
+                                //     email: 'mern.cop4331@gmail.com'
+                                // }]
                             };
 
-                            sgMail.send(message)
-                                .then( () => {
-                                    console.log('Email sent to ' + user.email);
-                                }).catch( (error) => {
-                                    console.error(error);
-                                    return res.status(500).send({msg: 'Error sending mail', err: error.message})
-                                });
+                            // sgMail.send(message)
+                            //     .then( () => {
+                            //         console.log('Email sent to ' + user.email);
+                            //     }).catch( (error) => {
+                            //         console.error(error);
+                            //         return res.status(500).send({msg: 'Error sending mail', err: error.message})
+                            //     });
+
+                            try {
+                                const result = await sgMail.send(message);
+                            } catch( err) {
+                                console.error('Send Email error:' +err.message);
+                                res.status(500).send( {msg:'Error Sending mail', err:err.message });
+                            }
+                            // email sent successfully.
+                            console.log('Verification email sent to: ' + user.email);
                             return res.status(200).json(
                                 {
                                     msg:'Verification email sent to ' + user.email,
@@ -89,18 +98,19 @@ const signup = async function(req, res, next) {
                             //if an error occured
                             console.log('Error during token saving: ' + err);
                             await User.deleteOne({_id:user._id});
-                            console.log('Deleting the user');
+                            console.log('In progress user deleted.');
                             
                             return res.status(500).send({msg: 'Error during saving token', 'err':err.message}); //{'err': err};
                         });
 
                 }).catch(async (err) => {
-                    console.log('Error during user creation: ' + err);
+                    console.error('Error during user creation:\n' + err);
                     return res.status(500).send({'msg':'error while creating user', 'err':err.message});
                 });
         }
 
     } catch(err) {
+        console.error('Signup Error:\n' + err);
         return res.status(500).send({'msg': 'try-catch error in signup.js','err':err.message});;
     }
 }
