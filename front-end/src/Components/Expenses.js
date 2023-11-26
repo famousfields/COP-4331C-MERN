@@ -15,6 +15,7 @@ const Expenses = (expenses) =>
       }) 
       :   
         <>
+  
           <div className='expense'>
             <div className='text'>Gas</div>
             <div className='price'>Price: $150</div>
