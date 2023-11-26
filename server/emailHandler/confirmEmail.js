@@ -18,7 +18,7 @@ const confirmEmail = async (req, res, next) => {
         else {
             // user is a query , not the document... 
             //var user = User.findOne( {_id:token._userId, name: req.params.name});
-            var user = await User.findOne( {_id:token._userId, name: req.params.name})  //await will give a document? = yes!
+            var user = await User.findOne( {_id:token._userId} )  //await will give a document? = yes!
             //.then( (user) => { // .then not need if awaiting.
 
             if(!user) {

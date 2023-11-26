@@ -108,6 +108,22 @@ h1 {
 	border-radius: 20px;
 }
 
+.cancelExpenseButton{
+	font-size: 18px;
+	width: 180px;
+	height: 40px;
+	border-radius: 20px;
+	cursor: pointer;
+	background-color:#131A26;
+	color:white;
+	margin-left: 10px;
+	
+}
+.cancelExpenseButton:hover {
+	background-color: rgb(255, 17, 0);
+  }
+
+
 .createExpenseButton:hover {
 	background-color: black;
 	color: white;
@@ -327,6 +343,8 @@ h1 {
 }
 
 .closePopup{
+	padding-left:10px;
 	cursor: pointer;
+	color: black;
 }
 

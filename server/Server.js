@@ -12,7 +12,6 @@ const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 const bcrypt = require("bcrypt");
 const Token = require("./models/tokenModel");
-//const bcrypt = require('bcrypt');
 
 var app = express();
 const PORT  = 5000;     //main port for HTTP / testing
@@ -24,30 +23,24 @@ app.use(express.json());
 app.set('view engine', 'pug');  //view engine for verify page.
 
 // Global middleware function (logs the time, along with request method and route)
-app.use( (req, res, next) => {
-    //date = new Date().
-    //strTime = 
+app.use( (req, res, next) => { 
     //console.log('Time:', Date.now(), '; Request Type:', req.method);
     console.log('Request Type:', req.method, ', Route:', req.path);
     next()
 })
 
-  //infrastructure for HTTPS, requires a key pair be created and then a cert.
+//infrastructure for HTTPS, requires a key pair be created and then a cert.
 const https = require('node:https');
 const http = require('node:http');
 const fs = require('node:fs');
 
-// Email Verification
+// Email Verification Functions
 const signup = require('./emailHandler/signup');
 const resendLink = require('./emailHandler/resendLink');
 const confirmEmail = require('./emailHandler/confirmEmail');
 const login = require('./login');
 
-/*const options = {
-    key: fs.readFileSync('path_to_key.pem'),
-    cert: fs.readFileSync('path_to_cert.pem'),
-};*/
-//otherwise
+// HTTPS server options
 const options = {
     pfx: fs.readFileSync('./mern.pfx'),
     passphrase: 'mernProj',
@@ -66,7 +59,9 @@ mongoose.connection.once('open', ()=> {
     //mongoose.mongodb.C .createIndex( {"expireAt":1}, { expireAfterSeconds:15})
     //Token.createIndexes({key: { expireAt: 1}, expireAfterSeconds: 15});
 
-    //https.createServer(options, app).listen(PORT_S);    //does the trick, doesn't print to console though...
+    // Create an HTTPS server using the self signed certificate ./mern.pfx
+    //https.createServer(options, app)
+    //    .listen(PORT_S, () => { console.log(`HTTPS Server Connected on port: ${PORT_S}`);});
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
@@ -75,7 +70,19 @@ app.route('/expenses')
     // the post route = create a new expense (from req.body)
     .post(async(req, res) => {
         try {
-            const expense = await Expense.create(req.body);
+            const { userID, type, quantity, price } = req.body;
+            console.log('Required field not included!\n', 'Request Body:' + req.body.quantity);
+            if (!userID || !type || !quantity || !price) {
+                return res.status(400).json({ message: 'User ID, type, quantity, and price are required.'});
+            }
+
+            const expense = await Expense.create({
+                user_id: userID,
+                type,
+                quantity,
+                price,
+            });
+            
             res.status(200).json(expense);
         } catch (error) {
             console.log(error.message);
@@ -93,14 +100,13 @@ app.route('/expenses')
             console.log("Error getting expenses");
         }
     })
-    //.delete() - in progress
+    //Update an expense
     .put(async (req, res, next) => {
-        //Update an expense
         const expense = await Expense.findOne({_id:req.body._id});  //gets the expense
         // update contents
         if(!expense) {
             console.log('Could not find Expense while Updating');
-            res.status(404).json({msg:'Could not find expense'});
+            res.status(404).json({msg:'Could not find expense provided'});
             next()
         }
         expense.type = req.body.type;
@@ -114,7 +120,7 @@ app.route('/expenses')
         });
         // saved successfully
         console.log('Successfully Updated Expense: ' + expense.type);   //type is equivalent to its name.
-        res.status(200).json({msg:'Successfully Updated Expense!'});
+        res.status(200).json({msg:'Successfully Updated Expense!'});    //return anything else?
     });
 
 app.delete('/expenses/:id', async (req, res) => {
@@ -149,6 +155,31 @@ app.get("/user_expenses", async (req, res) => {
     }
 });
 
+// Route for getting the user's monthly budget and setting the users monthly budget.
+app.route('/user_budget')
+    //get the budget from the DB.
+    .get(async (req, res, next) => {
+        // take user id and return the monthyBudget of the user.
+        const user = await User.findOne({ _id:req.body.user_id });
+        res.status(200).send( { budget: user.monthlyBudget } );
+        next();
+    })
+    // Set the monthly budget.
+    .post(async (req, res, next) => {
+        // get the user_id and then update and save the monthyBudget.
+        const user = await User.findOne( {_id:req.body.user_id});
+        console.log(user)
+        user.monthlyBudget = req.body.budget;
+        try {
+            const saved = await user.save();
+            // worked
+            res.status(200).send(saved);
+        } catch(err) {
+            console.error('Error saving monthlyBudget on user:\n'  + err.message);
+            res.status(500).send({msg:'Error saving monthlyBudget', status:'Failed'});
+        }
+    })
+
 // Route to get all users
 // MARKED for DELETION (not needed on frontend)
 app.get("/users", async (request, response) => {
@@ -170,7 +201,6 @@ app.get("/user", async (req, res) => {
         console.error(error);
         console.log("Internal Server Error");
     }
-    
 })
 
 // Handle a post for a new user => could consolidate under POST /user ? 
@@ -197,7 +227,6 @@ app.get('/verify/:name/:token', async (req, res, next) => {
     output = await confirmEmail(req, res, next)    //updates res in function - now renders in function
     // returns name and email along with a message.
     
-    //console.log('Verify output:' + output);
     next();
 }, 
 (req, res, next) => {

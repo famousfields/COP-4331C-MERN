@@ -17,7 +17,7 @@ function Signup() {
     const handleInvalid = (e) =>{
         e.preventDefault()
         const passwordMessage = !password && (!passwordTry1 ? "enter a password" : ! passwordTry2 ? "reenter your password" : "ensure your passwords match");
-        setErrorMessage({name: "input", message: `Please ${!email && !passwordTry1 ? "enter a username and password" : [!email && "enter a username", passwordMessage].filter(i=>i).join(" and ")}.`});
+        setErrorMessage({name: "input", message: `Please ${!email && !passwordTry1 ? "enter a email and password" : [!email && "enter a email", passwordMessage].filter(i=>i).join(" and ")}.`});
     }
 
     useEffect(()=>{
@@ -39,6 +39,9 @@ function Signup() {
                     console.log(signupStatus)
                     setIsSubmitted(true);
                 }
+                else if(response.data.msg==='Error Sending mail'){
+                    setErrorMessage("Please enter a valid email")
+                }
             } 
             else{
                 handleInvalid(e);
@@ -49,6 +52,9 @@ function Signup() {
         }
        
     }
+    useEffect(()=>{
+
+    },[isSubmitted])
      const signupForm = (
         <div className="form-container">
 
@@ -116,8 +122,15 @@ function Signup() {
                     type = 'submit'
                     value= "signup"
                     />
-                    {isSubmitted&& <div>...Pending</div>}
-                    {errorMessage?.message && <div className="error">{errorMessage.message}</div>}
+
+                    {errorMessage?.message ?  <div className="error">
+                        {errorMessage.message}
+                        {setTimeout(() => {
+                            setIsSubmitted(false);
+                        }, 5000)}
+                    </div>: isSubmitted && <div>...Pending</div>}
+                    
+                    
                 </form>
             </div>
         </div>

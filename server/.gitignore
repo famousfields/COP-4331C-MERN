@@ -5,6 +5,8 @@ sendGridAPIKey.txt
 
 #nifty file for sending http requests right in VS code!
 requests.rest
+expenses.rest
+users.rest
 
 #A log file for debuging
 userQ.txt   
