@@ -192,21 +192,34 @@ const fallback = ("");
             
           <div className="content">
             <h3>Add expense</h3>
-            <input 
-              type='text'
-              className='addExpenseInput'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.name} />
-            <input 
-              type='number'
-              className='addExpenseInput'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.price} />
-            <input 
-              type='number'
-              className='addExpenseInput'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.quantity} />
+           
+              <label>Expense</label>
+              <input 
+                type='text'
+                className='addExpenseInput'
+                onChange={e => setNewExpense(e.target.value)}
+                value = {newExpense.name} 
+              />
+
+              <label>Price</label>
+              <input 
+                type='number'
+                className='addExpenseInput'
+                onChange={e => setNewExpense(e.target.value)}
+                value = {newExpense.price} 
+              />
+
+
+
+              <label>Quantity</label>
+              <input 
+                type='number'
+                className='addExpenseInput'
+                onChange={e => setNewExpense(e.target.value)}
+                value = {newExpense.quantity} 
+              />
+
+
             <button className='createExpenseButton' onClick={addExpense}>Create Expense</button> 
             <a href="#!" className="closePopup" onClick={() => setPopupActive(false)}>cancel</a>
           </div>

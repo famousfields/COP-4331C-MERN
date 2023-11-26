@@ -101,9 +101,12 @@ h1 {
 
 .addExpenseInput {
 	font-size: 18px;
-	padding: 10px;
+	height: 45px;
+	padding-left: 20px;
+	width: 200px;
 	border-radius: 20px;
 	margin: 10px;
+	margin-right: 20px;
 }
 
 
@@ -184,6 +187,7 @@ h1 {
 	padding-top: 15px;
 	padding-left: 5vh;
 }
+
 
   
 /* Sidebar CSS */
