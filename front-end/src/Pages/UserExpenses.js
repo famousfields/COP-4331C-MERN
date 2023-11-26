@@ -129,7 +129,7 @@ const fallback = ("");
   return (
     <div className="expense-layout">
 
-      <button onClick={handleLogout}>Logout</button>
+      
       <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
       <h4>Your Expenses</h4>
 
@@ -176,13 +176,17 @@ const fallback = ("");
         
         
            
+        <div className='addExpenseDiv'>
+          <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
+          <div className='logoutDiv'>
+            <button className = 'logout' onClick={handleLogout}>Logout</button>
+          </div>
+        </div>
         
-        <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
-
         {/* sum of all expense.prices */}
         
         
-        {popupActive ? ( 
+            {popupActive ? ( 
             <div className='popup'>
             
             <div className="content">
@@ -206,7 +210,10 @@ const fallback = ("");
               <a href="#!" className="closePopup" onClick={() => setPopupActive(false)}>cancel</a>
             </div>
           </div>
-          ): fallback}
+        ): fallback}
+        
+        
+          
       {/*</div>*/}
     </div>
       
