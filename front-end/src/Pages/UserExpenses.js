@@ -165,7 +165,7 @@ const fallback = ("");
           <h3>Enter monthly budget:</h3>
           <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
           <button onClick={expenseHandler}>Add budget</button>
-          </div>}
+        </div>}
         
            
         
@@ -176,25 +176,26 @@ const fallback = ("");
         
         {popupActive ? ( 
             <div className='popup'>
-            <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
+            
             <div className="content">
               <h3>Add expense</h3>
               <input 
               type='text'
-              className='add-expense-name'
+              className='addExpenseInput'
               onChange={e => setNewExpense(e.target.value)}
               value = {newExpense.name} />
               <input 
               type='number'
-              className='add-expense-price'
+              className='addExpenseInput'
               onChange={e => setNewExpense(e.target.value)}
               value = {newExpense.price} />
               <input 
               type='number'
-              className='add-expense-price'
+              className='addExpenseInput'
               onChange={e => setNewExpense(e.target.value)}
               value = {newExpense.quantity} />
-              <button className='button' onClick={addExpense}>Create Expense</button> 
+              <button className='createExpenseButton' onClick={addExpense}>Create Expense</button> 
+              <a href="#!" className="closePopup" onClick={() => setPopupActive(false)}>cancel</a>
             </div>
           </div>
           ): fallback}
