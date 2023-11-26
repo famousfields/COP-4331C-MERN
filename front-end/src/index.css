@@ -327,6 +327,8 @@ h1 {
 }
 
 .closePopup{
+	padding-left:10px;
 	cursor: pointer;
+	color: black;
 }
 
