@@ -75,7 +75,19 @@ app.route('/expenses')
     // the post route = create a new expense (from req.body)
     .post(async(req, res) => {
         try {
-            const expense = await Expense.create(req.body);
+            const { userID, type, quantity, price } = req.body;
+
+            if (!userID || !type || !quantity || !price) {
+                return res.status(400).json({ message: 'User ID, type, quantity, and price are required.'});
+            }
+
+            const expense = await Expense.create({
+                user_id: userID,
+                type,
+                quantity,
+                price,
+            });
+            
             res.status(200).json(expense);
         } catch (error) {
             console.log(error.message);
