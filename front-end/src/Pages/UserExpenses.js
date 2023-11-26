@@ -129,12 +129,15 @@ const fallback = ("");
   return (
     <div className="expense-layout">
 
-      
-      <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
-      <h4>Your Expenses</h4>
+      <div className='expenseWelcome'>
+        <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
+      </div>
+
+
 
       <div className = "testDiv">
-        
+        <h2>Your Expenses:</h2>
+
         {/* sum of all expense.prices */}
         <div className='expenseTotalGroup'>
           <div className='expense-total'>Expense Total: ${expenseTotal}</div>
@@ -151,7 +154,7 @@ const fallback = ("");
       
       
       {/*maps expenses from  database once fetched */}
-      <div className='expenses'>
+      <div className='expensesDiv'>
           {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
       </div> 
     
@@ -184,32 +187,30 @@ const fallback = ("");
         </div>
         
         {/* sum of all expense.prices */}
-        
-        
-            {popupActive ? ( 
-            <div className='popup'>
+        {popupActive ? ( 
+        <div className='popup'>
             
-            <div className="content">
-              <h3>Add expense</h3>
-              <input 
+          <div className="content">
+            <h3>Add expense</h3>
+            <input 
               type='text'
               className='addExpenseInput'
               onChange={e => setNewExpense(e.target.value)}
               value = {newExpense.name} />
-              <input 
+            <input 
               type='number'
               className='addExpenseInput'
               onChange={e => setNewExpense(e.target.value)}
               value = {newExpense.price} />
-              <input 
+            <input 
               type='number'
               className='addExpenseInput'
               onChange={e => setNewExpense(e.target.value)}
               value = {newExpense.quantity} />
-              <button className='createExpenseButton' onClick={addExpense}>Create Expense</button> 
-              <a href="#!" className="closePopup" onClick={() => setPopupActive(false)}>cancel</a>
-            </div>
+            <button className='createExpenseButton' onClick={addExpense}>Create Expense</button> 
+            <a href="#!" className="closePopup" onClick={() => setPopupActive(false)}>cancel</a>
           </div>
+        </div>
         ): fallback}
         
         
