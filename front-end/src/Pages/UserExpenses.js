@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react'
 import Expenses from "../Components/Expenses"
+import Sidebar from '../Components/Sidebar'
 import { useCookies } from "react-cookie";
 import axios from 'axios';
 
@@ -87,45 +88,46 @@ const fallback = ("");
           <Expenses expenses = {expenses} onDelete = {deleteExpense}/>
       </div> 
 
-      {/* sum of all expense.prices */}
-      <div className='expense-total'>Expense Total: ${expenseTotal}</div>
-      
-      {/* If user had entered a valid budget display budget if not prompt them to enter one */}
-      {validBudget ? 
-      <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
-      <div className='monthly-budget-input'> 
-        <h3>Enter monthly budget:</h3>
-        <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
-        <button onClick={expenseHandler}>Add budget</button>
-        </div>}
-      
-      {/* Add expense */}
-      <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
-      {popupActive ? (
-        <div className='popup'>
-          <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
-          <div className="content">
-            <h3>Add expense</h3>
-            <input 
-            type='text'
-            className='add-expense-name'
-            onChange={e => setNewExpense(e.target.value)}
-            value = {newExpense.type} />
-             <input 
-            type='number'
-            className='add-expense-price'
-            onChange={e => setNewExpense(e.target.value)}
-            value = {newExpense.price} />
-            <input 
-            type='number'
-            className='add-expense-price'
-            onChange={e => setNewExpense(e.target.value)}
-            value = {newExpense.quantity} />
-             <button className='button' onClick={addExpense}>Create Expense</button> 
+        {/* sum of all expense.prices */}
+        <div className='expense-total'>Expense Total: ${expenseTotal}</div>
+
+        {validBudget ? 
+        <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
+        <div className='monthly-budget-input'> 
+          <h3>Enter monthly budget:</h3>
+          <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
+          <button onClick={expenseHandler}>Add budget</button>
+          </div>}
+        <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
+        
+        {popupActive ? ( 
+            <div className='popup'>
+            <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
+            <div className="content">
+              <h3>Add expense</h3>
+              <input 
+              type='text'
+              className='add-expense-name'
+              onChange={e => setNewExpense(e.target.value)}
+              value = {newExpense.name} />
+              <input 
+              type='number'
+              className='add-expense-price'
+              onChange={e => setNewExpense(e.target.value)}
+              value = {newExpense.price} />
+              <input 
+              type='number'
+              className='add-expense-price'
+              onChange={e => setNewExpense(e.target.value)}
+              value = {newExpense.quantity} />
+              <button className='button' onClick={addExpense}>Create Expense</button> 
+            </div>
           </div>
-        </div>
-      ): fallback}
-    </div>
+          ): fallback}
+      </div>
+
+
+      
   );
 }
 
