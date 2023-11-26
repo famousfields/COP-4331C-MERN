@@ -59,6 +59,32 @@ const addExpense = async() => {
   setNewExpense("");
 }
 
+// function for green or red budget
+const ExpensePosNeg = ({ number }) => {
+  let color = 'black';
+  let message = '';
+
+  if (number > 0) {
+    color = 'green';
+    message = 'Great Job! You are on track with your budget!';
+  } else if (number < 0) {
+    color = 'red';
+    message = 'You are not on budget, lets look at your expenses and reduce them.';
+  }
+
+  const numberStyle = {
+    color: color,
+  };
+
+  return (
+    <div>
+      <div style={numberStyle}>{number}</div>
+      <div>{message}</div>
+    </div>
+  );
+}
+
+
 // function to fetch user expenses
 const fetchExpenses= async() =>{
   await fetch(`https://localhost:5000/user`, {
@@ -85,6 +111,7 @@ const fallback = ("");
   return (
     <div className="expense-layout">
       
+      {/*
       <div className="sidebar">
         <button className='sideOption'>Dashboard</button>
         <button className='sideOption'>Expenses</button>
@@ -93,13 +120,17 @@ const fallback = ("");
         
         <button className = "logout" onClick={handleLogout}>Logout</button>
       </div>
+      */}
 
       
       <div className='mainContent'>
-        
+        <button className = "logout" onClick={handleLogout}>Logout</button>
         <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
-        <h4>Your Expenses</h4>
         
+        <h3></h3>
+        
+        
+        <h4>Your Expenses</h4>
         {/*maps expenses from  database once fetched */}
         <div className='expenses'>
             <Expenses expenses = {expenses}/>
@@ -116,6 +147,12 @@ const fallback = ("");
           <button onClick={expenseHandler}>Add budget</button>
           </div>}
         <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
+        
+        {/*
+        <ExpensePosNeg number={5}/>
+        <ExpensePosNeg number={-3}/>
+         */}
+        
         
         {popupActive ? ( 
             <div className='popup'>
@@ -138,6 +175,7 @@ const fallback = ("");
               onChange={e => setNewExpense(e.target.value)}
               value = {newExpense.quantity} />
               <button className='button' onClick={addExpense}>Create Expense</button> 
+              
             </div>
           </div>
           ): fallback}
