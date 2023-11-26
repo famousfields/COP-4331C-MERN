@@ -12,7 +12,7 @@ function Login({onLogin})
     const [email,setEmail] = useState("");
     const [loginResponse, setLoginResponse] = useState();
 
-   const [cookies,setCookies] = useCookies(["userID"],["name"]);
+   const [cookies,setCookies] = useCookies(["userID"],["name"],["monthlyBudget"]);
     
     const [password,setPassword] = useState("");
 

@@ -60,8 +60,8 @@ mongoose.connection.once('open', ()=> {
     //Token.createIndexes({key: { expireAt: 1}, expireAfterSeconds: 15});
 
     // Create an HTTPS server using the self signed certificate ./mern.pfx
-    //https.createServer(options, app)
-    //    .listen(PORT_S, () => { console.log(`HTTPS Server Connected on port: ${PORT_S}`);});
+    https.createServer(options, app)
+    .listen(PORT_S, () => { console.log(`HTTPS Server Connected on port: ${PORT_S}`);});
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
