@@ -13,6 +13,7 @@ function UserExpenses() {
   const [displayBudget, setDisplayBudget] = useState({});
   const [cookies, setCookies,removeCookies] = useCookies(["userID"]);
   const [validBudget, setValidBudget] = useState(false);
+  
   const [userExpenses,setUserExpenses] = useState([]);
   const [value,setValue] = useState(false)
 
@@ -27,7 +28,7 @@ function UserExpenses() {
   }
  
  // refreshed the expense total everytime the screen refreshes or expenses change
-useEffect(() =>{
+ useEffect(() =>{
   setTimeout(()=>
   console.log("effect ran"),
   fetchExpenses()
@@ -39,6 +40,7 @@ useEffect(() =>{
 useEffect(()=>{
 
 },[value])
+
 //function to fetch api and add expense
 const addExpense = async() => {
   const data = await fetch("http://localhost:5000/expenses",{
@@ -51,14 +53,40 @@ const addExpense = async() => {
       user_id:cookies.userID
     })
   }).then(res =>console.log(res));
- // setExpenses([...expenses,data]);
+  setUserExpenses([...userExpenses,data]);
   setPopupActive(false);
   setNewExpense("");
 }
 
- const deleteExpense = (expense) =>{
-  //setExpenses(expenses.filter(e => e !== expense))
+const deleteExpense = (expense) =>{
+  setUserExpenses(userExpenses.filter(e => e !== expense))
 }
+
+// function for green or red budget
+const ExpensePosNeg = ({ number }) => {
+  let color = 'black';
+  let message = '';
+
+  if (number > 0) {
+    color = 'green';
+    message = 'Great Job! You are on track with your budget!';
+  } else if (number < 0) {
+    color = 'red';
+    message = 'You are not on budget, lets look at your expenses and reduce them.';
+  }
+
+  const numberStyle = {
+    color: color,
+  };
+
+  return (
+    <div>
+      <div style={numberStyle}>{number}</div>
+      <div>{message}</div>
+    </div>
+  );
+}
+
 
 // function to fetch user expenses
 const fetchExpenses = async() => {
@@ -83,20 +111,6 @@ catch(error){
   console.error("Error fetching expenses:", error);
 }
 
-// gexpensess.map(expense=>{
-//   console.log(expense.type,
-//   expense.price,
-//   expense.quantity)
-// })
-
-
-  // if(response.statusText === 'OK')
-  // {
-  //   setExpenses(response)
-  // }else{
-  //   console.log("something went wrong with fetch request")
-  // }
-//})
 }
 
 // component to properly display monthly budget entered by user
@@ -114,7 +128,11 @@ const fallback = ("");
 
   return (
     <div className="expense-layout">
+      <button className="logout"onClick={handleLogout}>Logout</button>
+      <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
+      <h4>Your Expenses</h4>
       
+      {/*
       <div className="sidebar">
         <button className='sideOption'>Dashboard</button>
         <button className='sideOption'>Expenses</button>
@@ -123,32 +141,29 @@ const fallback = ("");
         
         <button className = "logout" onClick={handleLogout}>Logout</button>
       </div>
+      */}
 
       
       <div className='mainContent'>
-        
-        <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
-        <h4>Your Expenses</h4>
-        
         {/*maps expenses from  database once fetched */}
         <div className='expenses'>
-             {userExpenses && <Expenses expenses = {userExpenses} />} 
+        {userExpenses && <Expenses expenses = {userExpenses} />} 
         </div> 
 
         {/* sum of all expense.prices */}
         <div className='expense-total'>Expense Total: ${expenseTotal}</div>
-      
+
         {/* If user had entered a valid budget display budget if not prompt them to enter one */}
         {validBudget ? 
-          <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
-          <div className='monthly-budget-input'> 
-            <h3>Enter monthly budget:</h3>
-            <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
-            <button onClick={expenseHandler}>Add budget</button>
-            </div>}
+        <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
+        <div className='monthly-budget-input'> 
+          <h3>Enter monthly budget:</h3>
+          <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
+          <button onClick={expenseHandler}>Add budget</button>
+          </div>}
         
-        {/* Add expense */}
-        <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
+           {/* Add expense */}
+           <div className="addPopup" onClick={()=>setPopupActive(true) }>+</div>
             {popupActive ? ( 
               <div className='popup'>
               <div className="closePopup" onClick={()=>setPopupActive(false) }>x</div>
@@ -174,9 +189,6 @@ const fallback = ("");
             </div>
             ): fallback}
       </div>
-
-
-      
     </div>
   );
 }
