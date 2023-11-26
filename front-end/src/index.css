@@ -84,6 +84,7 @@ h1 {
 .expese-layout {
 	padding: 32px;
 	display: flex;
+	flex-direction: row;
 }
 
 .main-content {
@@ -113,6 +114,35 @@ h1 {
 	color: white;
 	cursor: pointer;
 }
+
+.testDiv{
+	display: flex;
+	justify-content: flex-end;
+	padding-right: 10vh;
+	padding-bottom: 30px;
+}
+
+.budgetButton{
+	width:100px;
+	height: 40px;
+	border-radius: 40px;
+}
+
+.budgetButton:hover{
+	color:white;
+	background-color: black;
+	cursor: pointer;
+}
+
+.monthly-budget-input{
+	margin-top: 10px;
+	margin-right: 10px;
+	padding: 15px;
+	width: 150px;
+	height: 40px;
+	border-radius: 40px;
+}
+
 /* Sidebar CSS */
 .sidebar {
 	width: 250px; /* Set width of the sidebar */
@@ -150,6 +180,8 @@ h1 {
 	opacity: 50%;
 	cursor: pointer;
   }
+
+
 
 /*Navbar CSS*/
 .navbar{

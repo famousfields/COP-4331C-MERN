@@ -128,9 +128,27 @@ const fallback = ("");
 
   return (
     <div className="expense-layout">
+
       <button onClick={handleLogout}>Logout</button>
       <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
       <h4>Your Expenses</h4>
+
+      <div className = "testDiv">
+        
+        {/* sum of all expense.prices */}
+        <div className='expenseTotalGroup'>
+          <div className='expense-total'>Expense Total: ${expenseTotal}</div>
+          {/* If user had entered a valid budget display budget if not prompt them to enter one */}
+          {validBudget ? 
+          <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
+          <div > 
+            <h3>Enter monthly budget:</h3>
+            <input className='monthly-budget-input' type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
+            <button className = 'budgetButton' onClick={expenseHandler}>Add budget</button>
+          </div>}
+        </div>
+      </div>
+      
       
       {/*maps expenses from  database once fetched */}
       <div className='expenses'>
@@ -149,23 +167,13 @@ const fallback = ("");
       </div>
       */}
 
-      <div className='mainContent'>
+      {/*<div className='mainContent'>*/}
         
         
         
         
 
-        {/* sum of all expense.prices */}
-        <div className='expense-total'>Expense Total: ${expenseTotal}</div>
-
-        {/* If user had entered a valid budget display budget if not prompt them to enter one */}
-        {validBudget ? 
-        <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
-        <div className='monthly-budget-input'> 
-          <h3>Enter monthly budget:</h3>
-          <input type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
-          <button onClick={expenseHandler}>Add budget</button>
-        </div>}
+        
         
            
         
@@ -199,7 +207,7 @@ const fallback = ("");
             </div>
           </div>
           ): fallback}
-      </div>
+      {/*</div>*/}
     </div>
       
   );
