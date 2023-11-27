@@ -12,6 +12,8 @@ const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 const bcrypt = require("bcrypt");
 const Token = require("./models/tokenModel");
+const escapeStringRegexp = require('escape-string-regexp'); //for expense search
+
 
 var app = express();
 const PORT  = 5000;     //main port for HTTP / testing
@@ -60,8 +62,8 @@ mongoose.connection.once('open', ()=> {
     //Token.createIndexes({key: { expireAt: 1}, expireAfterSeconds: 15});
 
     // Create an HTTPS server using the self signed certificate ./mern.pfx
-    //https.createServer(options, app)
-    //    .listen(PORT_S, () => { console.log(`HTTPS Server Connected on port: ${PORT_S}`);});
+    https.createServer(options, app)
+       .listen(PORT_S, () => { console.log(`HTTPS Server Connected on port: ${PORT_S}`);});
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
@@ -93,15 +95,17 @@ app.route('/expenses')
             res.status(500).json({message: error.message});
         }
     })
-    // the get route = get all expenses
-    // MARKED for DELETION (not needed on frontend side)
+    // the get route = get all expenses that match req.body.type, and req.body.user_id
     .get(async (req, res) => {
         try {
-            const expense = await Expense.find();
-            res.json(expense);
-        } catch (error) {
-            console.error(error);
-            console.log("Error getting expenses");
+            // Clean the regex by escaping any characters that need escaping. 
+            const $regex = escapeStringRegexp(req.body.type);
+            const expense = await Expense.find({type: { $regex }, user_id:req.body.user_id}); //it is case sensitive!
+
+            return res.json(expense);
+        } catch(err) {
+            console.error('Error searching:\n', err);
+            return res.send({ msg:'Error Searching', err:err.message });
         }
     })
     //Update an expense
