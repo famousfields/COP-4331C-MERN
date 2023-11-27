@@ -12,8 +12,8 @@ const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 const bcrypt = require("bcrypt");
 const Token = require("./models/tokenModel");
-const escapeStringRegexp = require('escape-string-regexp'); //for expense search
-
+//import escapeStringRegexp from 'escape-string-regexp'; //for expense search
+//const escapeStringRegexp = require('escape-string-regexp');
 
 var app = express();
 const PORT  = 5000;     //main port for HTTP / testing
@@ -96,8 +96,10 @@ app.route('/expenses')
     .get(async (req, res) => {
         try {
             // Clean the regex by escaping any characters that need escaping. 
-            const $regex = escapeStringRegexp(req.body.type);
-            const expense = await Expense.find({type: { $regex }, user_id:req.query._id}); //it is case sensitive!
+            
+            //const $regex = escapeStringRegexp(req.body.type);
+            const $regex = req.body.type;
+            const expense = await Expense.find({type: { $regex }, user_id:req.body._id}); //it is case sensitive!
 
             return res.json(expense);
         } catch(err) {
