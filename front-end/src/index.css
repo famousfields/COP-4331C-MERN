@@ -26,7 +26,16 @@ body {
 	background-repeat: no-repeat;
 	color: black;
 }
+.searchtext{
+	padding-left: 41px;
+}
 
+.searchBar{
+	display: flex;
+	
+	padding-left: 41px;
+	align-items: center;
+}
 
 .home-page{
 	text-align: center;

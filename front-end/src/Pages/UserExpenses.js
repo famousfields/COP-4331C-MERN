@@ -26,24 +26,27 @@ function UserExpenses() {
   
   const [userExpenses,setUserExpenses] = useState([]);
   const [value,setValue] = useState(false)
-
   var sum = 0;
   
-  
   console.log(sum);
-  
-
  
  // refreshed the expense total everytime the screen refreshes or expenses change
  useEffect(() =>{
   const fetchExpenses = async() => {
     try{
-     const response =  await axios.get('http://localhost:5000/user_expenses', {
+      var response;
+      if(query){
+         response =  await axios.get('http://localhost:5000/expenses', {
         params:{ 
-        _id: cookies.userID
+        _id: cookies.userID,
+        type:query
+      }})
+    }else{
+         response =  await axios.get('http://localhost:5000/user_expenses', {
+          params:{ 
+          _id: cookies.userID
+        }})
       }
-    });
-   
     if(response.statusText === 'OK'){
       setUserExpenses(response.data);
       setValue(!value)
@@ -73,7 +76,6 @@ const getFilteredExpenses = (query,userExpenses) =>{
 }
 
 useEffect(()=>{
-  
 },[userExpenses])
 
 useEffect(()=>{
@@ -167,9 +169,11 @@ useEffect(()=>{
   
 window.localStorage.setItem('monthlybudget', displayBudget)
 },[displayBudget])
+
 userExpenses.map(expense =>(
   sum += (expense.price*expense.quantity)
 ))
+
 const expenseHandler= () =>{
   if(monthlyBudget>=0)
     setDisplayBudget(monthlyBudget);
@@ -179,11 +183,9 @@ const expenseHandler= () =>{
  console.log(monthlyBudget);
  console.log(displayBudget);
 
-
  useEffect(()=>{
  
  },[validBudget])
-
 
  const handleClearBudget= () =>
   {
@@ -192,7 +194,6 @@ const expenseHandler= () =>{
      setValidBudget(false);
   }
  
-
 const handleLogout=()=>{
   removeCookies("userID");
 }
@@ -221,11 +222,11 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
         <h1>Welcome, {cookies.name}</h1>{/*Pulling name from database once connected*/}
         <button className='logout'onClick={handleLogout}>Logout</button>
       </div>
-
+      <h3 className='searchtext'>Search</h3>
       <div className='searchBar'>
         <form >
-        <label>Search</label>
-        <input type='text' onChange={e=>setQuery(e.target.value)} value={query}></input>
+        <input type='text' className="monthly-budget-input"onChange={e=>setQuery(e.target.value)} value={query}></input>
+        <button type='submit'></button>
         </form>
       </div>
 
@@ -283,12 +284,10 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
           ): <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
         }
       {/*maps expenses from  database once fetched */}
-      {query?
       <div>
           {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
-      </div> :
-      <div> {filteredExpenses&&<Expenses expenses = {filteredExpenses} onDelete = {deleteExpense}/>}</div>
-}
+      </div> 
+
      
       </div>
   );
