@@ -67,6 +67,7 @@ function UserExpenses() {
 useEffect(()=>{
 
 },[query])
+
 const getFilteredExpenses = (query,userExpenses) =>{
   if(!query)
   return userExpenses
@@ -242,17 +243,18 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
           {validBudget ? 
           <div className='monthly-budget'>
             Monthly budget: ${displayBudget}
-            <button  className="mbudgetButton" onClick={handleClearBudget}>clear budget</button>
+            <button  className="mbudgetButton" onClick={handleClearBudget}>change</button>
           {/* <button onclick={handleClearBudget}>Clear Budget</button>  */}
           </div>
           : 
           <div > 
-            <h3>Enter monthly budget:</h3>
+            <div>Enter monthly budget:</div>
             <input className='monthly-budget-input' type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget === 0 ? " ":monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
             <button className = 'budgetButton' onClick={expenseHandler}>Add budget</button>
           </div>}
         </div>
       </div>
+
       {popupActive ? ( 
             <div className='popup'>
             
@@ -285,7 +287,7 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
         }
       {/*maps expenses from  database once fetched */}
       <div>
-          {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
+          {userExpenses && <Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
       </div> 
 
      
