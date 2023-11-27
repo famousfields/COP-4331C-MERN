@@ -165,7 +165,9 @@ const expenseHandler= () =>{
  useEffect(()=>{
  
  },[validBudget])
- const handleClearBudget= ()=>
+
+
+ const handleClearBudget= () =>
   {
      localStorage.removeItem("monthlybudget")
      setDisplayBudget(null);
@@ -198,16 +200,18 @@ const fallback = ("");
       </div>
 
       <div className = "testDiv">
-        {userExpenses.length ? <h2 className='title'>Your Expenses:</h2>:<h2> </h2>}
+        {userExpenses.length ? <h2 className='title'>Your Expense(s):</h2>:<h2>Currently no expenses to show</h2>}
 
         {/* sum of all expense.prices */}
         <div className='expenseTotalGroup'>
+          <h2>Monthly Information</h2>
           <div className='expense-total'>Expense Total: ${displayExpenseTotal(expensTotal)}</div>
           {/* If user had entered a valid budget display budget if not prompt them to enter one */}
           
           {validBudget ? 
           <div className='monthly-budget'>
             Monthly budget: ${displayBudget}
+            <button onClick={handleClearBudget}>clear budget</button>
           {/* <button onclick={handleClearBudget}>Clear Budget</button>  */}
           </div>
           : 

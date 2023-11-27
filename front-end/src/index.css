@@ -48,7 +48,10 @@ h1 {
 }
 .expenseTotalGroup{
 	border-radius: 2px;
-	border: #131A26;
+	border:2px solid;
+	padding: 10px;
+	background-color: #202B3E;
+	color: white;
 }
 .expense {
 	position: relative;
@@ -246,11 +249,16 @@ h1 {
 	cursor: pointer;
   }
 
+/* @media only screen and (min-width: 1200px){
+	.app{
+		width:800px
+	}
+} */
 
 
 /*Navbar CSS*/
 .navbar{
-  background-color: darkgrey;
+  background-color: #202B3E;
   display: flex;
   color: white;
   justify-content: space-between;
@@ -317,7 +325,7 @@ h1 {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-
+	margin-left: 41px;
 	width: 180px;
 	height: 64px;
 	border-radius: 999px;
