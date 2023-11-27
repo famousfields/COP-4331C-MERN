@@ -22,17 +22,15 @@ function UserExpenses() {
   const [displayBudget, setDisplayBudget] = useState(null);
   const [cookies, setCookies,removeCookies] = useCookies(["userID"],["name"],["monthlyBudget"]);
   const [validBudget, setValidBudget] = useState(false);
+  const [query,setQuery] = useState('');
   
   const [userExpenses,setUserExpenses] = useState([]);
   const [value,setValue] = useState(false)
 
   var sum = 0;
   
-  var expensTotal= 0;
-  expensTotal = userExpenses.map(expense =>(
-    sum += expense.price
-  ))
-  let lastElement = expensTotal[expensTotal.length - 1];
+  
+  console.log(sum);
 
  
  // refreshed the expense total everytime the screen refreshes or expenses change
@@ -62,6 +60,13 @@ function UserExpenses() {
   
 },[])
 
+const getFilteredExpenses = (query,userExpenses) =>{
+  if(!query)
+  return userExpenses
+  else{
+    return userExpenses.filter(expense => expense.type.includes(query))
+  }
+}
 
 useEffect(()=>{
   
@@ -155,9 +160,12 @@ useEffect(()=>{
 
 //set local storage when display budget changes
 useEffect(()=>{
+  
 window.localStorage.setItem('monthlybudget', displayBudget)
 },[displayBudget])
-
+userExpenses.map(expense =>(
+  sum += (expense.price*expense.quantity)
+))
 const expenseHandler= () =>{
   setDisplayBudget(monthlyBudget);
  }
@@ -178,18 +186,23 @@ const expenseHandler= () =>{
 const handleLogout=()=>{
   removeCookies("userID");
 }
-function displayExpenseTotal(expenseTotal){
-if(expenseTotal == 0)
+useEffect(()=>{
+
+},[sum])
+function displayExpenseTotal(sum){
+if(sum == 0)
 {
   return 0
 }
 else 
 {
-  return expensTotal
+  return sum
 }
 }
 
 const fallback = ("");
+
+const filteredExpenses = getFilteredExpenses(query,userExpenses);
 
   return (
     <div className="expense-layout">
@@ -198,6 +211,10 @@ const fallback = ("");
         <h1>Welcome, {cookies.name}</h1>{/*Pulling name from database once connected*/}
         <button className='logout'onClick={handleLogout}>Logout</button>
       </div>
+      <div className='searchBar'>
+        <label>Search</label>
+        <input type='text' onChange={e=>setQuery(e.target.value)} value={query}></input>
+      </div>
 
       <div className = "testDiv">
         {userExpenses.length ? <h2 className='title'>Your Expense(s):</h2>:<h2>Currently no expenses to show</h2>}
@@ -205,13 +222,13 @@ const fallback = ("");
         {/* sum of all expense.prices */}
         <div className='expenseTotalGroup'>
           <h2>Monthly Information</h2>
-          <div className='expense-total'>Expense Total: ${displayExpenseTotal(expensTotal)}</div>
+          <div className='expense-total'>Expense Total: ${displayExpenseTotal(sum)}</div>
           {/* If user had entered a valid budget display budget if not prompt them to enter one */}
           
           {validBudget ? 
           <div className='monthly-budget'>
             Monthly budget: ${displayBudget}
-            <button onClick={handleClearBudget}>clear budget</button>
+            <button  className="mbudgetButton" onClick={handleClearBudget}>clear budget</button>
           {/* <button onclick={handleClearBudget}>Clear Budget</button>  */}
           </div>
           : 
@@ -223,12 +240,13 @@ const fallback = ("");
         </div>
       </div>
       
-      
       {/*maps expenses from  database once fetched */}
+      {query?
       <div>
           {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
-      </div> 
-    
+      </div> :
+      <div> {filteredExpenses&&<Expenses expenses = {filteredExpenses} onDelete = {deleteExpense}/>}</div>
+}
       {popupActive ? ( 
             <div className='popup'>
             
