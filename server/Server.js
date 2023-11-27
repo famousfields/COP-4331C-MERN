@@ -12,8 +12,8 @@ const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 const bcrypt = require("bcrypt");
 const Token = require("./models/tokenModel");
-//import escapeStringRegexp from 'escape-string-regexp'; //for expense search
-//const escapeStringRegexp = require('escape-string-regexp');
+//const escapeStringRegexp = require('escape-string-regexp'); //for expense search
+
 
 var app = express();
 const PORT  = 5000;     //main port for HTTP / testing

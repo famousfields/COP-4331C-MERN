@@ -62,18 +62,15 @@ function UserExpenses() {
 
   fetchExpenses()
   
-},[])
-
-useEffect(()=>{
-
 },[query])
-const getFilteredExpenses = (query,userExpenses) =>{
-  if(!query)
-  return userExpenses
-  else{
-    return userExpenses.filter(expense => expense.type.includes(query))
-  }
-}
+
+// const getFilteredExpenses = (query,userExpenses) =>{
+//   if(!query)
+//   return userExpenses
+//   else{
+//     return userExpenses.filter(expense => expense.type ===query)
+//   }
+// }
 
 useEffect(()=>{
 },[userExpenses])
@@ -169,10 +166,12 @@ useEffect(()=>{
   
 window.localStorage.setItem('monthlybudget', displayBudget)
 },[displayBudget])
+function getSum(){
+  userExpenses.map(expense =>(
+    sum += (expense.price*expense.quantity)
+  ))
+}
 
-userExpenses.map(expense =>(
-  sum += (expense.price*expense.quantity)
-))
 
 const expenseHandler= () =>{
   if(monthlyBudget>=0)
@@ -213,7 +212,8 @@ else
 
 const fallback = ("");
 
-const filteredExpenses = getFilteredExpenses(query,userExpenses);
+// const filteredExpenses = getFilteredExpenses(query,userExpenses);
+// console.log(filteredExpenses);
 
   return (
     <div className="expense-layout">
@@ -222,13 +222,13 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
         <h1>Welcome, {cookies.name}</h1>{/*Pulling name from database once connected*/}
         <button className='logout'onClick={handleLogout}>Logout</button>
       </div>
-      <h3 className='searchtext'>Search</h3>
+      {/* <h3 className='searchtext'>Search</h3>
       <div className='searchBar'>
         <form >
         <input type='text' className="monthly-budget-input"onChange={e=>setQuery(e.target.value)} value={query}></input>
         <button type='submit'></button>
         </form>
-      </div>
+      </div> */}
 
       <div className = "testDiv">
         {userExpenses.length ? <h2 className='title'>Your Expense(s):</h2>:<h2>Currently no expenses to show</h2>}
@@ -236,23 +236,25 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
         {/* sum of all expense.prices */}
         <div className='expenseTotalGroup'>
           <h2>Monthly Information</h2>
+          {getSum()}
           <div className='expense-total'>Expense Total: ${displayExpenseTotal(sum)}</div>
           {/* If user had entered a valid budget display budget if not prompt them to enter one */}
           
           {validBudget ? 
           <div className='monthly-budget'>
             Monthly budget: ${displayBudget}
-            <button  className="mbudgetButton" onClick={handleClearBudget}>clear budget</button>
+            <button  className="mbudgetButton" onClick={handleClearBudget}>change</button>
           {/* <button onclick={handleClearBudget}>Clear Budget</button>  */}
           </div>
           : 
           <div > 
-            <h3>Enter monthly budget:</h3>
+            <div>Enter monthly budget:</div>
             <input className='monthly-budget-input' type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget === 0 ? " ":monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
             <button className = 'budgetButton' onClick={expenseHandler}>Add budget</button>
           </div>}
         </div>
       </div>
+
       {popupActive ? ( 
             <div className='popup'>
             
@@ -285,7 +287,7 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
         }
       {/*maps expenses from  database once fetched */}
       <div>
-          {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
+          {userExpenses && <Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
       </div> 
 
      
