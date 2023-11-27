@@ -57,9 +57,6 @@ connectDB(); //connects the db
 // log that the mongoose connection was successful and display server port connection
 mongoose.connection.once('open', ()=> {
     console.log("Mongo DB connection is succcessful");
-    //mongoose.Collection.createIndex( {"expireAt":1}, { expireAfterSeconds:15});
-    //mongoose.mongodb.C .createIndex( {"expireAt":1}, { expireAfterSeconds:15})
-    //Token.createIndexes({key: { expireAt: 1}, expireAfterSeconds: 15});
 
     // Create an HTTPS server using the self signed certificate ./mern.pfx
     https.createServer(options, app)
@@ -121,7 +118,7 @@ app.route('/expenses')
         expense.quantity = req.body.quantity;
         expense.price = req.body.price;
 
-        // catch any error during save.
+        // catch any errors during save.
         await expense.save().catch ( (err) => {
             console.error("Error saving expense after update:\n" + err.message);
             res.status(500).json({msg:'Error while saving expense', err:err.message});
@@ -135,7 +132,7 @@ app.route('/expenses')
             const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
 
             if (!deletedExpense) {
-                return res.status(500).json({message: error.message});
+                return res.status(200).json({message: "deletedExpense is null"});
             }
 
             res.json({ message: 'Expense deleted successfully', deletedExpense })
@@ -145,6 +142,7 @@ app.route('/expenses')
         }
     });
 
+// Gets all the expenses for a single user based on user_id.
 app.get("/user_expenses", async (req, res) => {
     try {
         const userId = req.query._id; // Retrieve user_id from query parameters
@@ -239,7 +237,6 @@ app.get('/fakeVerify', async (req, res, next) => {
 app.get('/verify/:name/:token', async (req, res, next) => {
     output = await confirmEmail(req, res, next)    //updates res in function - now renders in function
     // returns name and email along with a message.
-    
     next();
 }, 
 (req, res, next) => {
@@ -260,7 +257,7 @@ app.post('/resend', async (req, res, next) => {
 app.route('/login')
     .get( (req, res) => {
         //res.sendFile(buildPath + '')
-        res.end('server-side login page');
+        res.end('server-side login page\ngoto frontend login instead');
     })
     .post(async (req, res, next) => {
         output = await login(req, res, next);   // returns user_id and name in json
