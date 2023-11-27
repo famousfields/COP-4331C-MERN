@@ -18,8 +18,8 @@ function UserExpenses() {
   const [newPrice,setNewPrice] = useState();
   const [newQuantity,setNewQuantity] = useState();
   const [popupActive,setPopupActive] = useState(false);
-  const [monthlyBudget,setMonthlyBudget] = useState({});
-  const [displayBudget, setDisplayBudget] = useState(null);
+  const [monthlyBudget,setMonthlyBudget] = useState(0);
+  const [displayBudget, setDisplayBudget] = useState(0);
   const [cookies, setCookies,removeCookies] = useCookies(["userID"],["name"],["monthlyBudget"]);
   const [validBudget, setValidBudget] = useState(false);
   const [query,setQuery] = useState('');
@@ -31,6 +31,7 @@ function UserExpenses() {
   
   
   console.log(sum);
+  
 
  
  // refreshed the expense total everytime the screen refreshes or expenses change
@@ -158,7 +159,7 @@ const ExpensePosNeg = ({ number }) => {
 
 //sets dislay budget
 useEffect(()=>{
-  setDisplayBudget(JSON.parse(window.localStorage.getItem('monthlybudget')));
+  setDisplayBudget(window.localStorage.getItem('monthlybudget'));
 },[])
 
 //set local storage when display budget changes
@@ -170,8 +171,14 @@ userExpenses.map(expense =>(
   sum += (expense.price*expense.quantity)
 ))
 const expenseHandler= () =>{
-  setDisplayBudget(monthlyBudget);
+  if(monthlyBudget>=0)
+    setDisplayBudget(monthlyBudget);
+  else
+  return
  }
+ console.log(monthlyBudget);
+ console.log(displayBudget);
+
 
  useEffect(()=>{
  
@@ -240,7 +247,7 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
           : 
           <div > 
             <h3>Enter monthly budget:</h3>
-            <input className='monthly-budget-input' type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
+            <input className='monthly-budget-input' type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget === 0 ? " ":monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
             <button className = 'budgetButton' onClick={expenseHandler}>Add budget</button>
           </div>}
         </div>
