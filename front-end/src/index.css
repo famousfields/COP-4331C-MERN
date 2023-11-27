@@ -46,7 +46,10 @@ h1 {
 	padding-left: 5vh;
 	padding-right: 5vh;
 }
-
+.expenseTotalGroup{
+	border-radius: 2px;
+	border: #131A26;
+}
 .expense {
 	position: relative;
 	background-color: var(--dark);

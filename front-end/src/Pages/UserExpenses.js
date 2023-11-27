@@ -176,6 +176,16 @@ const expenseHandler= () =>{
 const handleLogout=()=>{
   removeCookies("userID");
 }
+function displayExpenseTotal(expenseTotal){
+if(expenseTotal == 0)
+{
+  return 0
+}
+else 
+{
+  return expensTotal
+}
+}
 
 const fallback = ("");
 
@@ -192,7 +202,7 @@ const fallback = ("");
 
         {/* sum of all expense.prices */}
         <div className='expenseTotalGroup'>
-          <div className='expense-total'>Expense Total: ${lastElement}</div>
+          <div className='expense-total'>Expense Total: ${displayExpenseTotal(expensTotal)}</div>
           {/* If user had entered a valid budget display budget if not prompt them to enter one */}
           
           {validBudget ? 
