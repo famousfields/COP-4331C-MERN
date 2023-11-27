@@ -12,6 +12,8 @@ const User = require("./models/userModel");
 const Expense = require('./models/expenseModel');
 const bcrypt = require("bcrypt");
 const Token = require("./models/tokenModel");
+const escapeStringRegexp = require('escape-string-regexp'); //for expense search
+
 
 var app = express();
 const PORT  = 5000;     //main port for HTTP / testing
@@ -55,13 +57,10 @@ connectDB(); //connects the db
 // log that the mongoose connection was successful and display server port connection
 mongoose.connection.once('open', ()=> {
     console.log("Mongo DB connection is succcessful");
-    //mongoose.Collection.createIndex( {"expireAt":1}, { expireAfterSeconds:15});
-    //mongoose.mongodb.C .createIndex( {"expireAt":1}, { expireAfterSeconds:15})
-    //Token.createIndexes({key: { expireAt: 1}, expireAfterSeconds: 15});
 
     // Create an HTTPS server using the self signed certificate ./mern.pfx
     https.createServer(options, app)
-    .listen(PORT_S, () => { console.log(`HTTPS Server Connected on port: ${PORT_S}`);});
+       .listen(PORT_S, () => { console.log(`HTTPS Server Connected on port: ${PORT_S}`);});
     app.listen(PORT, () => console.log(`Server connected on port: ${PORT}`));
 })
 
@@ -93,15 +92,17 @@ app.route('/expenses')
             res.status(500).json({message: error.message});
         }
     })
-    // the get route = get all expenses
-    // MARKED for DELETION (not needed on frontend side)
+    // the get route = get all expenses that match req.body.type, and req.body.user_id
     .get(async (req, res) => {
         try {
-            const expense = await Expense.find();
-            res.json(expense);
-        } catch (error) {
-            console.error(error);
-            console.log("Error getting expenses");
+            // Clean the regex by escaping any characters that need escaping. 
+            const $regex = escapeStringRegexp(req.body.type);
+            const expense = await Expense.find({type: { $regex }, user_id:req.body.user_id}); //it is case sensitive!
+
+            return res.json(expense);
+        } catch(err) {
+            console.error('Error searching:\n', err);
+            return res.send({ msg:'Error Searching', err:err.message });
         }
     })
     //Update an expense
@@ -117,7 +118,7 @@ app.route('/expenses')
         expense.quantity = req.body.quantity;
         expense.price = req.body.price;
 
-        // catch any error during save.
+        // catch any errors during save.
         await expense.save().catch ( (err) => {
             console.error("Error saving expense after update:\n" + err.message);
             res.status(500).json({msg:'Error while saving expense', err:err.message});
@@ -131,9 +132,9 @@ app.delete('/expenses/:id', async (req, res) => {
     try {
         const deletedExpense = await Expense.findByIdAndDelete(req.params.id);
 
-        if (!deletedExpense) {
-            return res.status(500).json({message: error.message});
-        }
+            if (!deletedExpense) {
+                return res.status(200).json({message: "deletedExpense is null"});
+            }
 
         res.json({ message: 'Expense deleted successfully', deletedExpense })
     } catch (error) {
@@ -142,6 +143,7 @@ app.delete('/expenses/:id', async (req, res) => {
     }
 });
 
+// Gets all the expenses for a single user based on user_id.
 app.get("/user_expenses", async (req, res) => {
     try {
         const userId = req.query._id; // Retrieve user_id from query parameters
@@ -236,7 +238,6 @@ app.get('/fakeVerify', async (req, res, next) => {
 app.get('/verify/:name/:token', async (req, res, next) => {
     output = await confirmEmail(req, res, next)    //updates res in function - now renders in function
     // returns name and email along with a message.
-    
     next();
 }, 
 (req, res, next) => {
@@ -257,7 +258,7 @@ app.post('/resend', async (req, res, next) => {
 app.route('/login')
     .get( (req, res) => {
         //res.sendFile(buildPath + '')
-        res.end('server-side login page');
+        res.end('server-side login page\ngoto frontend login instead');
     })
     .post(async (req, res, next) => {
         output = await login(req, res, next);   // returns user_id and name in json
