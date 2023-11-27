@@ -153,11 +153,10 @@ h1 {
 	justify-content: space-between;
 	align-items: center;
 	padding-right: 5vh;
-	padding-bottom: 30px;
 	padding-left: 5vh;
 }
 .testDiv .title{
-	margin-top: 60px;
+	margin-top:60px;
 }
 
 .budgetButton{
@@ -335,11 +334,13 @@ h1 {
 	align-items: center;
 	justify-content: center;
 	margin-left: 41px;
+	margin-bottom: 20px;
+	margin-top: 10px;
 	width: 180px;
 	height: 64px;
 	border-radius: 999px;
 	font-size: 20px;
-	font-weight: 900;
+	font-weight: 500;
 	color: var(--light);
 	background-color: var(--primary);
 	background-image: linear-gradient(to bottom right, var(--primary), var(--secondary));

@@ -60,6 +60,9 @@ function UserExpenses() {
   
 },[])
 
+useEffect(()=>{
+
+},[query])
 const getFilteredExpenses = (query,userExpenses) =>{
   if(!query)
   return userExpenses
@@ -211,9 +214,12 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
         <h1>Welcome, {cookies.name}</h1>{/*Pulling name from database once connected*/}
         <button className='logout'onClick={handleLogout}>Logout</button>
       </div>
+
       <div className='searchBar'>
+        <form >
         <label>Search</label>
         <input type='text' onChange={e=>setQuery(e.target.value)} value={query}></input>
+        </form>
       </div>
 
       <div className = "testDiv">
@@ -239,14 +245,6 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
           </div>}
         </div>
       </div>
-      
-      {/*maps expenses from  database once fetched */}
-      {query?
-      <div>
-          {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
-      </div> :
-      <div> {filteredExpenses&&<Expenses expenses = {filteredExpenses} onDelete = {deleteExpense}/>}</div>
-}
       {popupActive ? ( 
             <div className='popup'>
             
@@ -277,6 +275,14 @@ const filteredExpenses = getFilteredExpenses(query,userExpenses);
           </div>
           ): <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
         }
+      {/*maps expenses from  database once fetched */}
+      {query?
+      <div>
+          {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
+      </div> :
+      <div> {filteredExpenses&&<Expenses expenses = {filteredExpenses} onDelete = {deleteExpense}/>}</div>
+}
+     
       </div>
   );
 }
