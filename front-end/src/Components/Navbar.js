@@ -3,7 +3,7 @@ import React from 'react'
 function Navbar() {
   return (
     <div className='navbar'>
-        <a href='/'className='site-title'><img className = 'logo' src='https://i.imgur.com/jDRbafb.png'></img></a>
+        <a href='/'className='site-title'><img className = 'logo' src='https://i.imgur.com/3bHdxWU.png'></img></a>
         <ul>
             <li>
                 <a href='/login'>Login</a>
