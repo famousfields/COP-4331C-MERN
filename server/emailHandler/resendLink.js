@@ -34,7 +34,8 @@ const resendLink = async (req, res, next) => {
                         //console.log('DEBUG: new token saved...');
 
                         // send an email to verify user
-                        v_url = 'http://' + req.headers.host + '/verify/' + user.name + '/' + token.token;
+                        // v_url = 'http://' + req.headers.host + '/verify/' + user.name + '/' + token.token;
+                        v_url = 'https://' + 'expenseExpert:433' + '/verify/' + user.name + '/' + token.token;
                         
                         const message = {
                             template_id: 'd-07d36665001b4f28bc9e07d335bf8f51', //template for email verification
@@ -73,7 +74,7 @@ const resendLink = async (req, res, next) => {
                         }
 
                         console.log(`Email resent to: ${user.email}`);
-                        
+
                         return res.status(200).json( 
                             {
                                 msg:'Verification Email sent to ' + user.email,
