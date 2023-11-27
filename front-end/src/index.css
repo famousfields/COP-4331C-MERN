@@ -191,6 +191,10 @@ h1 {
 .monthly-budget{
 	display: flex;
 }
+.signupmsg{
+	background-color: #202B3E;
+	color: #fff;
+}
 .mbudgetButton{
 	width:70px;
 	height: 22px;

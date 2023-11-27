@@ -31,7 +31,6 @@ function Signup()
             if(name &&email && password)
             {
                 const response = await axios.post('http://localhost:5000/signup', {name, email , password})
-                console.log(response)
                 let responseData;
                 if(response.statusText === 'OK')
                 {
@@ -42,7 +41,10 @@ function Signup()
                 }
                 else if(response.data.msg==='Error Sending mail'){
                     setErrorMessage("Please enter a valid email")
+                    return
                 }
+                setIsSubmitted(true);
+
             } 
             else{
                 handleInvalid(e);
@@ -53,9 +55,17 @@ function Signup()
         }
        
     }
-    useEffect(()=>{
 
+    const handleBad = () =>{
+        setTimeout(() => {
+            window.location.reload();
+        }, 5000);
+    }
+
+    useEffect(()=>{
+        setErrorMessage([])
     },[isSubmitted])
+    
      const signupForm = (
         <div className="form-container">
 
@@ -126,10 +136,10 @@ function Signup()
 
                     {errorMessage?.message ?  <div className="error">
                         {errorMessage.message}
-                        {setTimeout(() => {
-                            setIsSubmitted(false);
-                        }, 5000)}
-                    </div>: isSubmitted && <div>...Pending</div>}
+                    </div>: isSubmitted && <div className='signupmsg'>Please verify email</div>
+                    }
+                    
+
                     
                     
                 </form>

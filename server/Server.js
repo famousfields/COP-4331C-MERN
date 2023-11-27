@@ -97,7 +97,7 @@ app.route('/expenses')
         try {
             // Clean the regex by escaping any characters that need escaping. 
             const $regex = escapeStringRegexp(req.body.type);
-            const expense = await Expense.find({type: { $regex }, user_id:req.query._id}); //it is case sensitive!
+            const expense = await Expense.find({type: { $regex }, user_id:req.body._id}); //it is case sensitive!
 
             return res.json(expense);
         } catch(err) {

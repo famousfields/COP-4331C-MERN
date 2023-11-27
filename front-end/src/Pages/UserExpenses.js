@@ -62,17 +62,13 @@ function UserExpenses() {
 
   fetchExpenses()
   
-},[])
-
-useEffect(()=>{
-
 },[query])
 
 const getFilteredExpenses = (query,userExpenses) =>{
   if(!query)
   return userExpenses
   else{
-    return userExpenses.filter(expense => expense.type.includes(query))
+    return userExpenses.filter(expense => expense.type ===query)
   }
 }
 
@@ -215,6 +211,7 @@ else
 const fallback = ("");
 
 const filteredExpenses = getFilteredExpenses(query,userExpenses);
+console.log(filteredExpenses);
 
   return (
     <div className="expense-layout">
