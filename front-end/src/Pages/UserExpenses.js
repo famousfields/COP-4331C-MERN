@@ -6,60 +6,121 @@ import axios from 'axios';
 
 function UserExpenses() {
 
-  const [newExpense,setNewExpense] = useState({});
+  const [newExpense,setNewExpense] = useState(
+    {
+      type: String,
+      price: Number,
+      quantity:Number,
+    }
+  );
+  const [deleted, setDeleted] = useState(false)
+  const [newType,setNewType] = useState("");
+  const [newPrice,setNewPrice] = useState();
+  const [newQuantity,setNewQuantity] = useState();
   const [popupActive,setPopupActive] = useState(false);
-  const [expenseTotal,setExpenseTotal] = useState(0);
   const [monthlyBudget,setMonthlyBudget] = useState({});
-  const [displayBudget, setDisplayBudget] = useState({});
-  const [cookies, setCookies,removeCookies] = useCookies(["userID"]);
+  const [displayBudget, setDisplayBudget] = useState(null);
+  const [cookies, setCookies,removeCookies] = useCookies(["userID"],["name"],["monthlyBudget"]);
   const [validBudget, setValidBudget] = useState(false);
   
   const [userExpenses,setUserExpenses] = useState([]);
   const [value,setValue] = useState(false)
 
-  let eArr = [150,500,50];
+  var sum = 0;
+  
+  var expensTotal= 0;
+  expensTotal = userExpenses.map(expense =>(
+    sum += expense.price
+  ))
+  let lastElement = expensTotal[expensTotal.length - 1];
 
-  // function to calculate expense total
-  function calcExpenseTotal(eArr){
-    let sum = 0
-    for(let i = 0; i < eArr.length;i++ )
-      sum += eArr[i];
-    return sum;
-  }
  
  // refreshed the expense total everytime the screen refreshes or expenses change
  useEffect(() =>{
-  setTimeout(()=>
-  console.log("effect ran"),
+  const fetchExpenses = async() => {
+    try{
+     const response =  await axios.get('http://localhost:5000/user_expenses', {
+        params:{ 
+        _id: cookies.userID
+      }
+    });
+   
+    if(response.statusText === 'OK'){
+      setUserExpenses(response.data);
+      setValue(!value)
+      return
+    }
+    else{
+      console.log("error when fetching expenses")
+    }
+  }
+  catch(error){
+    console.error("Error fetching expenses:", error);
+  }};
+
   fetchExpenses()
-  ,5000)
-  // fetchExpenses()
-   // setExpenseTotal(calcExpenseTotal(eArr));
+  
 },[])
 
-useEffect(()=>{
 
-},[value])
+useEffect(()=>{
+  
+},[userExpenses])
+
+useEffect(()=>{
+  const checkBudget = ( ) =>{
+    if(displayBudget)
+    {
+      setValidBudget(true);
+    }
+    else
+    return
+  }
+  
+checkBudget()
+},[displayBudget])
 
 //function to fetch api and add expense
 const addExpense = async() => {
-  const data = await fetch("http://localhost:5000/expenses",{
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      text: newExpense,
-      user_id:cookies.userID
+  
+  let bodyjs = JSON.stringify({
+    userID:cookies.userID,
+    type: newType,
+    quantity: newQuantity,
+    price: newPrice
+  })
+
+  console.log(bodyjs);
+  try{
+    const data = await fetch("http://localhost:5000/expenses",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: bodyjs
     })
-  }).then(res =>console.log(res));
-  setUserExpenses([...userExpenses,data]);
-  setPopupActive(false);
-  setNewExpense("");
+    if(data.statusText === 'OK')
+    {
+      setUserExpenses([...userExpenses,newExpense]);
+      setPopupActive(false);
+      setNewExpense("");
+      window.location.reload()
+      return
+    }
+    else{
+      console.log('Issue when adding expense')
+    }
+ 
+  }catch(error){
+    console.error(error)
+  }
 }
 
 const deleteExpense = (expense) =>{
-  setUserExpenses(userExpenses.filter(e => e !== expense))
+  setUserExpenses(userExpenses.filter(e => e !== expense)
+  )
+  window.location.reload()
+  return
 }
 
 // function for green or red budget
@@ -87,38 +148,30 @@ const ExpensePosNeg = ({ number }) => {
   );
 }
 
+//sets dislay budget
+useEffect(()=>{
+  setDisplayBudget(JSON.parse(window.localStorage.getItem('monthlybudget')));
+},[])
 
-// function to fetch user expenses
-const fetchExpenses = async() => {
-  try{
-   const response =  await axios.get('http://localhost:5000/user_expenses', {
-      params:{ 
-      _id: cookies.userID
-    }
-  });
+//set local storage when display budget changes
+useEffect(()=>{
+window.localStorage.setItem('monthlybudget', displayBudget)
+},[displayBudget])
+
+const expenseHandler= () =>{
+  setDisplayBudget(monthlyBudget);
+ }
+
+ useEffect(()=>{
  
-  if(response.statusText === 'OK'){
-    console.log(typeof([response.data]))
-    setUserExpenses(response.data);
-    setValue(!value)
-    return
+ },[validBudget])
+ const handleClearBudget= ()=>
+  {
+     localStorage.removeItem("monthlybudget")
+     setDisplayBudget(null);
+     setValidBudget(false);
   }
-  else{
-    console.log("error when fetching expenses")
-  }
-}
-catch(error){
-  console.error("Error fetching expenses:", error);
-}
-
-}
-
-// component to properly display monthly budget entered by user
-const expenseHandler= (e) =>{
-  localStorage.setItem(1,monthlyBudget);
-  setDisplayBudget(localStorage.getItem(1));
-  setValidBudget(true);
-}
+ 
 
 const handleLogout=()=>{
   removeCookies("userID");
@@ -130,20 +183,24 @@ const fallback = ("");
     <div className="expense-layout">
 
       <div className='expenseWelcome'>
-        <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
+        <h1>Welcome, {cookies.name}</h1>{/*Pulling name from database once connected*/}
+        <button className='logout'onClick={handleLogout}>Logout</button>
       </div>
 
-
-
       <div className = "testDiv">
-        <h2>Your Expenses:</h2>
+        {userExpenses.length ? <h2 className='title'>Your Expenses:</h2>:<h2> </h2>}
 
         {/* sum of all expense.prices */}
         <div className='expenseTotalGroup'>
-          <div className='expense-total'>Expense Total: ${expenseTotal}</div>
+          <div className='expense-total'>Expense Total: ${lastElement}</div>
           {/* If user had entered a valid budget display budget if not prompt them to enter one */}
+          
           {validBudget ? 
-          <div className='monthly-budget'>Monthly budget: ${displayBudget}</div> : 
+          <div className='monthly-budget'>
+            Monthly budget: ${displayBudget}
+          {/* <button onclick={handleClearBudget}>Clear Budget</button>  */}
+          </div>
+          : 
           <div > 
             <h3>Enter monthly budget:</h3>
             <input className='monthly-budget-input' type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
@@ -154,70 +211,41 @@ const fallback = ("");
       
       
       {/*maps expenses from  database once fetched */}
-      <div className='expensesDiv'>
+      <div>
           {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
       </div> 
     
-      
-      {/*
-      <div className="sidebar">
-        <button className='sideOption'>Dashboard</button>
-        <button className='sideOption'>Expenses</button>
-        <button className='sideOption'>Trends</button>
-        <button className='sideOption'>Budget</button>
-        
-        <button className = "logout" onClick={handleLogout}>Logout</button>
-      </div>
-      */}
-
-      {/*<div className='mainContent'>*/}
-        
-        
-        
-        
-
-        
-        
-           
-        <div className='addExpenseDiv'>
-          <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
-          <div className='logoutDiv'>
-            <button className = 'logout' onClick={handleLogout}>Logout</button>
-          </div>
-        </div>
-        
-        {/* sum of all expense.prices */}
-        {popupActive ? ( 
-        <div className='popup'>
+      {popupActive ? ( 
+            <div className='popup'>
             
-          <div className="content">
-            <h3>Add expense</h3>
-            <input 
+            <div className="content">
+              <input 
+              placeholder='Expense Name'
               type='text'
               className='addExpenseInput'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.name} />
+              onChange={e => setNewType(e.target.value)}
+              value = {newType} />
+
             <input 
               type='number'
+              placeholder='Expense Price'
               className='addExpenseInput'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.price} />
+              onChange={e =>setNewPrice(e.target.value)}
+              value = {newPrice} />
             <input 
+              placeholder='Expense Quantity'
               type='number'
               className='addExpenseInput'
-              onChange={e => setNewExpense(e.target.value)}
-              value = {newExpense.quantity} />
-            <button className='createExpenseButton' onClick={addExpense}>Create Expense</button> 
-            <a href="#!" className="closePopup" onClick={() => setPopupActive(false)}>cancel</a>
+              onChange={e => setNewQuantity(e.target.value)}
+              value = {newQuantity} />
+              <button className='createExpenseButton' onClick={addExpense}>Create Expense</button> 
+              <button className='cancelExpenseButton' onClick={() => setPopupActive(false)}>cancel</button> 
+            </div>
+            
           </div>
-        </div>
-        ): fallback}
-        
-        
-          
-      {/*</div>*/}
-    </div>
-      
+          ): <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
+        }
+      </div>
   );
 }
 

@@ -59,7 +59,8 @@ h1 {
 	cursor: pointer;
 	margin-bottom: 16px;
 }
-
+.expense-layout{
+}
 .expense:hover {
 	opacity: .8;
 }
@@ -70,6 +71,7 @@ h1 {
 	font-size: 20px;
 	margin-left: 50px;
 }
+
 .expense .delete-expense {
 	position: absolute;
 	top: 50%;
@@ -86,10 +88,11 @@ h1 {
 	font-weight: 700;
 }
 
-.expese-layout {
-	padding: 32px;
-	display: flex;
-	flex-direction: row;
+.expense-layout {
+	background-image: url('https://i.imgur.com/DjcukBk.jpg');
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 90vh;
 }
 
 .main-content {
@@ -100,9 +103,12 @@ h1 {
 
 .addExpenseInput {
 	font-size: 18px;
-	padding: 10px;
+	height: 45px;
+	padding-left: 20px;
+	width: 200px;
 	border-radius: 20px;
 	margin: 10px;
+	margin-right: 20px;
 }
 
 
@@ -113,6 +119,22 @@ h1 {
 	height: 40px;
 	border-radius: 20px;
 }
+
+.cancelExpenseButton{
+	font-size: 18px;
+	width: 180px;
+	height: 40px;
+	border-radius: 20px;
+	cursor: pointer;
+	background-color:#131A26;
+	color:white;
+	margin-left: 10px;
+	
+}
+.cancelExpenseButton:hover {
+	background-color: rgb(255, 17, 0);
+  }
+
 
 .createExpenseButton:hover {
 	background-color: black;
@@ -127,6 +149,9 @@ h1 {
 	padding-right: 5vh;
 	padding-bottom: 30px;
 	padding-left: 5vh;
+}
+.testDiv .title{
+	margin-top: 60px;
 }
 
 .budgetButton{
@@ -183,6 +208,7 @@ h1 {
 	padding-top: 15px;
 	padding-left: 5vh;
 }
+
 
   
 /* Sidebar CSS */
@@ -364,7 +390,8 @@ h1 {
 
 /* About Page */
 .about-devs{
-	background-size: contain;
+	background-image: url(https://i.imgur.com/DjcukBk.jpg);
+	background-size: cover;
 	background-repeat: no-repeat;
 }
 

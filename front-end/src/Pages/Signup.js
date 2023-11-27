@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 
-function Signup() {
+function Signup() 
+{
     const [email,setEmail] = useState("");
     const [name, setName] = useState("");
     const [passwordTry1,setPasswordTry1] = useState("");
@@ -17,7 +18,7 @@ function Signup() {
     const handleInvalid = (e) =>{
         e.preventDefault()
         const passwordMessage = !password && (!passwordTry1 ? "enter a password" : ! passwordTry2 ? "reenter your password" : "ensure your passwords match");
-        setErrorMessage({name: "input", message: `Please ${!email && !passwordTry1 ? "enter a username and password" : [!email && "enter a username", passwordMessage].filter(i=>i).join(" and ")}.`});
+        setErrorMessage({name: "input", message: `Please ${!email && !passwordTry1 ? "enter a email and password" : [!email && "enter a email", passwordMessage].filter(i=>i).join(" and ")}.`});
     }
 
     useEffect(()=>{
@@ -25,11 +26,11 @@ function Signup() {
     },[passwordTry1,passwordTry2])
 
     const handleSubmit = async(e) => {
-        e.preventDefault()
+        e.preventDefault();
         try{
             if(name &&email && password)
             {
-                const response = await axios.post('http://localhost:5000/signup', {name, email,password})
+                const response = await axios.post('http://localhost:5000/signup', {name, email , password})
                 console.log(response)
                 let responseData;
                 if(response.statusText === 'OK')
@@ -38,6 +39,9 @@ function Signup() {
                     setSignupStatus(responseData.data)
                     console.log(signupStatus)
                     setIsSubmitted(true);
+                }
+                else if(response.data.msg==='Error Sending mail'){
+                    setErrorMessage("Please enter a valid email")
                 }
             } 
             else{
@@ -49,6 +53,9 @@ function Signup() {
         }
        
     }
+    useEffect(()=>{
+
+    },[isSubmitted])
      const signupForm = (
         <div className="form-container">
 
@@ -116,8 +123,15 @@ function Signup() {
                     type = 'submit'
                     value= "signup"
                     />
-                    {isSubmitted&& <div>...Pending</div>}
-                    {errorMessage?.message && <div className="error">{errorMessage.message}</div>}
+
+                    {errorMessage?.message ?  <div className="error">
+                        {errorMessage.message}
+                        {setTimeout(() => {
+                            setIsSubmitted(false);
+                        }, 5000)}
+                    </div>: isSubmitted && <div>...Pending</div>}
+                    
+                    
                 </form>
             </div>
         </div>

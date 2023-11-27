@@ -37,7 +37,7 @@ function App() {
                 <RequireUser loggedOut><Login /></RequireUser>
               </Route>
               <Route path = "/about">
-                <RequireUser ><About /></RequireUser>
+                <About />
               </Route>
               <Route path='/expenses' >
                 <RequireUser ><UserExpenses /></RequireUser>
