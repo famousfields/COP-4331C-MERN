@@ -19,7 +19,7 @@ const PORT_S = 433;     //httpS port.
 
 // Neccessary packages for accepting json data
 app.use(cors());
-app.use(express.json());
+app.use(express.json());    //for parsing json
 app.set('view engine', 'pug');  //view engine for verify page.
 
 // Global middleware function (logs the time, along with request method and route)
@@ -71,11 +71,15 @@ app.route('/expenses')
     .post(async(req, res) => {
         try {
             const { userID, type, quantity, price } = req.body;
-            console.log('Required field not included!\n', 'Request Body:' + req.body.quantity);
+
+            // Check to make sure input was recieved correctly. 
             if (!userID || !type || !quantity || !price) {
+                console.log('Required field not included!\n', 
+                    'userID: ' + req.body.userID, 'type: ' + req.body.type, 
+                    'quantity: ' + req.body.quantity, 'price: ' + req.body.price);
                 return res.status(400).json({ message: 'User ID, type, quantity, and price are required.'});
             }
-
+            // create a new expense from the request
             const expense = await Expense.create({
                 user_id: userID,
                 type,
@@ -168,15 +172,20 @@ app.route('/user_budget')
     .post(async (req, res, next) => {
         // get the user_id and then update and save the monthyBudget.
         const user = await User.findOne( {_id:req.body.user_id});
-        console.log(user)
+
+        // add error handling incase of bad user_id.
+        if(!user) {
+            return res.status(400).send({msg:'Could not find user in DB', status:'failed'});
+        }
+
         user.monthlyBudget = req.body.budget;
         try {
             const saved = await user.save();
-            // worked
-            res.status(200).send(saved);
+            // save worked, send the saved user
+            return res.status(200).send(saved);
         } catch(err) {
             console.error('Error saving monthlyBudget on user:\n'  + err.message);
-            res.status(500).send({msg:'Error saving monthlyBudget', status:'Failed'});
+            res.status(500).send({msg:'Error saving monthlyBudget', status:'failed'});
         }
     })
 
@@ -200,6 +209,7 @@ app.get("/user", async (req, res) => {
     } catch (error) {
         console.error(error);
         console.log("Internal Server Error");
+        res.send({msg:'Server Error Occurred'});    //send a resonse so request isn't left hanging
     }
 })
 

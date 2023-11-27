@@ -32,7 +32,6 @@ function UserExpenses() {
   expensTotal = userExpenses.map(expense =>(
     sum += expense.price
   ))
-  console.log(expensTotal)
   let lastElement = expensTotal[expensTotal.length - 1];
 
  
@@ -149,36 +148,30 @@ const ExpensePosNeg = ({ number }) => {
   );
 }
 
-// component to properly display monthly budget entered by user
+//sets dislay budget
+useEffect(()=>{
+  setDisplayBudget(JSON.parse(window.localStorage.getItem('monthlybudget')));
+},[])
+
+//set local storage when display budget changes
+useEffect(()=>{
+window.localStorage.setItem('monthlybudget', displayBudget)
+},[displayBudget])
+
 const expenseHandler= () =>{
-  localStorage.setItem(1,monthlyBudget);
-  setDisplayBudget(localStorage.getItem(1));
-  console.log(localStorage.getItem(1));
-   setCookies("monthlyBudget",localStorage.getItem(1));
-//after setting budget use api call to store in budget db
-    // try
-    // {
-    //   const result = await fetch("http://localhost:5000/user_budget" ,{
-    //     method:'POST',
-    //     body: {user_id: cookies.userID,
-    //             budget: displayBudget}
-    //   })
-    //   if(result.status === 200)
-    //     console.log(result);
-    //     // if(res.status === 200)
-    //     // {
-    //     //   console.log("budget saved")
-    //     //   return
-    //     // }else{
-    //     //   console.log("error saving budget")
-    //     // }
-    // }
-    // catch(error)
-    // {
-    //   console.error(error);
-    // }
+  setDisplayBudget(monthlyBudget);
  }
 
+ useEffect(()=>{
+ 
+ },[validBudget])
+ const handleClearBudget= ()=>
+  {
+     localStorage.removeItem("monthlybudget")
+     setDisplayBudget(null);
+     setValidBudget(false);
+  }
+ 
 
 const handleLogout=()=>{
   removeCookies("userID");
@@ -189,21 +182,25 @@ const fallback = ("");
   return (
     <div className="expense-layout">
 
-      
-      <h1>Welcome, User Email Here</h1>{/*Pulling name from database once connected*/}
-      <div className='logoutDiv'>
-            <button className = 'logout' onClick={handleLogout}>Logout</button>
-          </div>
-        
+      <div className='expenseWelcome'>
+        <h1>Welcome, {cookies.name}</h1>{/*Pulling name from database once connected*/}
+        <button className='logout'onClick={handleLogout}>Logout</button>
+      </div>
 
       <div className = "testDiv">
-        
+        {userExpenses.length ? <h2 className='title'>Your Expenses:</h2>:<h2> </h2>}
+
         {/* sum of all expense.prices */}
         <div className='expenseTotalGroup'>
           <div className='expense-total'>Expense Total: ${lastElement}</div>
           {/* If user had entered a valid budget display budget if not prompt them to enter one */}
+          
           {validBudget ? 
-          <div className='monthly-budget'>Monthly budget: ${localStorage.getItem(1)}</div> : 
+          <div className='monthly-budget'>
+            Monthly budget: ${displayBudget}
+          {/* <button onclick={handleClearBudget}>Clear Budget</button>  */}
+          </div>
+          : 
           <div > 
             <h3>Enter monthly budget:</h3>
             <input className='monthly-budget-input' type={'number'} placeholder={"monthly budget..."}  value={monthlyBudget} onChange={(e)=>setMonthlyBudget(e.target.value)}></input>
@@ -212,30 +209,12 @@ const fallback = ("");
         </div>
       </div>
       
-      <h1>Your Expenses</h1>
       
       {/*maps expenses from  database once fetched */}
-      <div className='expenses'>
-          {userExpenses&&<Expenses expenses = {userExpenses} onDelete={deleteExpense} />}
+      <div>
+          {userExpenses&&<Expenses expenses = {userExpenses} onDelete = {deleteExpense}/>}
       </div> 
     
-      
-      {/*
-      <div className="sidebar">
-        <button className='sideOption'>Dashboard</button>
-        <button className='sideOption'>Expenses</button>
-        <button className='sideOption'>Trends</button>
-        <button className='sideOption'>Budget</button>
-        
-        <button className = "logout" onClick={handleLogout}>Logout</button>
-      </div>
-      */}
-
-      {/*<div className='mainContent'>*/}
-        
-        
-        
-        
       {popupActive ? ( 
             <div className='popup'>
             
@@ -247,13 +226,13 @@ const fallback = ("");
               onChange={e => setNewType(e.target.value)}
               value = {newType} />
 
-              <input 
+            <input 
               type='number'
               placeholder='Expense Price'
               className='addExpenseInput'
               onChange={e =>setNewPrice(e.target.value)}
               value = {newPrice} />
-              <input 
+            <input 
               placeholder='Expense Quantity'
               type='number'
               className='addExpenseInput'
@@ -266,15 +245,7 @@ const fallback = ("");
           </div>
           ): <div className="addPopup" onClick={()=>setPopupActive(true) }>Add Expense</div>
         }
-        
-        
-           
-          
-        {/* sum of all expense.prices */}
-        
-           
       </div>
-      
   );
 }
 

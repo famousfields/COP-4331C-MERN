@@ -57,10 +57,10 @@ const Expenses = ({expenses,onDelete} ) =>
         <li className='delete-expense' >x</li>
     </ul>
   ));
-
+const fallback = "";
   return (
     <>
-    
+    <div className='expensesDiv'>
       {expenses?.length?expenses.map(expense=>(
         <div className='expense' key = {expense._id}>
           <div className='text'>Expense Name: {expense.type}</div>
@@ -68,10 +68,12 @@ const Expenses = ({expenses,onDelete} ) =>
           <div className='price'>Quantity: {expense.quantity}</div>  
           <button className='delete-expense'onClick={()=>handleDelete(expense)}>x</button>
         </div>
+        
       )) 
       :   
-      <div>No expenses to show</div>
-}
+      fallback
+      }
+    </div>
       {/*
       <div>{listItems}</div>
           

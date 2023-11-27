@@ -13,8 +13,8 @@ function Home() {
             <img src='https://i.imgur.com/jDRbafb.png'></img>
 
             <h2>
-            The Expense Expert is the Simplest way to take control of your finances. 
-            Effortlessly track your expenses, manage budgets, and gain insights into your spending habits. 
+              The Expense Expert is the simplest way to take control of your finances. 
+              Effortlessly track your expenses, manage budgets, and gain insights into your spending habits. 
             </h2>
 
             <div className='buttonDiv'>
