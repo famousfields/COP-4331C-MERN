@@ -64,13 +64,13 @@ function UserExpenses() {
   
 },[query])
 
-const getFilteredExpenses = (query,userExpenses) =>{
-  if(!query)
-  return userExpenses
-  else{
-    return userExpenses.filter(expense => expense.type ===query)
-  }
-}
+// const getFilteredExpenses = (query,userExpenses) =>{
+//   if(!query)
+//   return userExpenses
+//   else{
+//     return userExpenses.filter(expense => expense.type ===query)
+//   }
+// }
 
 useEffect(()=>{
 },[userExpenses])
@@ -166,10 +166,12 @@ useEffect(()=>{
   
 window.localStorage.setItem('monthlybudget', displayBudget)
 },[displayBudget])
+function getSum(){
+  userExpenses.map(expense =>(
+    sum += (expense.price*expense.quantity)
+  ))
+}
 
-userExpenses.map(expense =>(
-  sum += (expense.price*expense.quantity)
-))
 
 const expenseHandler= () =>{
   if(monthlyBudget>=0)
@@ -210,8 +212,8 @@ else
 
 const fallback = ("");
 
-const filteredExpenses = getFilteredExpenses(query,userExpenses);
-console.log(filteredExpenses);
+// const filteredExpenses = getFilteredExpenses(query,userExpenses);
+// console.log(filteredExpenses);
 
   return (
     <div className="expense-layout">
@@ -220,13 +222,13 @@ console.log(filteredExpenses);
         <h1>Welcome, {cookies.name}</h1>{/*Pulling name from database once connected*/}
         <button className='logout'onClick={handleLogout}>Logout</button>
       </div>
-      <h3 className='searchtext'>Search</h3>
+      {/* <h3 className='searchtext'>Search</h3>
       <div className='searchBar'>
         <form >
         <input type='text' className="monthly-budget-input"onChange={e=>setQuery(e.target.value)} value={query}></input>
         <button type='submit'></button>
         </form>
-      </div>
+      </div> */}
 
       <div className = "testDiv">
         {userExpenses.length ? <h2 className='title'>Your Expense(s):</h2>:<h2>Currently no expenses to show</h2>}
@@ -234,6 +236,7 @@ console.log(filteredExpenses);
         {/* sum of all expense.prices */}
         <div className='expenseTotalGroup'>
           <h2>Monthly Information</h2>
+          {getSum()}
           <div className='expense-total'>Expense Total: ${displayExpenseTotal(sum)}</div>
           {/* If user had entered a valid budget display budget if not prompt them to enter one */}
           
