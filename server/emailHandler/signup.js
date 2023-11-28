@@ -45,7 +45,8 @@ const signup = async function(req, res, next) {
                         .then( async (token) => {
                             // successfully saved - send an email
                             // UPDATE to https when nearing completion & use proper host name (expenseExpert:5000)
-                            v_url = 'http://' + req.headers.host + '/verify/' + user.name + '/' + token.token;
+                            // v_url = 'http://' + req.headers.host + '/verify/' + user.name + '/' + token.token;
+                            v_url = 'https://' + 'expenseExpert:433'+ '/verify/' + user.name + '/' + token.token;
                             const message = {
                                 template_id: 'd-07d36665001b4f28bc9e07d335bf8f51', //template for email verification
                                 // data for the dynamic template

@@ -36,13 +36,13 @@ function UserExpenses() {
     try{
       var response;
       if(query){
-         response =  await axios.get('http://localhost:5000/expenses', {
+         response =  await axios.get('https://expenseExpert:433/expenses', {
         params:{ 
         _id: cookies.userID,
         type:query
       }})
     }else{
-         response =  await axios.get('http://localhost:5000/user_expenses', {
+         response =  await axios.get('https://expenseExpert:433/user_expenses', {
           params:{ 
           _id: cookies.userID
         }})
@@ -100,7 +100,7 @@ const addExpense = async() => {
 
   console.log(bodyjs);
   try{
-    const data = await fetch("http://localhost:5000/expenses",{
+    const data = await fetch("https://expenseExpert:433/expenses",{
       method: "POST",
       headers: {
         "Content-Type": "application/json"

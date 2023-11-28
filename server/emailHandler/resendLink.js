@@ -24,17 +24,18 @@ const resendLink = async (req, res, next) => {
             }
             else {
                 //send a verification link - start by creating a new token
-                console.log('DEBUG: User found to resend link...');
+                //console.log('DEBUG: User found to resend link...');
 
                 //create token for verification
                 Token.create( {_userId: user._id, token: crypto.randomBytes(16).toString('hex') })
                 //After token created and saved
-                    .then( (token) => {
+                    .then( async (token) => {
                         
-                        console.log('DEBUG: new token saved...');
+                        //console.log('DEBUG: new token saved...');
 
                         // send an email to verify user
-                        v_url = 'http://' + req.headers.host + '/verify/' + user.name + '/' + token.token;
+                        // v_url = 'http://' + req.headers.host + '/verify/' + user.name + '/' + token.token;
+                        v_url = 'https://' + 'expenseExpert:433' + '/verify/' + user.name + '/' + token.token;
                         
                         const message = {
                             template_id: 'd-07d36665001b4f28bc9e07d335bf8f51', //template for email verification
@@ -57,13 +58,23 @@ const resendLink = async (req, res, next) => {
                             // perhaps mern email as BCC.
                         };
 
-                        sgMail.send(message)
-                            .then( () => {
-                                console.log('Email sent to ' + user.email);
-                            })
-                            .catch( (error) => {
-                                console.error(error)
-                            })
+                        // sgMail.send(message)
+                        //     .then( () => {
+                        //         console.log('Email sent to ' + user.email);
+                        //     })
+                        //     .catch( (error) => {
+                        //         console.error(error)
+                        //         return res.status(500).send({msg:'Mail Send Error'});
+                        //     });
+                        try {
+                            const result = await sgMail.send(message);
+                        } catch( err) {
+                            console.error(err);
+                            return res.status(500).send({msg:'Mail Send Error', err:err.message});
+                        }
+
+                        console.log(`Email resent to: ${user.email}`);
+
                         return res.status(200).json( 
                             {
                                 msg:'Verification Email sent to ' + user.email,
