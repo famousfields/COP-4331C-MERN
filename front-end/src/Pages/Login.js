@@ -24,8 +24,10 @@ function Login({onLogin})
             if(res.statusText === "OK")
             {
                 console.log(res.data.user_id);
-                setCookies("userID",res.data.user_id);
-                setCookies("name",res.data.name)
+                setTimeout(() => {
+                    setCookies("userID",res.data.user_id);
+                    setCookies("name",res.data.name)
+                }, 1750);
                 setLoginResponse(res);
                 console.log(loginResponse);
             }
