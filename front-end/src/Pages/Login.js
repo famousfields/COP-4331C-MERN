@@ -29,11 +29,15 @@ function Login({onLogin})
                 setLoginResponse(res);
                 console.log(loginResponse);
             }
+            else if(res.data.msg === "Wrong Password!")
+            {
+                setErrorMessage(res.data.msg);
+                console.log(errorMessage)
+            }
             else{
                 console.log("Something went wrong when logging in");
             }
-        })
-        .catch(err=>console.log(err))
+        }).catch(err=>setErrorMessage(err.response.data.msg, ",Try again "))
 
         // if(loginResponse){
         //    // setCookie("userID",json.user_id);
@@ -85,6 +89,8 @@ function Login({onLogin})
                     </div>
                     
                 </form>
+                {errorMessage && <div>{errorMessage}</div>}
+                   
             </div>
 
         </div>

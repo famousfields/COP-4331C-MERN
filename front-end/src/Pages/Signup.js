@@ -55,6 +55,9 @@ function Signup()
         }
        
     }
+    const resendEmail = async() =>{
+        axios.post("http://localhost:5000/resend", {email})
+    }
 
     const handleBad = () =>{
         setTimeout(() => {
@@ -65,7 +68,7 @@ function Signup()
     useEffect(()=>{
         setErrorMessage([])
     },[isSubmitted])
-    
+
      const signupForm = (
         <div className="form-container">
 
@@ -136,7 +139,7 @@ function Signup()
 
                     {errorMessage?.message ?  <div className="error">
                         {errorMessage.message}
-                    </div>: isSubmitted && <div className='signupmsg'>Please verify email</div>
+                    </div>: isSubmitted && <div className='signupmsg'>Please verify email<button onClick={resendEmail}></button></div>
                     }
                     
 
