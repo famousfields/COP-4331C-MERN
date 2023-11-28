@@ -10,3 +10,5 @@ To have a local domain work, change the hosts file located at: "C:\Windows\Syste
 On your browser, to allow usage of a self-signed certificate, navigate to the backend at https://expenseExpert:433/ and click 'advanced' and then 'proceed...'. Do the same for the front end at https://expenseExpert:3000.
 
 Run npm start in both the front and back end folders. 
+
+An API key for sendgrid is required which should be located in the server / backend folder.
